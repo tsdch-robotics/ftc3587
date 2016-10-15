@@ -1,4 +1,3 @@
-
 /*
 Copyright (c) 2016 Robert Atkinson
 
@@ -80,8 +79,6 @@ public class TeleopTest extends OpMode {
 
         robot.FrontMotorRight.setPower(ThrottleRight);
         robot.BackMotorRight.setPower(ThrottleRight);
-
-
 
         // telemetry
         telemetry.addData("left", "%.2f", ThrottleLeft);
