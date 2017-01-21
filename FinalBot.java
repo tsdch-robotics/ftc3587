@@ -1,42 +1,51 @@
+             /**These are the imported libraries, use these exact commands */
 package org.firstinspires.ftc.teamcode;
+import android.graphics.Color;
+
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.vuforia.ar.pl.SensorController;
 
 /**
  * This is NOT an opmode.
+ * For future changes, consult comments below.
  *
- * This class can be used to define all the specific hardware for a single robot.
- * In this case that robot is a Pushbot.
- * See PushbotTeleopTank_Iterative and others classes starting with "Pushbot" for usage examples.
- *
- * This hardware class assumes the following device names have been configured on the robot:
- * Note:  All names are lower case and some have single spaces between words.
- *
- * Motor channel:  Left  drive motor:        "left_drive"
- * Motor channel:  Right drive motor:        "right_drive"
- * Motor channel:  Manipulator drive motor:  "left_arm"
- * Servo channel:  Servo to open left claw:  "left_hand"
- * Servo channel:  Servo to open right claw: "right_hand"
  */
-public class HaramBot {
-    // define all hardware on robot
+public class FinalBot {
+    // define all hardware on robot,
     public DcMotorController Front;
     public DcMotorController Back;
+    //public DcMotorController Fire;
+    public ServoController Servos;
+    public DeviceInterfaceModule Detect;
+    //public ServoController BaconPress;
 
     public DcMotor FrontMotorLeft;
     public DcMotor FrontMotorRight;
     public DcMotor BackMotorLeft;
     public DcMotor BackMotorRight;
+    public ColorSensor Right;
+    public Servo ArmL;
+    public Servo ArmR;
+    //public ColorSensor Left;
+    //public DcMotor FiringMotor;
+    //public OpticalDistanceSensor GodsEye;
+    //public Servo Pickup;
+    //public Servo Beacon;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
 
-    public HaramBot(){ }
+    public FinalBot(){ }
 
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
@@ -45,20 +54,31 @@ public class HaramBot {
         // initialize controllers - motor and servo
         Front = hwMap.dcMotorController.get("Motor 2");
         Back = hwMap.dcMotorController.get("Motor 1");
-
+        //Fire = hwMap.dcMotorController.get("Motor 3");
+        Detect = hwMap.deviceInterfaceModule.get("Device");
+        Servos = hwMap.servoController.get("Servos");
         // initialize motors
         FrontMotorLeft = hwMap.dcMotor.get("FrontMotorLeft");
-        FrontMotorLeft.setDirection(DcMotor.Direction.REVERSE);
         FrontMotorRight = hwMap.dcMotor.get("FrontMotorRight");
         BackMotorLeft = hwMap.dcMotor.get("BackMotorLeft");
-        BackMotorLeft.setDirection(DcMotor.Direction.REVERSE);
         BackMotorRight = hwMap.dcMotor.get("BackMotorRight");
+        //FiringMotor = hwMap.dcMotor.get("FiringMotor");
+        Right = hwMap.colorSensor.get("Right");
+        //Left = hwMap.colorSensor.get("Left");
+        //FiringMotor.setDirection(DcMotor.Direction.REVERSE);
+        //GodsEye = hwMap.opticalDistanceSensor.get("ODS 1");
+        //Pickup = hwMap.servo.get("Pickup");
+        ArmL= hwMap.servo.get("ArmL");
+        ArmR = hwMap.servo.get("ArmR");
+        //Beacon.setDirection(Servo.Direction.REVERSE);
 
-        // Set all motors to zero power
+         // Set all motors to zero power
         FrontMotorLeft.setPower(0.0);
         FrontMotorRight.setPower(0.0);
         BackMotorLeft.setPower(0.0);
         BackMotorRight.setPower(0.0);
+        //FiringMotor.setPower(0.0);
+
     }
 
     /***
