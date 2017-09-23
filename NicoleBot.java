@@ -1,4 +1,3 @@
-             /**These are the imported libraries, use these exact commands */
 package org.firstinspires.ftc.teamcode;
 import android.graphics.Color;
 

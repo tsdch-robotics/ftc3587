@@ -30,7 +30,7 @@ public class BasicAutonomous extends LinearOpMode {
         sleep(1000);//CHANGE VALUE
 
         robot.FrontMotorLeft.setPower(1.0);
-        sleep(2000);//CHANGE VALUE
+        sleep(1000);//CHANGE VALUE
 
         robot.FrontMotorRight.setPower(0.0);
         sleep(1000); //CHANGE VALUE
