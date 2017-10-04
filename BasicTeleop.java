@@ -42,8 +42,8 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 public class BasicTeleop extends OpMode {
 
     /* Declare OpMode members. */
-    NicoleBot         robot   = new NicoleBot();   // Use robot's hardware
-    private ElapsedTime     runtime = new ElapsedTime();
+    NicoleBot robot = new NicoleBot();   // Use robot's hardware
+    private ElapsedTime runtime = new ElapsedTime();
 
     // code runs ONCE when driver hits INIT
     @Override
@@ -60,11 +60,13 @@ public class BasicTeleop extends OpMode {
 
     // code runs REPEATEDLY after the driver hits INIT, but before they hit PLAY
     @Override
-    public void init_loop() { }
+    public void init_loop() {
+    }
 
     // code runs ONCE when the driver hits PLAY
     @Override
-    public void start() { }
+    public void start() {
+    }
 
     // code runs REPEATEDLY when driver hits play
     // put driver controls (drive motors, servos, etc.) HERE

@@ -23,7 +23,11 @@ public class NicoleBot {
     // define all hardware on robot
 
     public DcMotor FrontMotorLeft;
+    public DcMotor BackMotorLeft;
     public DcMotor FrontMotorRight;
+    public DcMotor BackMotorRight;
+    public Servo RightNicoleClaw;
+    public Servo LeftNicoleClaw;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -37,11 +41,25 @@ public class NicoleBot {
 
         // initialize motors
         FrontMotorLeft = hwMap.dcMotor.get("FrontMotorLeft");
+        FrontMotorLeft.setDirection(DcMotor.Direction.REVERSE);
+        BackMotorLeft = hwMap.dcMotor.get("BackMotorLeft");
+        BackMotorLeft.setDirection(DcMotor.Direction.REVERSE);
         FrontMotorRight = hwMap.dcMotor.get("FrontMotorRight");
+        BackMotorRight = hwMap.dcMotor.get("BackMotorRight");
+
+        //initialize servos
+        RightNicoleClaw = hwMap.servo.get("RightNicoleClaw");
+        LeftNicoleClaw = hwMap.servo.get("LeftNicoleClaw");
 
          // Set all motors to zero power
         FrontMotorLeft.setPower(0.0);
+        BackMotorLeft.setPower(0.0);
         FrontMotorRight.setPower(0.0);
+        BackMotorRight.setPower(0.0);
+
+        //Set all servos to zero position
+        RightNicoleClaw.setPosition(0.0);
+        LeftNicoleClaw.setPosition(0.0);
 
     }
 
