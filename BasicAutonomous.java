@@ -27,7 +27,7 @@ public class BasicAutonomous extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         robot.FrontMotorRight.setPower(1.0);
-        robot.FrontMotorLeft.setPower(1.0);
+        robot.FrontMotorLeft.setPower(1.0 );
         sleep(100000);//CHANGE VALUE
 
         robot.FrontMotorLeft.setPower(1.0);

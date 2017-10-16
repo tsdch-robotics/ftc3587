@@ -30,6 +30,7 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -37,52 +38,130 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.Range;
+
 
 @TeleOp(name="Basic TeleOp", group="NicoleBot")
 public class BasicTeleop extends OpMode {
 
-    /* Declare OpMode members. */
-    NicoleBot robot = new NicoleBot();   // Use robot's hardware
-    private ElapsedTime runtime = new ElapsedTime();
+    public BasicTeleop() {
 
-    // code runs ONCE when driver hits INIT
+    /* Declare OpMode members. */
+        NicoleBot robot = new NicoleBot();   // Use robot's hardware
+        public ElapsedTime runtime = new ElapsedTime();
+
+        /**
+         * Constructor
+         */
+
+    }
+
     @Override
     public void init() {
-        /* Initialize the hardware variables.
-         * The init() method of the hardware class does all the work here
-         */
-        robot.init(hardwareMap);
 
-        // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "Hello Driver");    //
-        updateTelemetry(telemetry);
+
+		/*
+		 * Use the hardwareMap to get the dc motors and servos by name. Note
+		 * that the names of the devices must match the names used when you
+		 * configured your robot and created the configuration file.
+		 */
+
+
+        FrontMotorLeft = hardwareMap.dcMotor.get("FrontMotorLeft");
+        BackMotorLeft = hardwareMap.dcMotor.get("BackMotorLeft");
+        FrontMotorRight = hardwareMap.dcMotor.get("FrontMotorRight");
+        BackMotorRight = hardwareMap.dcMotor.get("BackMotorRight");
+        //These work without reversing (Tetrix motors).
+        //AndyMark motors may be opposite, in which case uncomment these lines:
+        //motorFrontLeft.setDirection(DcMotor.Direction.REVERSE);
+        //motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
+        //motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
+        //motorBackRight.setDirection(DcMotor.Direction.REVERSE);
+
     }
 
-    // code runs REPEATEDLY after the driver hits INIT, but before they hit PLAY
-    @Override
-    public void init_loop() {
-    }
-
-    // code runs ONCE when the driver hits PLAY
-    @Override
-    public void start() {
-    }
-
-    // code runs REPEATEDLY when driver hits play
-    // put driver controls (drive motors, servos, etc.) HERE
     @Override
     public void loop() {
-        double ThrottleLeft = gamepad1.left_stick_y;
-        double ThrottleRight = gamepad1.right_stick_y;
 
 
-        robot.FrontMotorLeft.setPower(ThrottleLeft);
-        robot.FrontMotorRight.setPower(ThrottleRight);
+        // left stick controls direction
+        // right stick X controls rotation
 
-        // telemetry
-        telemetry.addData("left", "%.2f", ThrottleLeft);
-        telemetry.addData("right", "%.2f", ThrottleRight);
+        float gamepad1LeftY = -gamepad1.left_stick_y;
+        float gamepad1LeftX = gamepad1.left_stick_x;
+        float gamepad1RightX = gamepad1.right_stick_x;
 
-        updateTelemetry(telemetry);
+        // holonomic formulas
+
+        float FrontLeft = -gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
+        float FrontRight = gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
+        float BackRight = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
+        float BackLeft = -gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
+
+        // clip the right/left values so that the values never exceed +/- 1
+        FrontMotorRight = Range.clip(FrontMotorRight, -1, 1);
+        FrontMotorLeft = Range.clip(FrontMotorLeft, -1, 1);
+        BackMotorLeft = Range.clip(BackMotorLeft, -1, 1);
+        BackMotorRight = Range.clip(BackMotorRight, -1, 1);
+
+        // write the values to the motors
+        FrontMotorRight.setPower(FrontMotorRight);
+        FrontMotorLeft.setPower(FrontMotorLeft);
+        BackMotorLeft.setPower(BackMotorLeft);
+        BackMotorRight.setPower(BackMotorRight);
+
+
+		/*
+		 * Telemetry for debugging
+		 */
+        telemetry.addData("Text", "*** Robot Data***");
+        telemetry.addData("Joy XL YL XR",  String.format("%.2f", gamepad1LeftX) + " " +
+                String.format("%.2f", gamepad1LeftY) + " " +  String.format("%.2f", gamepad1RightX));
+        telemetry.addData("f left pwr",  "front left  pwr: " + String.format("%.2f", FrontLeft));
+        telemetry.addData("f right pwr", "front right pwr: " + String.format("%.2f", FrontRight));
+        telemetry.addData("b right pwr", "back right pwr: " + String.format("%.2f", BackRight));
+        telemetry.addData("b left pwr", "back left pwr: " + String.format("%.2f", BackLeft));
+
     }
+
+    @Override
+    public void stop() {
+
+    }
+
+    /*
+     * This method scales the joystick input so for low joystick values, the
+     * scaled value is less than linear.  This is to make it easier to drive
+     * the robot more precisely at slower speeds.
+     */
+    double scaleInput(double dVal)  {
+        double[] scaleArray = { 0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,
+                0.30, 0.36, 0.43, 0.50, 0.60, 0.72, 0.85, 1.00, 1.00 };
+
+        // get the corresponding index for the scaleInput array.
+        int index = (int) (dVal * 16.0);
+
+        // index should be positive.
+        if (index < 0) {
+            index = -index;
+        }
+
+        // index cannot exceed size of array minus 1.
+        if (index > 16) {
+            index = 16;
+        }
+
+        // get value from the array.
+        double dScale = 0.0;
+        if (dVal < 0) {
+            dScale = -scaleArray[index];
+        } else {
+            dScale = scaleArray[index];
+        }
+
+        // return scaled value.
+        return dScale;
+    }
+
 }
