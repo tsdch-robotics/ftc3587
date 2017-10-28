@@ -42,14 +42,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 
-@TeleOp(name="Basic TeleOp", group="NicoleBot")
+@TeleOp(name="Basic TeleOp", group="NioleBot")
 public class BasicTeleop extends OpMode {
 
+    NicoleBot robot = new NicoleBot();   // Use robot's hardware
+    public ElapsedTime runtime = new ElapsedTime();
     public BasicTeleop() {
 
     /* Declare OpMode members. */
-        NicoleBot robot = new NicoleBot();   // Use robot's hardware
-        public ElapsedTime runtime = new ElapsedTime();
+
 
         /**
          * Constructor
@@ -59,57 +60,48 @@ public class BasicTeleop extends OpMode {
 
     @Override
     public void init() {
-
-
 		/*
 		 * Use the hardwareMap to get the dc motors and servos by name. Note
 		 * that the names of the devices must match the names used when you
 		 * configured your robot and created the configuration file.
 		 */
-
-
-        FrontMotorLeft = hardwareMap.dcMotor.get("FrontMotorLeft");
-        BackMotorLeft = hardwareMap.dcMotor.get("BackMotorLeft");
-        FrontMotorRight = hardwareMap.dcMotor.get("FrontMotorRight");
-        BackMotorRight = hardwareMap.dcMotor.get("BackMotorRight");
-        //These work without reversing (Tetrix motors).
-        //AndyMark motors may be opposite, in which case uncomment these lines:
-        //motorFrontLeft.setDirection(DcMotor.Direction.REVERSE);
-        //motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
-        //motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
-        //motorBackRight.setDirection(DcMotor.Direction.REVERSE);
-
+        robot.init(hardwareMap);
     }
 
     @Override
     public void loop() {
+        // left stick controls direction - forward/back, left/right
+        // right stick X controls rotation - CW/CCW
+        float gamepad1LeftY = gamepad1.left_stick_y;
+        float gamepad1LeftX = -gamepad1.left_stick_x;
+        float gamepad1RightX = -gamepad1.right_stick_x;
 
-
-        // left stick controls direction
-        // right stick X controls rotation
-
-        float gamepad1LeftY = -gamepad1.left_stick_y;
-        float gamepad1LeftX = gamepad1.left_stick_x;
-        float gamepad1RightX = gamepad1.right_stick_x;
-
-        // holonomic formulas
-
+        // holonomic formulas for omnibot control
         float FrontLeft = -gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
         float FrontRight = gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
         float BackRight = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
         float BackLeft = -gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
 
-        // clip the right/left values so that the values never exceed +/- 1
-        FrontMotorRight = Range.clip(FrontMotorRight, -1, 1);
-        FrontMotorLeft = Range.clip(FrontMotorLeft, -1, 1);
-        BackMotorLeft = Range.clip(BackMotorLeft, -1, 1);
-        BackMotorRight = Range.clip(BackMotorRight, -1, 1);
-
         // write the values to the motors
-        FrontMotorRight.setPower(FrontMotorRight);
-        FrontMotorLeft.setPower(FrontMotorLeft);
-        BackMotorLeft.setPower(BackMotorLeft);
-        BackMotorRight.setPower(BackMotorRight);
+        robot.FrontMotorRight.setPower(FrontRight);
+        robot.FrontMotorLeft.setPower(FrontLeft);
+        robot.BackMotorLeft.setPower(BackLeft);
+        robot.BackMotorRight.setPower(BackRight);
+
+
+        if(gamepad1.y) robot.NicoleElevator.setPower(1.0);  //Elevator up
+        else if(gamepad1.a) robot.NicoleElevator.setPower(-1.0);   //Elevator down
+        else robot.NicoleElevator.setPower(0.0);
+
+        if(gamepad1.x) { // open
+            robot.LeftNicoleClaw.setPosition(0.0);
+            robot.RightNicoleClaw.setPosition(1.0);
+
+        }
+        else if(gamepad1.b) { // close
+            robot.LeftNicoleClaw.setPosition(0.85);
+            robot.RightNicoleClaw.setPosition(0.15);
+        }
 
 
 		/*
@@ -126,9 +118,7 @@ public class BasicTeleop extends OpMode {
     }
 
     @Override
-    public void stop() {
-
-    }
+    public void stop() { }
 
     /*
      * This method scales the joystick input so for low joystick values, the

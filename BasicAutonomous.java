@@ -26,18 +26,23 @@ public class BasicAutonomous extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        robot.FrontMotorRight.setPower(1.0);
-        robot.FrontMotorLeft.setPower(1.0 );
-        sleep(100000);//CHANGE VALUE
 
+        // program
+        robot.turn(90);
+        sleep(1000);
+        robot.turn(-50);
+        sleep(1000);
+        robot.turn(180);
+        sleep(1000);
         robot.FrontMotorLeft.setPower(1.0);
-        sleep(1000);//CHANGE VALUE
-
-        robot.FrontMotorRight.setPower(0.0);
-        sleep(1000); //CHANGE VALUE
+        robot.BackMotorLeft.setPower(1.0);
+        robot.FrontMotorRight.setPower(1.0);
+        robot.BackMotorRight.setPower(1.0);
 
         //telemetry.addData("distance", distance);
         updateTelemetry(telemetry);
 
     }
+
+
 }
