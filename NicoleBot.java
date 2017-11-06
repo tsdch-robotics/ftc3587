@@ -73,8 +73,8 @@ public class NicoleBot {
         RightNicoleClaw = hwMap.servo.get("RightNicoleClaw");
         LeftNicoleClaw = hwMap.servo.get("LeftNicoleClaw");
         ArmClawUD = hwMap.servo.get("ArmClawUD");
-        ArmClawFrontMap.servo.get("ArmClawUD");
-        ArmClawUD = hwMap.servo.get("ArmClawUD");
+        ArmClawFront = hwMap.servo.get("ArmClawFront");
+        ArmClawBack = hwMap.servo.get("ArmClawBack");
 
         // initialize sensors
         GyroCenter = hwMap.gyroSensor.get("GyroCenter");

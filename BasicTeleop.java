@@ -93,18 +93,34 @@ public class BasicTeleop extends OpMode {
         else if(gamepad1.a) robot.NicoleElevator.setPower(-1.0);   //Elevator down
         else robot.NicoleElevator.setPower(0.0);
 
-        if(gamepad1.x) { // open
+        if(gamepad1.x) { // Claw open
             robot.LeftNicoleClaw.setPosition(0.0);
             robot.RightNicoleClaw.setPosition(1.0);
 
         }
-        else if(gamepad1.b) { // close
+        else if(gamepad1.b) { // Claw close
             robot.LeftNicoleClaw.setPosition(0.85);
             robot.RightNicoleClaw.setPosition(0.15);
         }
         if(gamepad2.dpad_up) robot.NicoleArm.setPower(1.0); //Arm out
-        if(gamepad2.dpad_down) robot.NicoleArm.setPower(-1.0); //Arm in
+        else robot.NicoleArm.setPower(0.0);
 
+        if(gamepad2.dpad_down) robot.NicoleArm.setPower(-1.0); //Arm in
+        else robot.NicoleArm.setPower(0.0);
+
+        if(gamepad2.y) { //Arm up
+            robot.ArmClawUD.setPosition(1.0);
+        }
+        else if(gamepad2.b) { //Arm down
+            robot.ArmClawUD.setPosition(0.0);
+        }
+        if(gamepad2.x) { //Arm open
+            robot.ArmClawFront.setPosition(0.0);
+            robot.ArmClawBack.setPosition(1.0);
+        }
+        else if(gamepad2.a) { //Arm close
+            robot.ArmClawUD.setPosition(0.85);
+            robot.ArmClawUD.setPosition(0.15);
 
 		/*
 		 * Telemetry for debugging
