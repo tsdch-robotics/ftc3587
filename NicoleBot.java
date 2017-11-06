@@ -35,8 +35,12 @@ public class NicoleBot {
     public DcMotor FrontMotorRight;
     public DcMotor BackMotorRight;
     public DcMotor NicoleElevator;
+    public DcMotor NicoleArm;
     public Servo RightNicoleClaw;
     public Servo LeftNicoleClaw;
+    public Servo ArmClawUD;
+    public Servo ArmClawFront;
+    public Servo ArmClawBack;
     public GyroSensor GyroCenter;
 
     /* local OpMode members. */
@@ -63,10 +67,14 @@ public class NicoleBot {
         FrontMotorRight = hwMap.dcMotor.get("FrontMotorRight");
         BackMotorRight = hwMap.dcMotor.get("BackMotorRight");
         NicoleElevator = hwMap.dcMotor.get("NicoleElevator");
+        NicoleArm = hwMap.dcMotor.get("NicoleArm");
 
         //initialize servos
         RightNicoleClaw = hwMap.servo.get("RightNicoleClaw");
         LeftNicoleClaw = hwMap.servo.get("LeftNicoleClaw");
+        ArmClawUD = hwMap.servo.get("ArmClawUD");
+        ArmClawFrontMap.servo.get("ArmClawUD");
+        ArmClawUD = hwMap.servo.get("ArmClawUD");
 
         // initialize sensors
         GyroCenter = hwMap.gyroSensor.get("GyroCenter");
@@ -77,6 +85,7 @@ public class NicoleBot {
         FrontMotorRight.setPower(0.0);
         BackMotorRight.setPower(0.0);
         NicoleElevator.setPower(0.0);
+        NicoleArm.setPower(0.0);
 
         //Set all servos to open position
         RightNicoleClaw.setPosition(0.0);

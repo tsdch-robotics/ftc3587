@@ -102,6 +102,8 @@ public class BasicTeleop extends OpMode {
             robot.LeftNicoleClaw.setPosition(0.85);
             robot.RightNicoleClaw.setPosition(0.15);
         }
+        if(gamepad2.dpad_up) robot.NicoleArm.setPower(1.0); //Arm out
+        if(gamepad2.dpad_down) robot.NicoleArm.setPower(-1.0); //Arm in
 
 
 		/*
