@@ -28,17 +28,25 @@ public class BasicAutonomous extends LinearOpMode {
         waitForStart();
 
         // program
-        robot.turn(90);
-        sleep(1000);
-        robot.turn(-50);
-        sleep(1000);
-        robot.turn(180);
-        sleep(1000);
-        robot.FrontMotorLeft.setPower(1.0);
-        robot.BackMotorLeft.setPower(1.0);
-        robot.FrontMotorRight.setPower(1.0);
-        robot.BackMotorRight.setPower(1.0);
+        //robot.turn(90);
+        //sleep(1000);
+        //robot.turn(-50);
+        //sleep(1000);
+        //robot.turn(180);
+        //sleep(1000);
 
+        //resetAllEncoders();
+        robot.resetAllEncoders();
+
+        robot.FrontMotorLeft.setPower(-0.5);
+        robot.BackMotorLeft.setPower(-0.5);
+        robot.FrontMotorRight.setPower(0.5);
+        robot.BackMotorRight.setPower(0.5);
+        sleep(1000);
+        robot.FrontMotorLeft.setPower(0.0);
+        robot.BackMotorLeft.setPower(0.0);
+        robot.FrontMotorRight.setPower(0.0);
+        robot.BackMotorRight.setPower(0.0);
         //telemetry.addData("distance", distance);
         updateTelemetry(telemetry);
 
