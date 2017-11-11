@@ -42,13 +42,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 
-@TeleOp(name="Basic TeleOp", group="NioleBot")
-public class BasicTeleop extends OpMode {
+@TeleOp(name="Servo Test Bench", group="NioleBot")
+public class ServoTestBench extends OpMode {
 
     NicoleBot robot = new NicoleBot();   // Use robot's hardware
-
+    double lServoPos = 1.0;
+    double rServoPos = 0.0;
     public ElapsedTime runtime = new ElapsedTime();
-    public BasicTeleop() { }
+    public ServoTestBench() { }
 
     @Override
     public void init() {
@@ -85,34 +86,20 @@ public class BasicTeleop extends OpMode {
         else if (gamepad1.a) robot.NicoleElevator.setPower(-1.0);   //Elevator down
         else robot.NicoleElevator.setPower(0.0);
 
-        if (gamepad1.x) { // Claw open
-            robot.LeftNicoleClaw.setPosition(0.25);
-            robot.RightNicoleClaw.setPosition(0.75);
 
-        } else if (gamepad1.b) { // Claw close
-            robot.LeftNicoleClaw.setPosition(0.75);
-            robot.RightNicoleClaw.setPosition(0.25);
+        // testbench code
+        if(gamepad1.b) {
+            lServoPos = (lServoPos >= 1.0) ? 1.0 : lServoPos + 0.01;
+            rServoPos = (rServoPos <= 0.0) ? 0.0 : rServoPos - 0.01;
         }
 
+        if(gamepad1.x) {
+            lServoPos = (lServoPos <= 0.0) ? 0.0 : lServoPos - 0.01;
+            rServoPos = (rServoPos >= 1.0) ? 1.0 : rServoPos + 0.01;
+        }
 
-//        if (gamepad2.dpad_up) robot.NicoleArm.setPower(1.0); //Arm out
-//        else robot.NicoleArm.setPower(0.0);
-//
-//        if (gamepad2.dpad_down) robot.NicoleArm.setPower(-1.0); //Arm in
-//        else robot.NicoleArm.setPower(0.0);
-
-//        if (gamepad2.y) { //Arm up
-//            robot.ArmClawUD.setPosition(1.0);
-//        } else if (gamepad2.b) { //Arm down
-//            robot.ArmClawUD.setPosition(0.0);
-//        }
-//        if (gamepad2.x) { //Arm open
-//            robot.ArmClawFront.setPosition(0.0);
-//            robot.ArmClawBack.setPosition(1.0);
-//        } else if (gamepad2.a) { //Arm close
-//            robot.ArmClawUD.setPosition(0.85);
-//            robot.ArmClawUD.setPosition(0.15);
-        // }
+        robot.LeftNicoleClaw.setPosition(lServoPos);
+        robot.RightNicoleClaw.setPosition(rServoPos);
 
 		/*
 		 * Telemetry for debugging
@@ -120,10 +107,8 @@ public class BasicTeleop extends OpMode {
             telemetry.addData("Text", "*** Robot Data***");
             telemetry.addData("Joy XL YL XR", String.format("%.2f", gamepad1LeftX) + " " +
                     String.format("%.2f", gamepad1LeftY) + " " + String.format("%.2f", gamepad1RightX));
-            telemetry.addData("f left pwr", "front left  pwr: " + String.format("%.2f", FrontLeft));
-            telemetry.addData("f right pwr", "front right pwr: " + String.format("%.2f", FrontRight));
-            telemetry.addData("b right pwr", "back right pwr: " + String.format("%.2f", BackRight));
-            telemetry.addData("b left pwr", "back left pwr: " + String.format("%.2f", BackLeft));
+            telemetry.addData("L servo", String.format("%.2f", lServoPos));
+            telemetry.addData("R servo", String.format("%.2f", rServoPos));
 
     }
 

@@ -35,7 +35,7 @@ public class NicoleBot {
     public DcMotor FrontMotorRight;
     public DcMotor BackMotorRight;
     public DcMotor NicoleElevator;
-    public DcMotor NicoleArm;
+    //public DcMotor NicoleArm;
     public Servo RightNicoleClaw;
     public Servo LeftNicoleClaw;
     public Servo ArmClawUD;
@@ -67,14 +67,14 @@ public class NicoleBot {
         FrontMotorRight = hwMap.dcMotor.get("FrontMotorRight");
         BackMotorRight = hwMap.dcMotor.get("BackMotorRight");
         NicoleElevator = hwMap.dcMotor.get("NicoleElevator");
-        NicoleArm = hwMap.dcMotor.get("NicoleArm");
+        //NicoleArm = hwMap.dcMotor.get("NicoleArm");
 
         //initialize servos
         RightNicoleClaw = hwMap.servo.get("RightNicoleClaw");
         LeftNicoleClaw = hwMap.servo.get("LeftNicoleClaw");
-        ArmClawUD = hwMap.servo.get("ArmClawUD");
-        ArmClawFront = hwMap.servo.get("ArmClawFront");
-        ArmClawBack = hwMap.servo.get("ArmClawBack");
+//        ArmClawUD = hwMap.servo.get("ArmClawUD");
+//        ArmClawFront = hwMap.servo.get("ArmClawFront");
+//        ArmClawBack = hwMap.servo.get("ArmClawBack");
 
         // initialize sensors
         GyroCenter = hwMap.gyroSensor.get("GyroCenter");
@@ -85,11 +85,11 @@ public class NicoleBot {
         FrontMotorRight.setPower(0.0);
         BackMotorRight.setPower(0.0);
         NicoleElevator.setPower(0.0);
-        NicoleArm.setPower(0.0);
+        //NicoleArm.setPower(0.0);
 
         //Set all servos to open position
-        RightNicoleClaw.setPosition(0.0);
-        LeftNicoleClaw.setPosition(1.0);
+        RightNicoleClaw.setPosition(1.0);
+        LeftNicoleClaw.setPosition(0.0);
     }
 
     public void turn(double degreesToTurn) {
@@ -141,11 +141,27 @@ public class NicoleBot {
          }
     }
 
-    public void stopAllMotors() {
+    public void stopAllMotors(double whatever) {
+        FrontMotorLeft.setPower(whatever);
         FrontMotorLeft.setPower(0.0);
         BackMotorLeft.setPower(0.0);
         FrontMotorRight.setPower(0.0);
         BackMotorRight.setPower(0.0);
+    }
+
+    public void resetAllEncoders() {
+        FrontMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BackMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FrontMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BackMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        NicoleElevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //NicoleArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FrontMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BackMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        FrontMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BackMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        NicoleElevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //NicoleArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /***
