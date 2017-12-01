@@ -63,9 +63,13 @@ public class NicoleBot {
 
         // initialize motors
         FrontMotorLeft = hwMap.dcMotor.get("FrontMotorLeft");
+        FrontMotorLeft.setDirection(DcMotor.Direction.REVERSE);
         BackMotorLeft = hwMap.dcMotor.get("BackMotorLeft");
+        BackMotorLeft.setDirection(DcMotor.Direction.REVERSE);
         FrontMotorRight = hwMap.dcMotor.get("FrontMotorRight");
+        FrontMotorRight.setDirection(DcMotor.Direction.REVERSE);
         BackMotorRight = hwMap.dcMotor.get("BackMotorRight");
+        BackMotorRight.setDirection(DcMotor.Direction.REVERSE);
         NicoleElevator = hwMap.dcMotor.get("NicoleElevator");
         //NicoleArm = hwMap.dcMotor.get("NicoleArm");
 

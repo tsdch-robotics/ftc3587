@@ -162,6 +162,6 @@ public class BasicTeleop extends OpMode {
 
         // return scaled value.
         return dScale;
-    }
+}
 
 }
