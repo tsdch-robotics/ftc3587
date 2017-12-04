@@ -29,19 +29,26 @@ public class NicoleBot {
     public DeviceInterfaceModule DIM1;
     public ServoController SC0;
 
-    // actual hardware
+    //Public Motors
     public DcMotor FrontMotorLeft;
     public DcMotor BackMotorLeft;
     public DcMotor FrontMotorRight;
     public DcMotor BackMotorRight;
     public DcMotor NicoleElevator;
-    //public DcMotor NicoleArm;
+    public DcMotor NicoleArm;
+
+    //Public Servos
     public Servo RightNicoleClaw;
     public Servo LeftNicoleClaw;
     public Servo ArmClawUD;
     public Servo ArmClawFront;
     public Servo ArmClawBack;
+    public Servo JewelDown;
+    public Servo JewelHit;
+
+    //Public Sensors
     public GyroSensor GyroCenter;
+    public ColorSensor JewelCS;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -79,9 +86,12 @@ public class NicoleBot {
 //        ArmClawUD = hwMap.servo.get("ArmClawUD");
 //        ArmClawFront = hwMap.servo.get("ArmClawFront");
 //        ArmClawBack = hwMap.servo.get("ArmClawBack");
+        JewelDown = hwMap.servo.get("JewelDown");
+        JewelHit = hwMap.servo.get("JewelHit");
 
         // initialize sensors
         GyroCenter = hwMap.gyroSensor.get("GyroCenter");
+        JewelCS = hwMap.colorSensor.get("JewelCS");
 
         // Set all motors to zero power
         FrontMotorLeft.setPower(0.0);

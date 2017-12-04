@@ -13,7 +13,7 @@ public class BasicAutonomous extends LinearOpMode {
 
     /* Declare OpMode members. */
     NicoleBot         robot   = new NicoleBot();   //
-    ColorSensor colorSensor;
+    //ColorSensor colorSensor;
 
 
     @Override
@@ -29,7 +29,6 @@ public class BasicAutonomous extends LinearOpMode {
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
-        colorSensor = hardwareMap.get(ColorSensor.class, "sensor_color");//hsvValues
         float hsvValues[] = {0F, 0F, 0F};
 
         final float values[] = hsvValues;
@@ -60,19 +59,19 @@ public class BasicAutonomous extends LinearOpMode {
         updateTelemetry(telemetry);
 
 
-        colorSensor.enableLed(true);
+        robot.JewelCS.enableLed(true);
 
 
         //Converting RGB colors to values
-        Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
+        Color.RGBToHSV(robot.JewelCS.red() * 8, robot.JewelCS.green() * 8, robot.JewelCS.blue() * 8, hsvValues);
 
-        colorSensor = hardwareMap.colorSensor.get("Right")
+
 
         //Send info to DS
-        telemetry.addData("Clear", colorSensor.alpha());
-        telemetry.addData("Red", colorSensor.red());
-        telemetry.addData("Green", colorSensor.green());
-        telemetry.addData("Blue", colorSensor.blue());
+        telemetry.addData("Clear", robot.JewelCS.alpha());
+        telemetry.addData("Red", robot.JewelCS.red());
+        telemetry.addData("Green", robot.JewelCS.green());
+        telemetry.addData("Blue", robot.JewelCS.blue());
 
 //Post scanning color balls
 
