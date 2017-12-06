@@ -1,90 +1,172 @@
-
 package org.firstinspires.ftc.teamcode;
 
+import android.app.Activity;
 import android.graphics.Color;
+import android.view.View;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-@Autonomous(name="BasicAutonomous", group="NicoleBot")
-public class BasicAutonomous extends LinearOpMode {
-
-    /* Declare OpMode members. */
-    NicoleBot         robot   = new NicoleBot();   //
-    //ColorSensor colorSensor;
-
-
-    @Override
-    public void runOpMode() throws InterruptedException {
-        /*
-         * Initialize the drive system variables.
-         * The init() method of the hardware class does all the work here
-         */
-        robot.init(hardwareMap);
 
 
 
-        // Send telemetry message to signify robot waiting;
-        telemetry.addData("Status", "Ready to run");    //
-        telemetry.update();
-        float hsvValues[] = {0F, 0F, 0F};
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
 
-        final float values[] = hsvValues;
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+/**
+ * Created by 2827 on 11/18/2017.
+ */
 
-        // program
-        //robot.turn(90);
-        //sleep(1000);
-        //robot.turn(-50);
-        //sleep(1000);
-        //robot.turn(180);
-        //sleep(1000);
+public class RedBack {
 
-        //resetAllEncoders();
-        robot.resetAllEncoders();
-
-        robot.FrontMotorLeft.setPower(-0.5);
-        robot.BackMotorLeft.setPower(-0.5);
-        robot.FrontMotorRight.setPower(0.5);
-        robot.BackMotorRight.setPower(0.5);
-        sleep(1000);
-        robot.FrontMotorLeft.setPower(0.0);
-        robot.BackMotorLeft.setPower(0.0);
-        robot.FrontMotorRight.setPower(0.0);
-        robot.BackMotorRight.setPower(0.0);
-        //telemetry.addData("distance", distance);
-        updateTelemetry(telemetry);
-
-
-        robot.JewelCS.enableLed(true);
-
-
-        //Converting RGB colors to values
-        Color.RGBToHSV(robot.JewelCS.red() * 8, robot.JewelCS.green() * 8, robot.JewelCS.blue() * 8, hsvValues);
-
-
-
-        //Send info to DS
-        telemetry.addData("Clear", robot.JewelCS.alpha());
-        telemetry.addData("Red", robot.JewelCS.red());
-        telemetry.addData("Green", robot.JewelCS.green());
-        telemetry.addData("Blue", robot.JewelCS.blue());
-
-//Post scanning color balls
+    /* Copyright (c) 2017 FIRST. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted (subject to the limitations in the disclaimer below) provided that
+ * the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this list
+ * of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this
+ * list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * Neither the name of FIRST nor the names of its contributors may be used to endorse or
+ * promote products derived from this software without specific prior written permission.
+ *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
+ * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
 
-    relativeLayout.post(new Runnable()  {
-        realativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
-        });
+    /*
+     *
+     * This is an example LinearOpMode that shows how to use
+     * a Modern Robotics Color Sensor.
+     *
+     * The op mode assumes that the color sensor
+     * is configured with a name of "sensor_color".
+     *
+     * You can use the X button on gamepad1 to toggle the LED on and off.
+     *
+     * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
+     * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
+     */
+    @Autonomous(name="RedBack", group="NicoleBot")
+    public class BasicAutonomous extends LinearOpMode {
 
-        telemetry.update()
-    }
+        /* Declare OpMode members. */
+        NicoleBot         robot   = new NicoleBot();
 
-    relativeLayout.post(new Runnable()  {
-        relativeLayout.setBackgroundColor(Color.WHITE);
-    });
-    }
-}
+        ColorSensor JewelCS;    // Hardware Device Object
+
+
+        @Override
+        public void runOpMode() {
+
+            // hsvValues is an array that will hold the hue, saturation, and value information.
+            float hsvValues[] = {0F,0F,0F};
+
+            // values is a reference to the hsvValues array.
+            final float values[] = hsvValues;
+
+            // get a reference to the RelativeLayout so we can change the background
+            // color of the Robot Controller app to match the hue detected by the RGB sensor.
+            int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+            final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+
+            // bPrevState and bCurrState represent the previous and current state of the button.
+            boolean bPrevState = false;
+            boolean bCurrState = false;
+
+            // bLedOn represents the state of the LED.
+            boolean bLedOn = true;
+
+            // get a reference to our ColorSensor object.
+            JewelCS = hardwareMap.get(ColorSensor.class, "sensor_color");
+
+            // Set the LED in the beginning
+            JewelCS.enableLed(bLedOn);
+
+            // wait for the start button to be pressed.
+            waitForStart();
+
+            // while the op mode is active, loop and read the RGB data.
+            // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
+            while (opModeIsActive()) {
+
+                // check the status of the x button on either gamepad.
+                bCurrState = gamepad1.x;
+
+                // check for button state transitions.
+                if (bCurrState && (bCurrState != bPrevState))  {
+
+                    // button is transitioning to a pressed state. So Toggle LED
+                    bLedOn = !bLedOn;
+                    JewelCS.enableLed(bLedOn);
+                }
+
+                // update previous state variable.
+                bPrevState = bCurrState;
+
+                // convert the RGB values to HSV values.
+                Color.RGBToHSV(JewelCS.red() * 8, JewelCS.green() * 8, JewelCS.blue() * 8, hsvValues);
+
+                // send the info back to driver station using telemetry function.
+                telemetry.addData("LED", bLedOn ? "On" : "Off");
+                telemetry.addData("Clear", JewelCS.alpha());
+                telemetry.addData("Red  ", JewelCS.red());
+                telemetry.addData("Green", JewelCS.green());
+                telemetry.addData("Blue ", JewelCS.blue());
+                telemetry.addData("Hue", hsvValues[0]);
+
+                robot.JewelHit.setPosition(0.5);
+                robot.JewelDown.setPosition(1.0);
+
+                if(JewelCS.red() > 1) {
+                    robot.JewelHit.setPosition(1.0);
+                    robot.JewelHit.setPosition(0.5);
+                }
+
+                else if (JewelCS.blue() > 1) {
+                    robot.JewelHit.setPosition(0.0);
+                    robot.JewelHit.setPosition(0.5);
+                }
+
+                // change the background color to match the color detected by the RGB sensor.
+                // pass a reference to the hue, saturation, and value array as an argument
+                // to the HSVToColor method.
+                relativeLayout.post(new Runnable() {
+                    public void run() {
+                        relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
+                    }
+                });
+
+                telemetry.update();
+            }
+
+            // Set the panel back to the default color
+            relativeLayout.post(new Runnable() {
+                public void run() {
+                    relativeLayout.setBackgroundColor(Color.WHITE);
+                }
+            });
+        }
+    };}
