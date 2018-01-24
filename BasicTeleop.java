@@ -68,6 +68,9 @@ public class BasicTeleop extends OpMode {
         float gamepad1LeftX = -gamepad1.left_stick_x;
         float gamepad1RightX = -gamepad1.right_stick_x;
 
+        float gamepad2RightY = -gamepad2.right_stick_y;
+        float gamepad2LeftY = -gamepad2.left_stick_y;
+
         // holonomic formulas for omnibot control
         float FrontLeft = -gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
         float FrontRight = gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
@@ -80,20 +83,25 @@ public class BasicTeleop extends OpMode {
         robot.BackMotorLeft.setPower(BackLeft);
         robot.BackMotorRight.setPower(BackRight);
 
+        robot.RBotEscalator.setPower(gamepad2RightY);
+        robot.LBotEscalator.setPower(-gamepad2RightY);
 
-        if (gamepad1.y) robot.NicoleElevator.setPower(1.0);  //Elevator up
-        else if (gamepad1.a) robot.NicoleElevator.setPower(-1.0);   //Elevator down
-        else robot.NicoleElevator.setPower(0.0);
+        robot.RTopEscalator.setPower(gamepad2LeftY);
+        robot.LTopEscalator.setPower(-gamepad2LeftY);
 
-        if (gamepad1.x) { // Claw open
-            robot.LeftNicoleClaw.setPosition(0.25);
-            robot.RightNicoleClaw.setPosition(0.75);
 
-        } else if (gamepad1.b) { // Claw close
-            robot.LeftNicoleClaw.setPosition(0.75);
-            robot.RightNicoleClaw.setPosition(0.25);
+        if (gamepad2.y) {
+            robot.REscalatorDown.setPosition(0.6);
+            robot.LEscalatorDown.setPosition(0.4); //Top Escalator up
         }
-
+        else if (gamepad1.a) {
+            robot.REscalatorDown.setPosition(0.4);
+            robot.LEscalatorDown.setPosition(0.6);   //Top Escalator down
+        }
+        else {
+            robot.REscalatorDown.setPosition(0.5);
+            robot.LEscalatorDown.setPosition(0.5);
+        }
 
 //        if (gamepad2.dpad_up) robot.NicoleArm.setPower(1.0); //Arm out
 //        else robot.NicoleArm.setPower(0.0);

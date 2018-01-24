@@ -34,15 +34,15 @@ public class NicoleBot {
     public DcMotor BackMotorLeft;
     public DcMotor FrontMotorRight;
     public DcMotor BackMotorRight;
-    public DcMotor NicoleElevator;
-    public DcMotor NicoleArm;
+
+    public DcMotor RBotEscalator;
+    public DcMotor LBotEscalator;
+    public DcMotor RTopEscalator;
+    public DcMotor LTopEscalator;
 
     //Public Servos
-    public Servo RightNicoleClaw;
-    public Servo LeftNicoleClaw;
-    public Servo ArmClawUD;
-    public Servo ArmClawFront;
-    public Servo ArmClawBack;
+    public Servo LEscalatorDown;
+    public Servo REscalatorDown;
     public Servo JewelDown;
     public Servo JewelHit;
 
@@ -77,15 +77,16 @@ public class NicoleBot {
         FrontMotorRight.setDirection(DcMotor.Direction.REVERSE);
         BackMotorRight = hwMap.dcMotor.get("BackMotorRight");
         BackMotorRight.setDirection(DcMotor.Direction.REVERSE);
-        NicoleElevator = hwMap.dcMotor.get("NicoleElevator");
-        //NicoleArm = hwMap.dcMotor.get("NicoleArm");
+
+        RBotEscalator = hwMap.dcMotor.get("RBotEscalator");
+        LBotEscalator = hwMap.dcMotor.get("LBotEscalator");
+        RTopEscalator = hwMap.dcMotor.get("RTopEscalator");
+        LTopEscalator = hwMap.dcMotor.get("LTopEscalator");
 
         //initialize servos
-        RightNicoleClaw = hwMap.servo.get("RightNicoleClaw");
-        LeftNicoleClaw = hwMap.servo.get("LeftNicoleClaw");
-//        ArmClawUD = hwMap.servo.get("ArmClawUD");
-//        ArmClawFront = hwMap.servo.get("ArmClawFront");
-//        ArmClawBack = hwMap.servo.get("ArmClawBack");
+        LEscalatorDown = hwMap.servo.get("LEscalatorDown");
+        REscalatorDown = hwMap.servo.get("REscalatorDown");
+
         JewelDown = hwMap.servo.get("JewelDown");
         JewelHit = hwMap.servo.get("JewelHit");
 
@@ -98,8 +99,11 @@ public class NicoleBot {
         BackMotorLeft.setPower(0.0);
         FrontMotorRight.setPower(0.0);
         BackMotorRight.setPower(0.0);
-        NicoleElevator.setPower(0.0);
-        //NicoleArm.setPower(0.0);
+
+        RBotEscalator.setPower(0.0);
+        LBotEscalator.setPower(0.0);
+        RTopEscalator.setPower(0.0);
+        LTopEscalator.setPower(0.0);
 
         //Set all servos to open position
         RightNicoleClaw.setPosition(1.0);
