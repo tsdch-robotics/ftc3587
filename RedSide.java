@@ -137,18 +137,18 @@ public class RedSide {
                 telemetry.addData("Blue ", JewelCS.blue());
                 telemetry.addData("Hue", hsvValues[0]);
 
-                robot.JewelHit.setPosition(0.5);
-                robot.JewelDown.setPosition(1.0);
-
-                if(JewelCS.red() > 1) {
-                    robot.JewelHit.setPosition(1.0);
-                    robot.JewelHit.setPosition(0.5);
-                }
-
-                else if (JewelCS.blue() > 1) {
-                    robot.JewelHit.setPosition(0.0);
-                    robot.JewelHit.setPosition(0.5);
-                }
+//                robot.JewelHit.setPosition(0.5);
+//                robot.JewelDown.setPosition(1.0);
+//
+//                if(JewelCS.red() > 1) {
+//                    robot.JewelHit.setPosition(1.0);
+//                    robot.JewelHit.setPosition(0.5);
+//                }
+//
+//                else if (JewelCS.blue() > 1) {
+//                    robot.JewelHit.setPosition(0.0);
+//                    robot.JewelHit.setPosition(0.5);
+//                }
 
                 // change the background color to match the color detected by the RGB sensor.
                 // pass a reference to the hue, saturation, and value array as an argument

@@ -91,16 +91,16 @@ public class BasicTeleop extends OpMode {
 
 
         if (gamepad2.y) {
-            robot.REscalatorDown.setPosition(0.6);
-            robot.LEscalatorDown.setPosition(0.4); //Top Escalator up
+            robot.SC0.setServoPosition(2,.75);
+            robot.SC0.setServoPosition(1,.25); //Top Escalator up
         }
         else if (gamepad1.a) {
-            robot.REscalatorDown.setPosition(0.4);
-            robot.LEscalatorDown.setPosition(0.6);   //Top Escalator down
+            robot.SC0.setServoPosition(2,.25);
+            robot.SC0.setServoPosition(1,.75);   //Top Escalator down
         }
         else {
-            robot.REscalatorDown.setPosition(0.5);
-            robot.LEscalatorDown.setPosition(0.5);
+            robot.SC0.setServoPosition(2,.5);
+            robot.SC0.setServoPosition(1,.5);
         }
 
 //        if (gamepad2.dpad_up) robot.NicoleArm.setPower(1.0); //Arm out

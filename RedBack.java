@@ -111,62 +111,62 @@ public class RedBack {
             // while the op mode is active, loop and read the RGB data.
             // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
             while (opModeIsActive()) {
+//
+//                // check the status of the x button on either gamepad.
+//                bCurrState = gamepad1.x;
+//
+//                // check for button state transitions.
+//                if (bCurrState && (bCurrState != bPrevState))  {
+//
+//                    // button is transitioning to a pressed state. So Toggle LED
+//                    bLedOn = !bLedOn;
+//                    JewelCS.enableLed(bLedOn);
+//                }
 
-                // check the status of the x button on either gamepad.
-                bCurrState = gamepad1.x;
-
-                // check for button state transitions.
-                if (bCurrState && (bCurrState != bPrevState))  {
-
-                    // button is transitioning to a pressed state. So Toggle LED
-                    bLedOn = !bLedOn;
-                    JewelCS.enableLed(bLedOn);
-                }
-
-                // update previous state variable.
-                bPrevState = bCurrState;
+//                // update previous state variable.
+//                bPrevState = bCurrState;
 
                 // convert the RGB values to HSV values.
-                Color.RGBToHSV(JewelCS.red() * 8, JewelCS.green() * 8, JewelCS.blue() * 8, hsvValues);
+                //Color.RGBToHSV(JewelCS.red() * 8, JewelCS.green() * 8, JewelCS.blue() * 8, hsvValues);
 
                 // send the info back to driver station using telemetry function.
                 telemetry.addData("LED", bLedOn ? "On" : "Off");
-                telemetry.addData("Clear", JewelCS.alpha());
+                //telemetry.addData("Clear", JewelCS.alpha());
                 telemetry.addData("Red  ", JewelCS.red());
                 telemetry.addData("Green", JewelCS.green());
                 telemetry.addData("Blue ", JewelCS.blue());
-                telemetry.addData("Hue", hsvValues[0]);
+                //telemetry.addData("Hue", hsvValues[0]);
 
-                robot.JewelHit.setPosition(0.5);
-                robot.JewelDown.setPosition(1.0);
-
-                if(JewelCS.red() > 1) {
-                    robot.JewelHit.setPosition(1.0);
-                    robot.JewelHit.setPosition(0.5);
-                }
-
-                else if (JewelCS.blue() > 1) {
-                    robot.JewelHit.setPosition(0.0);
-                    robot.JewelHit.setPosition(0.5);
-                }
+//                robot.JewelHit.setPosition(0.5);
+//                robot.JewelDown.setPosition(1.0);
+//
+//                if(JewelCS.red() > 1) {
+//                    robot.JewelHit.setPosition(1.0);
+//                    robot.JewelHit.setPosition(0.5);
+//                }
+//
+//                else if (JewelCS.blue() > 1) {
+//                    robot.JewelHit.setPosition(0.0);
+//                    robot.JewelHit.setPosition(0.5);
+//                }
 
                 // change the background color to match the color detected by the RGB sensor.
                 // pass a reference to the hue, saturation, and value array as an argument
                 // to the HSVToColor method.
-                relativeLayout.post(new Runnable() {
-                    public void run() {
-                        relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
-                    }
-                });
+//                relativeLayout.post(new Runnable() {
+//                    public void run() {
+//                        relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
+//                    }
+//                });
 
                 telemetry.update();
             }
 
             // Set the panel back to the default color
-            relativeLayout.post(new Runnable() {
-                public void run() {
-                    relativeLayout.setBackgroundColor(Color.WHITE);
-                }
-            });
+//            relativeLayout.post(new Runnable() {
+//                public void run() {
+//                    relativeLayout.setBackgroundColor(Color.WHITE);
+//                }
+//            });
         }
     };}

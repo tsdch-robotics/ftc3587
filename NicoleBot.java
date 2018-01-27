@@ -25,6 +25,7 @@ public class NicoleBot {
     // controllers
     public DcMotorController DCMC1;
     public DcMotorController DCMC2;
+    public DcMotorController DCMC3;
     public DcMotorController DCMC0;
     public DeviceInterfaceModule DIM1;
     public ServoController SC0;
@@ -41,14 +42,14 @@ public class NicoleBot {
     public DcMotor LTopEscalator;
 
     //Public Servos
-    public Servo LEscalatorDown;
-    public Servo REscalatorDown;
-    public Servo JewelDown;
-    public Servo JewelHit;
+   // public Servo ABC;
+    //public Servo REscalatorDown;
+    //public Servo JewelDown;
+    //public Servo JewelHit;
 
     //Public Sensors
-    public GyroSensor GyroCenter;
-    public ColorSensor JewelCS;
+    //public GyroSensor GyroCenter;
+    //public ColorSensor JewelCS;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -65,7 +66,8 @@ public class NicoleBot {
         DCMC0 = hwMap.dcMotorController.get("Motor Controller 0");
         DCMC1 = hwMap.dcMotorController.get("Motor Controller 1");
         DCMC2 = hwMap.dcMotorController.get("Motor Controller 2");
-        DIM1 = hwMap.deviceInterfaceModule.get("Device Interface Module 1");
+        DCMC3 = hwMap.dcMotorController.get("Motor Controller 3");
+        //DIM1 = hwMap.deviceInterfaceModule.get("Device Interface Module 1");
         SC0 = hwMap.servoController.get("Servo Controller 0");
 
         // initialize motors
@@ -78,21 +80,22 @@ public class NicoleBot {
         BackMotorRight = hwMap.dcMotor.get("BackMotorRight");
         BackMotorRight.setDirection(DcMotor.Direction.REVERSE);
 
+
         RBotEscalator = hwMap.dcMotor.get("RBotEscalator");
         LBotEscalator = hwMap.dcMotor.get("LBotEscalator");
         RTopEscalator = hwMap.dcMotor.get("RTopEscalator");
         LTopEscalator = hwMap.dcMotor.get("LTopEscalator");
 
         //initialize servos
-        LEscalatorDown = hwMap.servo.get("LEscalatorDown");
-        REscalatorDown = hwMap.servo.get("REscalatorDown");
+        //ABC = hwMap.servo.get("ABC");
+        //REscalatorDown = hwMap.servo.get("REscalatorDown");
 
-        JewelDown = hwMap.servo.get("JewelDown");
-        JewelHit = hwMap.servo.get("JewelHit");
+
+        //JewelDown = hwMap.servo.get("JewelDown");
 
         // initialize sensors
-        GyroCenter = hwMap.gyroSensor.get("GyroCenter");
-        JewelCS = hwMap.colorSensor.get("JewelCS");
+        //GyroCenter = hwMap.gyroSensor.get("GyroCenter");
+        //JewelCS = hwMap.colorSensor.get("JewelCS");
 
         // Set all motors to zero power
         FrontMotorLeft.setPower(0.0);
@@ -105,59 +108,61 @@ public class NicoleBot {
         RTopEscalator.setPower(0.0);
         LTopEscalator.setPower(0.0);
 
-        //Set all servos to open position
-        RightNicoleClaw.setPosition(1.0);
-        LeftNicoleClaw.setPosition(0.0);
+//        ABC.setPosition(0.5);
+        SC0.setServoPosition(1, .5);
+        SC0.setServoPosition(2, .5);
+        //REscalatorDown.setPosition(0.5);
+
+        //Set all servos to open positionnh
     }
 
-    public void turn(double degreesToTurn) {
-        double targetHeading = 0;
-
-        // stop robot
-        FrontMotorLeft.setPower(0.0);
-        BackMotorLeft.setPower(0.0);
-        FrontMotorRight.setPower(0.0);
-        BackMotorRight.setPower(0.0);
-        NicoleElevator.setPower(0.0);
-
+//    public void turn(double degreesToTurn) {
+//        double targetHeading = 0;
+//
+//        // stop robot
+//        FrontMotorLeft.setPower(0.0);
+//        BackMotorLeft.setPower(0.0);
+//        FrontMotorRight.setPower(0.0);
+//        BackMotorRight.setPower(0.0);
+//
         // reset heading
-        GyroCenter.calibrate();
-        while(GyroCenter.isCalibrating()); // wait to finish calibrating
+        //GyroCenter.calibrate();
+        //while(GyroCenter.isCalibrating()); // wait to finish calibrating
 
         // determine which direction to turn
-        if (degreesToTurn > 0){
-            targetHeading = degreesToTurn;
-        }
-        if (degreesToTurn < 0) {
-            targetHeading = 360.0 + degreesToTurn;
-        }
+//        if (degreesToTurn > 0){
+//            targetHeading = degreesToTurn;
+//        }
+//        if (degreesToTurn < 0) {
+//            targetHeading = 360.0 + degreesToTurn;
+//        }
 
 
         // execute turn
-         if (targetHeading > 180) {
-             FrontMotorLeft.setPower(1.0);
-             BackMotorLeft.setPower(1.0);
-             FrontMotorRight.setPower(1.0);
-             BackMotorRight.setPower(1.0);
-             while (GyroCenter.getHeading() > targetHeading); // wait until robot reaches heading
-             FrontMotorLeft.setPower(0.0);
-             BackMotorLeft.setPower(0.0);
-             FrontMotorRight.setPower(0.0);
-             BackMotorRight.setPower(0.0);
-         }
-
-         else {
-             FrontMotorLeft.setPower(-1.0);
-             BackMotorLeft.setPower(-1.0);
-             FrontMotorRight.setPower(-1.0);
-             BackMotorRight.setPower(-1.0);
-             while (GyroCenter.getHeading() < targetHeading); // wait until robot reaches heading
-             FrontMotorLeft.setPower(0.0);
-             BackMotorLeft.setPower(0.0);
-             FrontMotorRight.setPower(0.0);
-             BackMotorRight.setPower(0.0);
-         }
-    }
+//         if (targetHeading > 180) {
+//             FrontMotorLeft.setPower(1.0);
+//             BackMotorLeft.setPower(1.0);
+//             FrontMotorRight.setPower(1.0);
+//             BackMotorRight.setPower(1.0);
+//             while (GyroCenter.getHeading() > targetHeading); // wait until robot reaches heading
+//             FrontMotorLeft.setPower(0.0);
+//             BackMotorLeft.setPower(0.0);
+//             FrontMotorRight.setPower(0.0);
+//             BackMotorRight.setPower(0.0);
+//         }
+//
+//         else {
+//             FrontMotorLeft.setPower(-1.0);
+//             BackMotorLeft.setPower(-1.0);
+//             FrontMotorRight.setPower(-1.0);
+//             BackMotorRight.setPower(-1.0);
+//             while (GyroCenter.getHeading() < targetHeading); // wait until robot reaches heading
+//             FrontMotorLeft.setPower(0.0);
+//             BackMotorLeft.setPower(0.0);
+//             FrontMotorRight.setPower(0.0);
+//             BackMotorRight.setPower(0.0);
+//         }
+//    }
 
     public void stopAllMotors(double whatever) {
         FrontMotorLeft.setPower(whatever);
@@ -172,14 +177,10 @@ public class NicoleBot {
         BackMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         FrontMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BackMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        NicoleElevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //NicoleArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         FrontMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         BackMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         FrontMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         BackMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        NicoleElevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //NicoleArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /***

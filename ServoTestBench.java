@@ -82,9 +82,9 @@ public class ServoTestBench extends OpMode {
         robot.BackMotorRight.setPower(BackRight);
 
 
-        if (gamepad1.y) robot.NicoleElevator.setPower(1.0);  //Elevator up
-        else if (gamepad1.a) robot.NicoleElevator.setPower(-1.0);   //Elevator down
-        else robot.NicoleElevator.setPower(0.0);
+//        if (gamepad1.y) robot.NicoleElevator.setPower(1.0);  //Elevator up
+//        else if (gamepad1.a) robot.NicoleElevator.setPower(-1.0);   //Elevator down
+//        else robot.NicoleElevator.setPower(0.0);
 
 
         // testbench code
@@ -98,8 +98,8 @@ public class ServoTestBench extends OpMode {
             rServoPos = (rServoPos >= 1.0) ? 1.0 : rServoPos + 0.01;
         }
 
-        robot.LeftNicoleClaw.setPosition(lServoPos);
-        robot.RightNicoleClaw.setPosition(rServoPos);
+//        robot.LeftNicoleClaw.setPosition(lServoPos);
+//        robot.RightNicoleClaw.setPosition(rServoPos);
 
 		/*
 		 * Telemetry for debugging
