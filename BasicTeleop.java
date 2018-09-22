@@ -42,10 +42,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 
-@TeleOp(name="Basic TeleOp", group="NioleBot")
+@TeleOp(name="Basic TeleOp", group="BBot")
 public class BasicTeleop extends OpMode {
 
-    NicoleBot robot = new NicoleBot();   // Use robot's hardware
+    BBot robot = new BBot();   // Use robot's hardware
 
     public ElapsedTime runtime = new ElapsedTime();
     public BasicTeleop() { }

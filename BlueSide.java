@@ -69,11 +69,11 @@ public class BlueSide {
      * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
      * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
      */
-    @Autonomous(name="BlueSide", group="NicoleBot")
+    @Autonomous(name="BlueSide", group="BBot")
     public class BasicAutonomous extends LinearOpMode {
 
         /* Declare OpMode members. */
-        NicoleBot         robot   = new NicoleBot();
+        BBot         robot   = new BBot();
 
         ColorSensor JewelCS;    // Hardware Device Object
 

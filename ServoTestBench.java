@@ -42,10 +42,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 
-@TeleOp(name="Servo Test Bench", group="NioleBot")
+@TeleOp(name="Servo Test Bench", group="BBot")
 public class ServoTestBench extends OpMode {
 
-    NicoleBot robot = new NicoleBot();   // Use robot's hardware
+    BBot robot = new BBot();   // Use robot's hardware
     double lServoPos = 1.0;
     double rServoPos = 0.0;
     public ElapsedTime runtime = new ElapsedTime();

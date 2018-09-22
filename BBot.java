@@ -21,7 +21,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  * For future changes, consult comments below.
  *
          */
-public class NicoleBot {
+public class BBot {
     // controllers
     public DcMotorController DCMC1;
     public DcMotorController DCMC2;
@@ -55,7 +55,7 @@ public class NicoleBot {
     HardwareMap hwMap = null;
     private ElapsedTime period = new ElapsedTime();
 
-    public NicoleBot() {
+    public BBot() {
     }
 
     /* Initialize standard Hardware interfaces */
