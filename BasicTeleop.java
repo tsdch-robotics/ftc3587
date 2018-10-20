@@ -35,11 +35,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.Range;
 
 
 @TeleOp(name="Basic TeleOp", group="BBot")
@@ -78,49 +74,11 @@ public class BasicTeleop extends OpMode {
         float BackLeft = -gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
 
         // write the values to the motors
-        robot.FrontMotorRight.setPower(FrontRight);
-        robot.FrontMotorLeft.setPower(FrontLeft);
-        robot.BackMotorLeft.setPower(BackLeft);
-        robot.BackMotorRight.setPower(BackRight);
-
-        robot.RBotEscalator.setPower(gamepad2RightY);
-        robot.LBotEscalator.setPower(-gamepad2RightY);
-
-        robot.RTopEscalator.setPower(gamepad2LeftY);
-        robot.LTopEscalator.setPower(-gamepad2LeftY);
-
-
-        if (gamepad2.y) {
-            robot.SC0.setServoPosition(2,.75);
-            robot.SC0.setServoPosition(1,.25); //Top Escalator up
-        }
-        else if (gamepad1.a) {
-            robot.SC0.setServoPosition(2,.25);
-            robot.SC0.setServoPosition(1,.75);   //Top Escalator down
-        }
-        else {
-            robot.SC0.setServoPosition(2,.5);
-            robot.SC0.setServoPosition(1,.5);
-        }
-
-//        if (gamepad2.dpad_up) robot.NicoleArm.setPower(1.0); //Arm out
-//        else robot.NicoleArm.setPower(0.0);
-//
-//        if (gamepad2.dpad_down) robot.NicoleArm.setPower(-1.0); //Arm in
-//        else robot.NicoleArm.setPower(0.0);
-
-//        if (gamepad2.y) { //Arm up
-//            robot.ArmClawUD.setPosition(1.0);
-//        } else if (gamepad2.b) { //Arm down
-//            robot.ArmClawUD.setPosition(0.0);
-//        }
-//        if (gamepad2.x) { //Arm open
-//            robot.ArmClawFront.setPosition(0.0);
-//            robot.ArmClawBack.setPosition(1.0);
-//        } else if (gamepad2.a) { //Arm close
-//            robot.ArmClawUD.setPosition(0.85);
-//            robot.ArmClawUD.setPosition(0.15);
-        // }
+        robot.DriveBackLeft.setPower(FrontRight);
+        robot.DriveFrontLeft.setPower(FrontLeft);
+        robot.DriveFrontRight.setPower(BackLeft);
+        robot.DriveBackRight.setPower(BackRight);
+        
 
 		/*
 		 * Telemetry for debugging

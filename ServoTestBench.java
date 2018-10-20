@@ -35,11 +35,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.Range;
 
 
 @TeleOp(name="Servo Test Bench", group="BBot")
@@ -76,10 +72,10 @@ public class ServoTestBench extends OpMode {
         float BackLeft = -gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
 
         // write the values to the motors
-        robot.FrontMotorRight.setPower(FrontRight);
-        robot.FrontMotorLeft.setPower(FrontLeft);
-        robot.BackMotorLeft.setPower(BackLeft);
-        robot.BackMotorRight.setPower(BackRight);
+        robot.DriveBackLeft.setPower(FrontRight);
+        robot.DriveFrontLeft.setPower(FrontLeft);
+        robot.DriveFrontRight.setPower(BackLeft);
+        robot.DriveBackRight.setPower(BackRight);
 
 
 //        if (gamepad1.y) robot.NicoleElevator.setPower(1.0);  //Elevator up
