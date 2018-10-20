@@ -40,7 +40,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Basic TeleOp", group="BBot")
 public class BasicTeleop extends OpMode {
-
     BBot robot = new BBot();   // Use robot's hardware
 
     public ElapsedTime runtime = new ElapsedTime();
@@ -78,7 +77,7 @@ public class BasicTeleop extends OpMode {
         robot.DriveFrontLeft.setPower(FrontLeft);
         robot.DriveFrontRight.setPower(BackLeft);
         robot.DriveBackRight.setPower(BackRight);
-        
+
 
 		/*
 		 * Telemetry for debugging
