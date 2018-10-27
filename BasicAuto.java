@@ -50,13 +50,15 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
-enum States {
-    LOWER, MOVE_AWAY_HANGER, TURN1, MOVE_INTO_CRATER, STOP;
-}
 
 @Autonomous(name="Basic", group="BBot")
 public class BasicAuto extends LinearOpMode {
     BBot robot = new BBot();   // Use robot's hardware
+
+    private enum States {
+        LOWER, MOVE_AWAY_HANGER, TURN1, MOVE_INTO_CRATER, STOP;
+    }
+
 
     public void runOpMode() {
         robot.init(hardwareMap);
