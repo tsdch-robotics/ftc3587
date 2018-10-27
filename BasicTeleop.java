@@ -12,9 +12,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name="OutReach op", group="WoodyBot")
+@TeleOp(name="Teleop", group="PocketBot")
 public class BasicTeleop extends OpMode {
-    private WoodyBot robot = new WoodyBot();   // Use robot's hardware
+    private PocketBot robot = new PocketBot();   // Use robot's hardware
     private ElapsedTime runtime = new ElapsedTime();
 
     // code runs ONCE when driver hits INIT
@@ -28,10 +28,8 @@ public class BasicTeleop extends OpMode {
         updateTelemetry(telemetry);
 
         // disable the encoders since the robot will be under driver control
-        robot.FrontMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.FrontMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.BackMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.BackMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.MotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.MotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     // code runs REPEATEDLY after the driver hits INIT, but before they hit PLAY
@@ -50,20 +48,9 @@ public class BasicTeleop extends OpMode {
     public void loop() {
         double ThrottleRight = gamepad1.right_stick_y;
         double ThrottleLeft = gamepad1.left_stick_y;
-        boolean elevatorup = gamepad1.right_bumper;
-        boolean elevatordown = gamepad1.left_bumper;
-        robot.FrontMotorLeft.setPower(ThrottleLeft);
-        robot.FrontMotorRight.setPower(ThrottleRight);
-        robot.BackMotorLeft.setPower(ThrottleLeft);
-        robot.BackMotorRight.setPower(ThrottleRight);
-        if(elevatorup==true)
-        {
-            robot.Elevator1.setPower(1);
-        }
-        if(elevatordown==true)
-        {
-            robot.Elevator1.setPower(-1);
-        }
+        robot.MotorLeft.setPower(ThrottleLeft);
+        robot.MotorRight.setPower(ThrottleRight);
+
         updateTelemetry(telemetry);
     }
 }
