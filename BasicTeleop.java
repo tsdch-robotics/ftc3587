@@ -57,38 +57,41 @@ public class BasicTeleop extends OpMode {
 
     @Override
     public void loop() {
-        // left stick controls direction - forward/back, left/right
-        // right stick X controls rotation - CW/CCW
-        float gamepad1LeftY = gamepad1.left_stick_y;
-        float gamepad1LeftX = -gamepad1.left_stick_x;
-        float gamepad1RightX = -gamepad1.right_stick_x;
+        // tank drive: each stick controls one side of the robot
+        // dpad for strafing left/right 
+        float gamepad1LeftY = -gamepad1.left_stick_y;
+        float gamepad1RightY = -gamepad1.right_stick_y;
+        boolean LeftStrafe = gamepad1.dpad_left;
+        boolean RightStrafe = gamepad1.dpad_right;
 
-        float gamepad2RightY = -gamepad2.right_stick_y;
-        float gamepad2LeftY = -gamepad2.left_stick_y;
-
-        // holonomic formulas for omnibot control
-        float FrontLeft = -gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
-        float FrontRight = gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
-        float BackRight = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
-        float BackLeft = -gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
-
-        // write the values to the motors
-        robot.DriveBackLeft.setPower(FrontRight);
-        robot.DriveFrontLeft.setPower(FrontLeft);
-        robot.DriveFrontRight.setPower(BackLeft);
-        robot.DriveBackRight.setPower(BackRight);
-
+        if(RightStrafe) {
+            // to right strafe, right motors towards each other, left motors away from each other
+            robot.DriveFrontLeft.setPower(1);
+            robot.DriveFrontRight.setPower(-1);
+            robot.DriveBackLeft.setPower(-1);
+            robot.DriveBackRight.setPower(1);
+        }
+        else if(LeftStrafe) {
+            // opposite of right strafe
+            robot.DriveFrontLeft.setPower(-1);
+            robot.DriveFrontRight.setPower(1);
+            robot.DriveBackLeft.setPower(1);
+            robot.DriveBackRight.setPower(-1);
+        }
+        else {
+            // write the values to the motors
+            robot.DriveBackLeft.setPower(gamepad1LeftY);
+            robot.DriveFrontLeft.setPower(gamepad1LeftY);
+            robot.DriveFrontRight.setPower(gamepad1RightY);
+            robot.DriveBackRight.setPower(gamepad1RightY);
+        }
 
 		/*
 		 * Telemetry for debugging
 		 */
-            telemetry.addData("Text", "*** Robot Data***");
-            telemetry.addData("Joy XL YL XR", String.format("%.2f", gamepad1LeftX) + " " +
-                    String.format("%.2f", gamepad1LeftY) + " " + String.format("%.2f", gamepad1RightX));
-            telemetry.addData("f left pwr", "front left  pwr: " + String.format("%.2f", FrontLeft));
-            telemetry.addData("f right pwr", "front right pwr: " + String.format("%.2f", FrontRight));
-            telemetry.addData("b right pwr", "back right pwr: " + String.format("%.2f", BackRight));
-            telemetry.addData("b left pwr", "back left pwr: " + String.format("%.2f", BackLeft));
+
+        telemetry.addData("Left Right", String.format("%.2f", gamepad1LeftY) + " " + String.format("%.2f", gamepad1RightY));
+
 
     }
 
