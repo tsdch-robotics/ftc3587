@@ -8,6 +8,9 @@ import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
  * This is NOT an opmode.
@@ -22,6 +25,9 @@ public class BBot {
     public DcMotor DriveBackRight;
     //public DcMotor HangArm;
     //public DcMotor ParticleArm;
+
+    // IMU - gyro + accelrometer
+    BNO055IMU imu;
 
 
 
@@ -49,28 +55,32 @@ public class BBot {
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
         DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
 
-        //HangArm = hwMap.dcMotor.get("HangArm");
-        //ParticleArm = hwMap.dcMotor.get("ParticleArm");
-
-        //initialize servos
-        //ABC = hwMap.servo.get("ABC");
-        //REscalatorDown = hwMap.servo.get("REscalatorDown");
-
-
-        //JewelDown = hwMap.servo.get("JewelDown");
-
-        // initialize sensors
-        //GyroCenter = hwMap.gyroSensor.get("GyroCenter");
-        //JewelCS = hwMap.colorSensor.get("JewelCS");
-
-
-
-//        ABC.setPosition(0.5);
-        //REscalatorDown.setPosition(0.5);
-
-        //Set all servos to open position
+        // initialize imu
+        init_imu();
 
         stopAllMotors();
+    }
+
+    public void init_imu() {
+        // get the REV controller's builtin imu
+        imu = hwMap.get(BNO055IMU.class, "imu");
+
+        // set up parameters
+        BNO055IMU.Parameters params = new BNO055IMU.Parameters();
+        params.mode = BNO055IMU.SensorMode.IMU;
+        params.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        params.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        params.loggingEnabled = false;
+        imu.initialize(params);
+
+//        telemetry.addData("Status", "Calibrating IMU...");
+//        telemetry.update();
+
+        while (imu.isGyroCalibrated()) { // wait for gyro to be calibrated
+            try { java.lang.Thread.sleep(50); } catch (Exception ex) {} // funky-looking sleep
+        }
+//        telemetry.addData("Status", "IMU calibrated!");
+//        telemetry.addData("IMU", imu.getCalibrationStatus().toString());
     }
 
 //    public void turn(double degreesToTurn) {

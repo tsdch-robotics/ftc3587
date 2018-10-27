@@ -37,6 +37,15 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+// garbage gyro imput
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
+
 
 @TeleOp(name="Basic TeleOp", group="BBot")
 public class BasicTeleop extends OpMode {
@@ -91,6 +100,7 @@ public class BasicTeleop extends OpMode {
 		 */
 
         telemetry.addData("Left Right", String.format("%.2f", gamepad1LeftY) + " " + String.format("%.2f", gamepad1RightY));
+        telemetry.addData("IMU raw angle", robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES));
 
 
     }
