@@ -1,25 +1,24 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-/**
- * This is NOT an opmode.
- * For future changes, consult comments below.
- *
-         */
+/*
+ * This is NOT an opmode. This file defines all the hardware on the robot
+ * and some common helper functions (stop motors, reset encoders, etc.)
+*/
 public class BBot {
-    //Public Motors
+    // class variables for all hardware
     public DcMotor DriveFrontLeft;
     public DcMotor DriveFrontRight;
     public DcMotor DriveBackLeft;
     public DcMotor DriveBackRight;
-    public Servo IntakeCRServo;
-    public DcMotor BasketArm;
 
-
+    // game element manipulation
+    public DcMotor ArmElevator;
+    public Servo ArmFlipper;
 
 
     /* local OpMode members. */
@@ -32,7 +31,6 @@ public class BBot {
     public void init(HardwareMap ahwMap) {
         hwMap = ahwMap; // reference to hardware map
 
-
         // initialize motors
         DriveFrontLeft = hwMap.dcMotor.get("DriveFrontLeft");
         DriveBackLeft = hwMap.dcMotor.get("DriveBackLeft");
@@ -40,33 +38,15 @@ public class BBot {
         DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
         DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
-        BasketArm = hwMap.dcMotor.get("BasketArm");
+        ArmElevator = hwMap.dcMotor.get("ArmElevator");
 
         // initialize servos
-        IntakeCRServo = hwMap.servo.get("IntakeCRServo");
+        ArmFlipper = hwMap.servo.get("ArmFlipper");
 
-
-
-        //HangArm = hwMap.dcMotor.get("HangArm");
-        //ParticleArm = hwMap.dcMotor.get("ParticleArm");
-
-        //initialize servos
-        //ABC = hwMap.servo.get("ABC");
-        //REscalatorDown = hwMap.servo.get("REscalatorDown");
-
-
-        //JewelDown = hwMap.servo.get("JewelDown");
 
         // initialize sensors
         //GyroCenter = hwMap.gyroSensor.get("GyroCenter");
         //JewelCS = hwMap.colorSensor.get("JewelCS");
-
-
-
-//        ABC.setPosition(0.5);
-        //REscalatorDown.setPosition(0.5);
-
-        //Set all servos to open position
 
         stopAllMotors();
     }
@@ -119,18 +99,23 @@ public class BBot {
 //         }
 //    }
 
+    public void setDriveMotors(double FrontL, double FrontR, double BackL, double BackR) {
+        DriveFrontLeft.setPower(FrontL);
+        DriveFrontRight.setPower(FrontR);
+        DriveBackLeft.setPower(BackL);
+        DriveBackRight.setPower(BackR);
+    }
+
     public void stopAllMotors() {
         DriveFrontLeft.setPower(0.0);
         DriveFrontRight.setPower(0.0);
         DriveBackLeft.setPower(0.0);
         DriveBackRight.setPower(0.0);
-        BasketArm.setPower(0.0);
-
-        //HangArm.setPower(0.0);
-        //ParticleArm.setPower(0.0);
+        ArmElevator.setPower(0.0);
     }
 
     public void resetAllEncoders() {
+        // reset drive encoders
         DriveFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         DriveFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         DriveBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -139,13 +124,10 @@ public class BBot {
         DriveFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         DriveBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         DriveBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BasketArm.setMode((DcMotor.RunMode.STOP_AND_RESET_ENCODER));
 
-        /*HangArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        HangArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        ParticleArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        ParticleArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        */
+        // extra encoders
+        ArmElevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ArmElevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /***

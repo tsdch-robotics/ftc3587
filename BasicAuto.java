@@ -43,10 +43,9 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 public class BasicAuto extends LinearOpMode {
     BBot robot = new BBot();   // Use robot's hardware
 
-    private enum States {
+    private enum States { // states for the autonomous FSM
         LOWER, MOVE_AWAY_HANGER, TURN1, MOVE_INTO_CRATER, STOP;
     }
-
 
     public void runOpMode() {
         robot.init(hardwareMap);
@@ -66,19 +65,24 @@ public class BasicAuto extends LinearOpMode {
         telemetry.update();
         while (current_state == States.LOWER) {
             // lower the robot off the hanger
+            // FAKE NEWS! actually run the robot forward a little bit.
+            robot.setDriveMotors(1,1,1,1);
 
-            //if(arm is lowered) {
-            // current_state = States.MOVE_AWAY_HANGER;
+            if(robot.DriveFrontRight.getCurrentPosition() > 100) {
+                current_state = States.MOVE_AWAY_HANGER;
+            }
         }
 
         telemetry.addData("State", "Moving away from hanger");
         telemetry.update();
         while (current_state == States.MOVE_AWAY_HANGER) {
+            robot.setDriveMotors(0,0,0,0);
+            // this will stay stuck here for testing purposes
+        }
             // lower the robot off the hanger
 
             //if(arm is lowered) {
             // current_state = States.MOVE_AWAY_HANGER;
-        }
 
         telemetry.addData("State", "Turn towards crater");
         telemetry.update();

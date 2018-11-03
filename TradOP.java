@@ -2,11 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.Range;
 
 
 @TeleOp(name="TradOp", group="BBot")
@@ -46,17 +42,19 @@ public class TradOP extends OpMode {
         robot.DriveBackRight.setPower(v4);
 
         // intake mechanism
-        float ArmPower = gamepad2.left_stick_y;
-        float RunIntake = gamepad2.right_trigger;
+        float ElevatorPower = gamepad2.left_stick_y;
+        float ArmAngle = gamepad2.right_trigger;
 
-        robot.BasketArm.setPower(ArmPower);
-        robot.IntakeCRServo.setPosition(RunIntake);
+        robot.ArmElevator.setPower(ElevatorPower);
+        robot.ArmFlipper.setPosition(ArmAngle);
         
         // driver data
         telemetry.addData("FrontMotorLeft = " , v1);
         telemetry.addData("FrontMotorRight =", v2);
         telemetry.addData("BackMotorLeft =", v3);
         telemetry.addData("BackMotorRight =", v4);
+
+        telemetry.addData("Arm angle", ArmAngle);
 
     }
 

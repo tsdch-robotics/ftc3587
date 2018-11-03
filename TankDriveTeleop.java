@@ -93,13 +93,13 @@ public class TankDriveTeleop extends OpMode {
         }
 
         //Flip up mechanism
-        robot.BasketArm.setPower(ArmPower);
+        robot.ArmElevator.setPower(ArmPower);
 
 
         if (RunIntake == true) {
-            robot.IntakeCRServo.setDirection(Servo.Direction.FORWARD);
+            robot.ArmFlipper.setPosition(1);
         } else if (RunIntake == false) {
-            robot.IntakeCRServo.setPosition(0);
+            robot.ArmFlipper.setPosition(0);
         }
 
 
