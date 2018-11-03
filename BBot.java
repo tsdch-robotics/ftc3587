@@ -45,9 +45,12 @@ public class BBot {
         DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
         DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
+        BasketArm = hwMap.dcMotor.get("BasketArm");
 
         // initialize servos
         Servo1 = hwMap.servo.get("Servo1");
+
+
 
         //HangArm = hwMap.dcMotor.get("HangArm");
         //ParticleArm = hwMap.dcMotor.get("ParticleArm");
@@ -126,6 +129,7 @@ public class BBot {
         DriveFrontRight.setPower(0.0);
         DriveBackLeft.setPower(0.0);
         DriveBackRight.setPower(0.0);
+        BasketArm.setPower(0.0);
 
         //HangArm.setPower(0.0);
         //ParticleArm.setPower(0.0);
@@ -140,6 +144,7 @@ public class BBot {
         DriveFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         DriveBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         DriveBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BasketArm.setMode((DcMotor.RunMode.STOP_AND_RESET_ENCODER));
 
         /*HangArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         HangArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

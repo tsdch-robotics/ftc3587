@@ -44,67 +44,72 @@ public class TankDriveTeleop extends OpMode {
     BBot robot = new BBot();   // Use robot's hardware
 
     public ElapsedTime runtime = new ElapsedTime();
-    public TankDriveTeleop() { }
+
+    public TankDriveTeleop() {
+    }
 
     @Override
     public void init() {
-		/*
-		 * Use the hardwareMap to get the dc motors and servos by name. Note
-		 * that the names of the devices must match the names used when you
-		 * configured your robot and created the configuration file.
-		 */
+        /*
+         * Use the hardwareMap to get the dc motors and servos by name. Note
+         * that the names of the devices must match the names used when you
+         * configured your robot and created the configuration file.
+         */
         robot.init(hardwareMap);
     }
 
     @Override
     public void loop() {
         // tank drive: each stick controls one side of the robot
-        // dpad for strafing left/right 
+        // dpad for strafing left/right
+        // gamepad2 left joystick for basket arm
+        // servo for intake system
         float gamepad1LeftY = -gamepad1.left_stick_y;
         float gamepad1RightY = -gamepad1.right_stick_y;
         boolean LeftStrafe = gamepad1.dpad_left;
         boolean RightStrafe = gamepad1.dpad_right;
-        boolean servo1 = gamepad1.a;
+        boolean servo1 = gamepad2.a;
+        float gamepad2LeftY = gamepad2.left_stick_y;
+
+        robot.BasketArm.setPower(gamepad2.left_stick_y);
 
 
-        if(RightStrafe) {
+        if (RightStrafe) {
             // to right strafe, right motors towards each other, left motors away from each other
             robot.DriveFrontLeft.setPower(1);
             robot.DriveFrontRight.setPower(-1);
             robot.DriveBackLeft.setPower(-1);
             robot.DriveBackRight.setPower(1);
-        }
-        else if(LeftStrafe) {
+        } else if (LeftStrafe) {
             // opposite of right strafe
             robot.DriveFrontLeft.setPower(-1);
             robot.DriveFrontRight.setPower(1);
             robot.DriveBackLeft.setPower(1);
             robot.DriveBackRight.setPower(-1);
-        }
-        else {
+        } else {
             // write the values to the motors
             robot.DriveBackLeft.setPower(gamepad1LeftY);
             robot.DriveFrontLeft.setPower(gamepad1LeftY);
             robot.DriveFrontRight.setPower(gamepad1RightY);
             robot.DriveBackRight.setPower(gamepad1RightY);
         }
-        if(servo1==true)
-        {
-          robot.Servo1.setDirection(Servo.Direction.FORWARD);
-        }
-        else if(servo1==false)
-        {
+        if (servo1 == true) {
+            robot.Servo1.setDirection(Servo.Direction.FORWARD);
+        } else if (servo1 == false) {
             robot.Servo1.setPosition(0);
         }
 
-		/*
-		 * Telemetry for debugging
-		 */
+
+
+
+        /*
+         * Telemetry for debugging
+         */
 
         telemetry.addData("Left Right", String.format("%.2f", gamepad1LeftY) + " " + String.format("%.2f", gamepad1RightY));
 
-
     }
+
 
     @Override
     public void stop() { }
