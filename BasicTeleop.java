@@ -35,6 +35,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -63,6 +64,8 @@ public class BasicTeleop extends OpMode {
         float gamepad1RightY = -gamepad1.right_stick_y;
         boolean LeftStrafe = gamepad1.dpad_left;
         boolean RightStrafe = gamepad1.dpad_right;
+        boolean servo1 = gamepad1.a;
+
 
         if(RightStrafe) {
             // to right strafe, right motors towards each other, left motors away from each other
@@ -84,6 +87,14 @@ public class BasicTeleop extends OpMode {
             robot.DriveFrontLeft.setPower(gamepad1LeftY);
             robot.DriveFrontRight.setPower(gamepad1RightY);
             robot.DriveBackRight.setPower(gamepad1RightY);
+        }
+        if(servo1==true)
+        {
+          robot.Servo1.setDirection(Servo.Direction.FORWARD);
+        }
+        else if(servo1==false)
+        {
+            robot.Servo1.setPosition(0);
         }
 
 		/*

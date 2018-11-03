@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -20,8 +21,10 @@ public class BBot {
     public DcMotor DriveFrontRight;
     public DcMotor DriveBackLeft;
     public DcMotor DriveBackRight;
-    //public DcMotor HangArm;
-    //public DcMotor ParticleArm;
+    public Servo Servo1;
+    public DcMotor Basketarm;
+    public Servo
+
 
 
 
@@ -48,6 +51,7 @@ public class BBot {
 
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
         DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
+        Servo1 = hwMap.servo.get("Servo1");
 
         //HangArm = hwMap.dcMotor.get("HangArm");
         //ParticleArm = hwMap.dcMotor.get("ParticleArm");
