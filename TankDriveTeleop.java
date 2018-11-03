@@ -39,12 +39,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@TeleOp(name="Basic TeleOp", group="BBot")
-public class BasicTeleop extends OpMode {
+@TeleOp(name="Tank Drive", group="BBot")
+public class TankDriveTeleop extends OpMode {
     BBot robot = new BBot();   // Use robot's hardware
 
     public ElapsedTime runtime = new ElapsedTime();
-    public BasicTeleop() { }
+    public TankDriveTeleop() { }
 
     @Override
     public void init() {
