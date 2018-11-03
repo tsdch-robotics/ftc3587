@@ -29,6 +29,7 @@ public class TradOP extends OpMode {
 
     @Override
     public void loop() {
+        // drivetrain
         // left stick controls direction - forward/back, left/right
         // right stick X controls rotation - CW/CCW
         double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
@@ -44,13 +45,19 @@ public class TradOP extends OpMode {
         robot.DriveBackLeft.setPower(v3);
         robot.DriveBackRight.setPower(v4);
 
+        // intake mechanism
+        float ArmPower = gamepad2.left_stick_y;
+        float RunIntake = gamepad2.right_trigger;
 
+        robot.BasketArm.setPower(ArmPower);
+        robot.IntakeCRServo.setPosition(RunIntake);
+        
+        // driver data
         telemetry.addData("FrontMotorLeft = " , v1);
         telemetry.addData("FrontMotorRight =", v2);
         telemetry.addData("BackMotorLeft =", v3);
         telemetry.addData("BackMotorRight =", v4);
 
-        //telemetry.addData("Strafe =", );
     }
 
     @Override

@@ -1,13 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.provider.Telephony;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -21,7 +16,7 @@ public class BBot {
     public DcMotor DriveFrontRight;
     public DcMotor DriveBackLeft;
     public DcMotor DriveBackRight;
-    public Servo Servo1;
+    public Servo IntakeCRServo;
     public DcMotor BasketArm;
 
 
@@ -48,7 +43,7 @@ public class BBot {
         BasketArm = hwMap.dcMotor.get("BasketArm");
 
         // initialize servos
-        Servo1 = hwMap.servo.get("Servo1");
+        IntakeCRServo = hwMap.servo.get("IntakeCRServo");
 
 
 

@@ -45,8 +45,7 @@ public class TankDriveTeleop extends OpMode {
 
     public ElapsedTime runtime = new ElapsedTime();
 
-    public TankDriveTeleop() {
-    }
+    public TankDriveTeleop() { }
 
     @Override
     public void init() {
@@ -62,17 +61,16 @@ public class TankDriveTeleop extends OpMode {
     public void loop() {
         // tank drive: each stick controls one side of the robot
         // dpad for strafing left/right
-        // gamepad2 left joystick for basket arm
+        // ArmPower left joystick for basket arm
         // servo for intake system
-        float gamepad1LeftY = -gamepad1.left_stick_y;
-        float gamepad1RightY = -gamepad1.right_stick_y;
+        float DriveLeftPower = -gamepad1.left_stick_y;
+        float DriveRightPower = -gamepad1.right_stick_y;
         boolean LeftStrafe = gamepad1.dpad_left;
         boolean RightStrafe = gamepad1.dpad_right;
-        boolean servo1 = gamepad2.a;
-        float gamepad2LeftY = gamepad2.left_stick_y;
 
-        robot.BasketArm.setPower(gamepad2.left_stick_y);
+        float ArmPower = gamepad2.left_stick_y;
 
+        boolean RunIntake = gamepad2.a;
 
         if (RightStrafe) {
             // to right strafe, right motors towards each other, left motors away from each other
@@ -88,15 +86,20 @@ public class TankDriveTeleop extends OpMode {
             robot.DriveBackRight.setPower(-1);
         } else {
             // write the values to the motors
-            robot.DriveBackLeft.setPower(gamepad1LeftY);
-            robot.DriveFrontLeft.setPower(gamepad1LeftY);
-            robot.DriveFrontRight.setPower(gamepad1RightY);
-            robot.DriveBackRight.setPower(gamepad1RightY);
+            robot.DriveBackLeft.setPower(DriveLeftPower);
+            robot.DriveFrontLeft.setPower(DriveLeftPower);
+            robot.DriveFrontRight.setPower(DriveRightPower);
+            robot.DriveBackRight.setPower(DriveRightPower);
         }
-        if (servo1 == true) {
-            robot.Servo1.setDirection(Servo.Direction.FORWARD);
-        } else if (servo1 == false) {
-            robot.Servo1.setPosition(0);
+
+        //Flip up mechanism
+        robot.BasketArm.setPower(ArmPower);
+
+
+        if (RunIntake == true) {
+            robot.IntakeCRServo.setDirection(Servo.Direction.FORWARD);
+        } else if (RunIntake == false) {
+            robot.IntakeCRServo.setPosition(0);
         }
 
 
@@ -106,7 +109,7 @@ public class TankDriveTeleop extends OpMode {
          * Telemetry for debugging
          */
 
-        telemetry.addData("Left Right", String.format("%.2f", gamepad1LeftY) + " " + String.format("%.2f", gamepad1RightY));
+        telemetry.addData("Left Right", String.format("%.2f", DriveLeftPower) + " " + String.format("%.2f", DriveRightPower));
 
     }
 
