@@ -22,8 +22,7 @@ public class BBot {
     public DcMotor DriveBackLeft;
     public DcMotor DriveBackRight;
     public Servo Servo1;
-    public DcMotor Basketarm;
-    public Servo
+    public DcMotor BasketArm;
 
 
 
@@ -32,8 +31,7 @@ public class BBot {
     HardwareMap hwMap = null;
     private ElapsedTime period = new ElapsedTime();
 
-    public BBot() {
-    }
+    public BBot() { }
 
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
@@ -42,15 +40,13 @@ public class BBot {
 
         // initialize motors
         DriveFrontLeft = hwMap.dcMotor.get("DriveFrontLeft");
-
         DriveBackLeft = hwMap.dcMotor.get("DriveBackLeft");
-
-
         DriveFrontRight = hwMap.dcMotor.get("DriveFrontRight");
         DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
-
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
         DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
+
+        // initialize servos
         Servo1 = hwMap.servo.get("Servo1");
 
         //HangArm = hwMap.dcMotor.get("HangArm");
