@@ -41,20 +41,37 @@ public class TradOP extends OpMode {
         robot.DriveBackLeft.setPower(v3);
         robot.DriveBackRight.setPower(v4);
 
-        // intake mechanism
-        float ElevatorPower = gamepad2.left_stick_y;
-        float ArmAngle = gamepad2.right_trigger;
+        // intake mechanism variables
+        boolean Elevator_up = gamepad1.right_bumper;
+        float Elevator_down = gamepad1.right_trigger;
+        //telemetry variable
+        String elevator_status;
 
-        robot.ArmElevator.setPower(ElevatorPower);
-        robot.ArmFlipper.setPosition(ArmAngle);
-        
+        //if right bumper is held arm elevator is set to 1
+        if(Elevator_up == true)
+        {
+            robot.ArmElevator.setPower(1);
+            elevator_status = "up";
+        }
+        //if right trigger is pressed elevator is set to -1
+        else if(Elevator_down >= .1)
+        {
+            robot.ArmElevator.setPower(-1);
+            elevator_status = "down";
+        }
+        //if neither are pressed elevator is set to 0
+        else
+        {
+            robot.ArmElevator.setPower(0);
+            elevator_status="off";
+        }
         // driver data
         telemetry.addData("FrontMotorLeft = " , v1);
         telemetry.addData("FrontMotorRight =", v2);
         telemetry.addData("BackMotorLeft =", v3);
         telemetry.addData("BackMotorRight =", v4);
+        telemetry.addData("elevator", elevator_status);
 
-        telemetry.addData("Arm angle", ArmAngle);
 
     }
 //test
