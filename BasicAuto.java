@@ -68,8 +68,7 @@ public class BasicAuto extends LinearOpMode {
             // FAKE NEWS! actually run the robot forward a little bit.
             robot.setDriveMotors(1,1,1,1);
 
-            if(robot.DriveFrontRight.getCurrentPosition() > 10) {
-                robot.resetAllEncoders();
+            if(robot.DriveFrontRight.getCurrentPosition() > 100) {
                 current_state = States.MOVE_AWAY_HANGER;
             }
         }
