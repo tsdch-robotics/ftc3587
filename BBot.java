@@ -18,7 +18,7 @@ public class BBot {
 
     // game element manipulation
     public DcMotor ArmElevator;
-    public Servo ArmFlipper;
+    public Servo ArmHook;
 
 
     /* local OpMode members. */
@@ -41,7 +41,7 @@ public class BBot {
         ArmElevator = hwMap.dcMotor.get("ArmElevator");
 
         // initialize servos
-        ArmFlipper = hwMap.servo.get("ArmFlipper");
+        ArmHook = hwMap.servo.get("ArmHook");
 
 
         // initialize sensors

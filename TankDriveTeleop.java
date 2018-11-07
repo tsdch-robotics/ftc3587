@@ -35,7 +35,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -97,9 +96,9 @@ public class TankDriveTeleop extends OpMode {
 
 
         if (RunIntake == true) {
-            robot.ArmFlipper.setPosition(1);
+            robot.ArmHook.setPosition(1);
         } else if (RunIntake == false) {
-            robot.ArmFlipper.setPosition(0);
+            robot.ArmHook.setPosition(0);
         }
 
 
