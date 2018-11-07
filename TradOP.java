@@ -70,7 +70,7 @@ public class TradOP extends OpMode {
         telemetry.addData("FrontMotorRight =", v2);
         telemetry.addData("BackMotorLeft =", v3);
         telemetry.addData("BackMotorRight =", v4);
-        telemetry.addData("elevator", elevator_status);
+        telemetry.addData("Elevator", elevator_status);
 
 
     }
