@@ -4,14 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-
 @TeleOp(name="TradOp", group="BBot")
 public class TradOP extends OpMode {
-
     BBot robot = new BBot();   // Use robot's hardware
-
     public ElapsedTime runtime = new ElapsedTime();
-    public TradOP() { }
+
+    double hookPosition = 0.0;
 
     @Override
     public void init() {
@@ -26,8 +24,8 @@ public class TradOP extends OpMode {
     @Override
     public void loop() {
         // drivetrain
-        // left stick controls direction - forward/back, left/right
-        // right stick X controls rotation - CW/CCW
+        // left stick controls direction - forward/back, rotate CW/CCW
+        // right stick X controls strafing - right/left
         double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
         double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
         double rightX = gamepad1.right_stick_x;
@@ -41,67 +39,54 @@ public class TradOP extends OpMode {
         robot.DriveBackLeft.setPower(v3);
         robot.DriveBackRight.setPower(v4);
 
-        //elevator
-        // intake mechanism variables
-        boolean Elevator_up = gamepad1.right_bumper;
-        float Elevator_down = gamepad1.right_trigger;
-        //telemetry variable
-        String elevator_status;
+        // intake mechanism
+        double intakePower = (-gamepad2.right_stick_y)/2 + 0.5;
+        robot.IntakeCR.setPosition(intakePower);
 
-        //if right bumper is held arm elevator is set to 1
-        if(Elevator_up == true)
-        {
+        // elevator
+        boolean Elevator_up = gamepad2.right_bumper;
+        boolean Elevator_down = (gamepad2.right_trigger > 0.1);
+        String elevatorStatus = "";
+
+        if(Elevator_up) { // if right bumper is held arm elevator is set to 1
             robot.ArmElevator.setPower(1);
-            elevator_status = "up";
+            elevatorStatus = "moving up";
         }
-        //if right trigger is pressed elevator is set to -1
-        else if(Elevator_down >= .1)
-        {
+        else if(Elevator_down) { // if right trigger is pressed elevator is set to -1
             robot.ArmElevator.setPower(-1);
-            elevator_status = "down";
+            elevatorStatus = "moving down";
         }
-        //if neither are pressed elevator is set to 0
-        else
-        {
+        else { // if neither are pressed elevator is set to 0
             robot.ArmElevator.setPower(0);
-            elevator_status="off";
+            elevatorStatus = "idle";
         }
 
-        //hook
-        String Hook = new String();
+        // hook
+        boolean HookUp = gamepad2.dpad_up;
+        boolean HookDown = gamepad2.dpad_down;
+        String hookStatus = "";
 
-        boolean HookOn = gamepad2.dpad_up;
-        boolean HookOff = gamepad2.dpad_down;
-
-        if (HookOn == true) {
-            robot.ArmHook.setPosition(0.5);
-            Hook = "On";
+        if (HookUp) {
+            hookPosition = (hookPosition < 1) ? hookPosition + 0.05 : hookPosition;
+            hookStatus = "moving up";
         }
-        else if (HookOff == true){
-            robot.ArmHook.setPosition(0);
-            Hook = "Off";
+        else if (HookDown) {
+            hookPosition = (hookPosition > 0) ? hookPosition - 0.05 : hookPosition;
+            hookStatus = "moving down";
         }
+        else {
+            hookStatus = "idle";
+        }
+        robot.ArmHook.setPosition(hookPosition);
 
         // driver data
-        telemetry.addData("FrontMotorLeft = " , v1);
-        telemetry.addData("FrontMotorRight =", v2);
-        telemetry.addData("BackMotorLeft =", v3);
-        telemetry.addData("BackMotorRight =", v4);
-        telemetry.addData("Elevator: ", elevator_status);
-        telemetry.addData("Hook: ", Hook);
-
-
+        telemetry.addData("Elevator", elevatorStatus);
+        telemetry.addData("Hook: %s, %f", hookStatus, hookPosition);
+        telemetry.addData("Intake", intakePower);
     }
-//test
+
     @Override
     public void stop() { }
-
-    /*
-     * This method scales the joystick input so for low joystick values, the
-     * scaled value is less than linear.  This is to make it easier to drive
-     * the robot more precisely at slower speeds.
-     */
-
 }
 
 
