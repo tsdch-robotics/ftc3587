@@ -45,6 +45,7 @@ public class TankDriveTeleop extends OpMode {
 
     double HookPosition = 0.0;
 
+
     @Override
     public void init() {
         /*
@@ -63,6 +64,7 @@ public class TankDriveTeleop extends OpMode {
         float DriveRightPower = -gamepad1.right_stick_y;
         boolean LeftStrafe = gamepad1.dpad_left;
         boolean RightStrafe = gamepad1.dpad_right;
+        boolean IntakeCR = gamepad2.left_bumper;
 
         if (RightStrafe) {
             // to right strafe, right motors towards each other, left motors away from each other
@@ -117,7 +119,29 @@ public class TankDriveTeleop extends OpMode {
             HookPosition = (HookPosition > 0) ? HookPosition - 0.05 : HookPosition;
             hookStatus = "Moving down";
         }
+
+        else {
+            hookStatus = "idle";
+        }
         robot.ArmHook.setPosition(HookPosition);
+
+     //intake
+
+       boolean intakePower = gamepad2.left_bumper;
+
+        if (intakePower) {
+            robot.IntakeCR.setPower(-1);
+        }
+
+        else {
+            robot.IntakeCR.setPower(0);
+        }
+
+
+
+
+
+
 
 
 

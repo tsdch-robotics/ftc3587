@@ -9,7 +9,7 @@ public class TradOP extends OpMode {
     BBot robot = new BBot();   // Use robot's hardware
     public ElapsedTime runtime = new ElapsedTime();
 
-    double hookPosition = 0.0;
+    double hookPosition = 0.4;
 
     @Override
     public void init() {
@@ -64,15 +64,20 @@ public class TradOP extends OpMode {
         // hook
         boolean HookUp = gamepad2.dpad_up;
         boolean HookDown = gamepad2.dpad_down;
+        boolean HookOverride = gamepad2.x;
         String hookStatus = "";
 
         if (HookUp) {
-            hookPosition = (hookPosition < 1) ? hookPosition + 0.05 : hookPosition;
+            hookPosition = (hookPosition < 1) ? hookPosition + 0.05 : 1;
             hookStatus = "moving up";
         }
         else if (HookDown) {
-            hookPosition = (hookPosition > 0) ? hookPosition - 0.05 : hookPosition;
+            hookPosition = (hookPosition > 0.4) ? hookPosition - 0.05 : 0.4;
             hookStatus = "moving down";
+        }
+        else if(HookOverride) {
+            hookPosition = 0.25;
+            hookStatus = "override";
         }
         else {
             hookStatus = "idle";
