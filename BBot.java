@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -19,7 +20,7 @@ public class BBot {
     // game element manipulation
     public DcMotor ArmElevator;
     public Servo ArmHook;
-    public Servo IntakeCR;
+    public CRServo IntakeCR;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -42,7 +43,7 @@ public class BBot {
 
         // initialize servos
         ArmHook = hwMap.servo.get("ArmHook");
-        IntakeCR = hwMap.servo.get("Intake");
+        IntakeCR = hwMap.crservo.get("Intake");
 
         // initialize sensors
         //GyroCenter = hwMap.gyroSensor.get("GyroCenter");

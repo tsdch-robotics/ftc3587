@@ -35,17 +35,25 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @TeleOp(name="Servo Test Bench", group="BBot")
 public class ServoTestBench extends OpMode {
+    public Servo Servo1;
+    public Servo Servo2;
+    public Servo Servo3;
+    public CRServo CRServo1;
+    public CRServo CRServo2;
+    public CRServo CRServo3;
 
-    BBot robot = new BBot();   // Use robot's hardware
-    double lServoPos = 1.0;
-    double rServoPos = 0.0;
-    public ElapsedTime runtime = new ElapsedTime();
-    public ServoTestBench() { }
+    double servoPosition[];
+
+    boolean buttonReleased; // debounce toggle buttons
+    int selectedServo = 0;
+    int selectedCRServo = 0;
 
     @Override
     public void init() {
@@ -54,95 +62,89 @@ public class ServoTestBench extends OpMode {
 		 * that the names of the devices must match the names used when you
 		 * configured your robot and created the configuration file.
 		 */
-        robot.init(hardwareMap);
+        // todo: add scan for incorrect configuration (must be STB)
+        try {
+            Servo1 = hardwareMap.servo.get("Servo1");
+            Servo2 = hardwareMap.servo.get("Servo2");
+            Servo3 = hardwareMap.servo.get("Servo3");
+            CRServo1 = hardwareMap.crservo.get("CRServo1");
+            CRServo2 = hardwareMap.crservo.get("CRServo2");
+            CRServo3 = hardwareMap.crservo.get("CRServo3");
+        }
+        catch(Exception ex) {
+            telemetry.addData("Incorrect configuration! Must use STB configuration.", null);
+        }
+
+        servoPosition = new double[] { 0.0, 0.0, 0.0 };
     }
 
     @Override
     public void loop() {
-        // left stick controls direction - forward/back, left/right
-        // right stick X controls rotation - CW/CCW
-        float gamepad1LeftY = gamepad1.left_stick_y;
-        float gamepad1LeftX = -gamepad1.left_stick_x;
-        float gamepad1RightX = -gamepad1.right_stick_x;
+        boolean ServoNext = gamepad1.dpad_right;
+        boolean ServoPrev = gamepad1.dpad_left;
+        boolean CRNext = gamepad1.left_bumper;
+        boolean CRPrev = (gamepad1.left_trigger > 0.5);
 
-        // holonomic formulas for omnibot control
-        float FrontLeft = -gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
-        float FrontRight = gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
-        float BackRight = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
-        float BackLeft = -gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
+        boolean ServoPosIncrease = gamepad1.b;
+        boolean ServoPosDecrease = gamepad1.a;
 
-        // write the values to the motors
-        robot.DriveBackLeft.setPower(FrontRight);
-        robot.DriveFrontLeft.setPower(FrontLeft);
-        robot.DriveFrontRight.setPower(BackLeft);
-        robot.DriveBackRight.setPower(BackRight);
+        double CRServoPower = -gamepad1.right_stick_y;
 
+        // servo selection logic
+        if(ServoNext) selectedServo = (selectedServo >= 2) ? 0 : selectedServo + 1;
+        if(ServoPrev) selectedServo = (selectedServo <= 0) ? 2 : selectedServo - 1;
+        if(CRNext) selectedCRServo = (selectedCRServo >= 2) ? 0 : selectedCRServo + 1;
+        if(CRPrev) selectedCRServo = (selectedCRServo <= 0) ? 2 : selectedCRServo - 1;
 
-//        if (gamepad1.y) robot.NicoleElevator.setPower(1.0);  //Elevator up
-//        else if (gamepad1.a) robot.NicoleElevator.setPower(-1.0);   //Elevator down
-//        else robot.NicoleElevator.setPower(0.0);
-
-
-        // testbench code
-        if(gamepad1.b) {
-            lServoPos = (lServoPos >= 1.0) ? 1.0 : lServoPos + 0.01;
-            rServoPos = (rServoPos <= 0.0) ? 0.0 : rServoPos - 0.01;
+        // now we know which servo and which CR servo is selected
+        if(ServoPosIncrease) {
+            double curPos = servoPosition[selectedServo];
+            servoPosition[selectedServo] = (curPos >= 1.0) ? 1.0 : curPos + 0.01;
+        }
+        else if(ServoPosDecrease) {
+            double curPos = servoPosition[selectedServo];
+            servoPosition[selectedServo] = (curPos <= 0.0) ? 0.0 : curPos - 0.01;
         }
 
-        if(gamepad1.x) {
-            lServoPos = (lServoPos <= 0.0) ? 0.0 : lServoPos - 0.01;
-            rServoPos = (rServoPos >= 1.0) ? 1.0 : rServoPos + 0.01;
-        }
+        Servo1.setPosition(servoPosition[0]);
+        Servo2.setPosition(servoPosition[1]);
+        Servo3.setPosition(servoPosition[2]);
 
-//        robot.LeftNicoleClaw.setPosition(lServoPos);
-//        robot.RightNicoleClaw.setPosition(rServoPos);
+        switch(selectedCRServo) {
+            case 0:
+                CRServo1.setPower(CRServoPower);
+                CRServo2.setPower(0);
+                CRServo3.setPower(0);
+                break;
+            case 1:
+                CRServo1.setPower(0);
+                CRServo2.setPower(CRServoPower);
+                CRServo3.setPower(0);
+                break;
+            case 2:
+                CRServo1.setPower(0);
+                CRServo2.setPower(0);
+                CRServo3.setPower(CRServoPower);
+                break;
+            default:
+                break;
+        }
 
 		/*
 		 * Telemetry for debugging
 		 */
-            telemetry.addData("Text", "*** Robot Data***");
-            telemetry.addData("Joy XL YL XR", String.format("%.2f", gamepad1LeftX) + " " +
-                    String.format("%.2f", gamepad1LeftY) + " " + String.format("%.2f", gamepad1RightX));
-            telemetry.addData("L servo", String.format("%.2f", lServoPos));
-            telemetry.addData("R servo", String.format("%.2f", rServoPos));
+        telemetry.addData("Selected servo, CR servo", "%d, %d", selectedServo, selectedCRServo + 3);
+        telemetry.addData("Servo positions", "%.2f %.2f %.2f", servoPosition[0], servoPosition[1], servoPosition[2]);
+        telemetry.addData("CR servo speed", "%.2f", CRServoPower);
+
+        if(ServoNext || ServoPrev || CRNext || CRPrev) {
+            try { Thread.sleep(300); }
+            catch(Exception ex) {}
+        }
 
     }
 
     @Override
     public void stop() { }
-
-    /*
-     * This method scales the joystick input so for low joystick values, the
-     * scaled value is less than linear.  This is to make it easier to drive
-     * the robot more precisely at slower speeds.
-     */
-    double scaleInput(double dVal)  {
-        double[] scaleArray = { 0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,
-                0.30, 0.36, 0.43, 0.50, 0.60, 0.72, 0.85, 1.00, 1.00 };
-
-        // get the corresponding index for the scaleInput array.
-        int index = (int) (dVal * 16.0);
-
-        // index should be positive.
-        if (index < 0) {
-            index = -index;
-        }
-
-        // index cannot exceed size of array minus 1.
-        if (index > 16) {
-            index = 16;
-        }
-
-        // get value from the array.
-        double dScale = 0.0;
-        if (dVal < 0) {
-            dScale = -scaleArray[index];
-        } else {
-            dScale = scaleArray[index];
-        }
-
-        // return scaled value.
-        return dScale;
-    }
 
 }

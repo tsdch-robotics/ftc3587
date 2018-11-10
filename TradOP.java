@@ -40,8 +40,8 @@ public class TradOP extends OpMode {
         robot.DriveBackRight.setPower(v4);
 
         // intake mechanism
-        double intakePower = (-gamepad2.right_stick_y)/2 + 0.5;
-        robot.IntakeCR.setPosition(intakePower);
+        double intakePower = -gamepad2.right_stick_y;
+        robot.IntakeCR.setPower(intakePower);
 
         // elevator
         boolean Elevator_up = gamepad2.right_bumper;
@@ -81,7 +81,7 @@ public class TradOP extends OpMode {
 
         // driver data
         telemetry.addData("Elevator", elevatorStatus);
-        telemetry.addData("Hook: %s, %f", hookStatus, hookPosition);
+        telemetry.addData("Hook", "%s, %f", hookStatus, hookPosition);
         telemetry.addData("Intake", intakePower);
     }
 

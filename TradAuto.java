@@ -39,7 +39,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
-@Autonomous(name="Basic", group="BBot")
+@Autonomous(name="Ralph's Auto", group="BBot")
 public class TradAuto extends LinearOpMode {
     BBot robot = new BBot();   // Use robot's hardware
 
