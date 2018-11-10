@@ -37,6 +37,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -48,10 +49,14 @@ public class ServoTestBench extends OpMode {
     public CRServo CRServo1;
     public CRServo CRServo2;
     public CRServo CRServo3;
+    public DcMotor Motor1;
+    public DcMotor Motor2;
+    public DcMotor Motor3;
+    public DcMotor Motor4;
 
     double servoPosition[];
 
-    boolean buttonReleased; // debounce toggle buttons
+    int selectedMotor = 0;
     int selectedServo = 0;
     int selectedCRServo = 0;
 
@@ -62,7 +67,6 @@ public class ServoTestBench extends OpMode {
 		 * that the names of the devices must match the names used when you
 		 * configured your robot and created the configuration file.
 		 */
-        // todo: add scan for incorrect configuration (must be STB)
         try {
             Servo1 = hardwareMap.servo.get("Servo1");
             Servo2 = hardwareMap.servo.get("Servo2");
@@ -70,6 +74,10 @@ public class ServoTestBench extends OpMode {
             CRServo1 = hardwareMap.crservo.get("CRServo1");
             CRServo2 = hardwareMap.crservo.get("CRServo2");
             CRServo3 = hardwareMap.crservo.get("CRServo3");
+            Motor1 = hardwareMap.dcMotor.get("Motor1");
+            Motor2 = hardwareMap.dcMotor.get("Motor2");
+            Motor3 = hardwareMap.dcMotor.get("Motor3");
+            Motor4 = hardwareMap.dcMotor.get("Motor4");
         }
         catch(Exception ex) {
             telemetry.addData("Incorrect configuration! Must use STB configuration.", null);
@@ -80,21 +88,26 @@ public class ServoTestBench extends OpMode {
 
     @Override
     public void loop() {
-        boolean ServoNext = gamepad1.dpad_right;
-        boolean ServoPrev = gamepad1.dpad_left;
+        boolean ServoNext = gamepad1.dpad_up;
+        boolean ServoPrev = gamepad1.dpad_down;
         boolean CRNext = gamepad1.left_bumper;
         boolean CRPrev = (gamepad1.left_trigger > 0.5);
+        boolean MotorNext = gamepad1.right_bumper;
+        boolean MotorPrev = (gamepad1.right_trigger > 0.5);
 
         boolean ServoPosIncrease = gamepad1.b;
         boolean ServoPosDecrease = gamepad1.a;
 
-        double CRServoPower = -gamepad1.right_stick_y;
+        double CRServoPower = -gamepad1.left_stick_y;
+        double MotorPower = -gamepad1.right_stick_y;
 
-        // servo selection logic
+        // servo and motor selection logic
         if(ServoNext) selectedServo = (selectedServo >= 2) ? 0 : selectedServo + 1;
         if(ServoPrev) selectedServo = (selectedServo <= 0) ? 2 : selectedServo - 1;
         if(CRNext) selectedCRServo = (selectedCRServo >= 2) ? 0 : selectedCRServo + 1;
         if(CRPrev) selectedCRServo = (selectedCRServo <= 0) ? 2 : selectedCRServo - 1;
+        if(MotorNext) selectedMotor = (selectedMotor >= 3) ? 0 : selectedMotor + 1;
+        if(MotorPrev) selectedMotor = (selectedMotor <= 0) ? 3 : selectedMotor - 1;
 
         // now we know which servo and which CR servo is selected
         if(ServoPosIncrease) {
@@ -130,18 +143,45 @@ public class ServoTestBench extends OpMode {
                 break;
         }
 
-		/*
-		 * Telemetry for debugging
-		 */
-        telemetry.addData("Selected servo, CR servo", "%d, %d", selectedServo, selectedCRServo + 3);
+        switch(selectedMotor) {
+            case 0:
+                Motor1.setPower(MotorPower);
+                Motor2.setPower(0);
+                Motor3.setPower(0);
+                Motor4.setPower(0);
+                break;
+            case 1:
+                Motor1.setPower(0);
+                Motor2.setPower(MotorPower);
+                Motor3.setPower(0);
+                Motor4.setPower(0);
+                break;
+            case 2:
+                Motor1.setPower(0);
+                Motor2.setPower(0);
+                Motor3.setPower(MotorPower);
+                Motor4.setPower(0);
+                break;
+            case 3:
+                Motor1.setPower(0);
+                Motor2.setPower(0);
+                Motor3.setPower(0);
+                Motor4.setPower(MotorPower);
+            default:
+                break;
+        }
+
+
+		telemetry.addData("Selected servo, CR servo, motor", "%d, %d, %d", selectedServo, selectedCRServo + 3, selectedMotor );
         telemetry.addData("Servo positions", "%.2f %.2f %.2f", servoPosition[0], servoPosition[1], servoPosition[2]);
         telemetry.addData("CR servo speed", "%.2f", CRServoPower);
+        telemetry.addData("Motor speed", "%.2f", MotorPower);
 
-        if(ServoNext || ServoPrev || CRNext || CRPrev) {
+        // if any buttons are pressed, sleep for 0.3s to give user time to release button
+        if(ServoNext || ServoPrev || CRNext || CRPrev || MotorNext || MotorPrev) {
             try { Thread.sleep(300); }
             catch(Exception ex) {}
         }
-
     }
 
     @Override
