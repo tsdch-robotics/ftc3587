@@ -131,7 +131,7 @@ public class ServoTestBench extends OpMode {
         telemetry.addData("Servo positions", "%.2f %.2f %.2f", servoPosition[0], servoPosition[1], servoPosition[2]);
         telemetry.addData("CR servo speed", "%.2f", CRServoPower);
         telemetry.addData("Motor speed", "%.2f", MotorPower);
-        telemetry.addData("Motor position", "%.2f", motors[selectedMotor].getCurrentPosition());
+        telemetry.addData("Motor position", "%d", motors[selectedMotor].getCurrentPosition());
         telemetry.update();
 
         // if any discrete-control buttons are pressed, sleep for 0.3s to give user time to release button
