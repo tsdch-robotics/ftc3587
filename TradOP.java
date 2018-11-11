@@ -65,6 +65,7 @@ public class TradOP extends OpMode {
         boolean HookUp = gamepad2.dpad_up;
         boolean HookDown = gamepad2.dpad_down;
         boolean HookOverride = gamepad2.x;
+        boolean HookCradle = gamepad2.b;
         String hookStatus = "";
 
         if (HookUp) {
@@ -78,6 +79,10 @@ public class TradOP extends OpMode {
         else if(HookOverride) {
             hookPosition = 0.25;
             hookStatus = "override";
+        }
+        else if(HookCradle)
+        {
+            hookPosition = .6;
         }
         else {
             hookStatus = "idle";
