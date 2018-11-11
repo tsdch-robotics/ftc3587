@@ -136,15 +136,6 @@ public class TankDriveTeleop extends OpMode {
         else {
             robot.IntakeCR.setPower(0);
         }
-
-
-
-
-
-
-
-
-
         /*
          * Telemetry for debugging
          */
