@@ -41,24 +41,21 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@TeleOp(name="Servo Test Bench", group="BBot")
-public class ServoTestBench extends OpMode {
-    public Servo Servo1;
-    public Servo Servo2;
-    public Servo Servo3;
-    public CRServo CRServo1;
-    public CRServo CRServo2;
-    public CRServo CRServo3;
+@TeleOp(name="Encoder Test Bench", group="BBot")
+public class EncoderTestBench extends OpMode {
+
     public DcMotor Motor1;
     public DcMotor Motor2;
-    public DcMotor Motor3;
-    public DcMotor Motor4;
+
 
     double servoPosition[];
+
 
     int selectedMotor = 0;
     int selectedServo = 0;
     int selectedCRServo = 0;
+    int position = Motor1.getCurrentPosition();
+    int position2 = Motor2.getCurrentPosition();
 
     @Override
     public void init() {
@@ -67,28 +64,45 @@ public class ServoTestBench extends OpMode {
 		 * that the names of the devices must match the names used when you
 		 * configured your robot and created the configuration file.
 		 */
+        Motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         try {
-            Servo1 = hardwareMap.servo.get("Servo1");
-            Servo2 = hardwareMap.servo.get("Servo2");
-            Servo3 = hardwareMap.servo.get("Servo3");
-            CRServo1 = hardwareMap.crservo.get("CRServo1");
-            CRServo2 = hardwareMap.crservo.get("CRServo2");
-            CRServo3 = hardwareMap.crservo.get("CRServo3");
+
             Motor1 = hardwareMap.dcMotor.get("Motor1");
             Motor2 = hardwareMap.dcMotor.get("Motor2");
-            Motor3 = hardwareMap.dcMotor.get("Motor3");
-            Motor4 = hardwareMap.dcMotor.get("Motor4");
+
+
         }
         catch(Exception ex) {
             telemetry.addData("Incorrect configuration! Must use STB configuration.", null);
         }
-
-        servoPosition = new double[] { 0.0, 0.0, 0.0 };
+        telemetry.addData("Encoder Position", position);
+        telemetry.addData("Encoder Position", position2);
+        Motor2.setDirection(DcMotor.Direction.REVERSE);
     }
 
     @Override
     public void loop() {
-        boolean ServoNext = gamepad1.dpad_up;
+
+        if (gamepad1.a == true)
+        {
+            Motor1.setPower(.8);
+            Motor2.setPower(.8);
+
+        }
+
+        else
+        {
+            Motor1.setPower(0);
+            Motor2.setPower(0);
+        }
+
+
+
+
+    /*    boolean ServoNext = gamepad1.dpad_up;
         boolean ServoPrev = gamepad1.dpad_down;
         boolean CRNext = gamepad1.left_bumper;
         boolean CRPrev = (gamepad1.left_trigger > 0.5);
@@ -169,21 +183,14 @@ public class ServoTestBench extends OpMode {
                 Motor4.setPower(MotorPower);
 
             default:
-                break;
+                break;*/
         }
 
 
-		telemetry.addData("Selected servo, CR servo, motor", "%d, %d, %d", selectedServo, selectedCRServo + 3, selectedMotor );
-        telemetry.addData("Servo positions", "%.2f %.2f %.2f", servoPosition[0], servoPosition[1], servoPosition[2]);
-        telemetry.addData("CR servo speed", "%.2f", CRServoPower);
-        telemetry.addData("Motor speed", "%.2f", MotorPower);
 
-        // if any buttons are pressed, sleep for 0.3s to give user time to release button
-        if(ServoNext || ServoPrev || CRNext || CRPrev || MotorNext || MotorPrev) {
-            try { Thread.sleep(300); }
-            catch(Exception ex) {}
-        }
-    }
+
+
+
 
     @Override
     public void stop() { }
