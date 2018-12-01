@@ -48,14 +48,13 @@ public class EncoderTestBench extends OpMode {
     public DcMotor Motor2;
 
 
-    double servoPosition[];
+    //double servoPosition[];
 
 
-    int selectedMotor = 0;
-    int selectedServo = 0;
-    int selectedCRServo = 0;
-    int position = Motor1.getCurrentPosition();
-    int position2 = Motor2.getCurrentPosition();
+    //int selectedMotor = 0;
+    //int selectedServo = 0;
+    //int selectedCRServo = 0;
+
 
     @Override
     public void init() {
@@ -72,32 +71,34 @@ public class EncoderTestBench extends OpMode {
 
             Motor1 = hardwareMap.dcMotor.get("Motor1");
             Motor2 = hardwareMap.dcMotor.get("Motor2");
+            Motor2.setDirection(DcMotor.Direction.REVERSE);
 
 
         }
         catch(Exception ex) {
             telemetry.addData("Incorrect configuration! Must use STB configuration.", null);
         }
-        telemetry.addData("Encoder Position", position);
-        telemetry.addData("Encoder Position", position2);
-        Motor2.setDirection(DcMotor.Direction.REVERSE);
     }
 
     @Override
     public void loop() {
 
-        if (gamepad1.a == true)
-        {
+        if (gamepad1.a == true) {
             Motor1.setPower(.8);
             Motor2.setPower(.8);
 
         }
 
-        else
-        {
+        else {
             Motor1.setPower(0);
             Motor2.setPower(0);
         }
+
+        int position = Motor1.getCurrentPosition();
+        int position2 = Motor2.getCurrentPosition();
+
+        telemetry.addData("Encoder Position", position);
+        telemetry.addData("Encoder Position", position2);
 
 
 
