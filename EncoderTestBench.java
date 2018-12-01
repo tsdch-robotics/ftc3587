@@ -54,8 +54,8 @@ public class EncoderTestBench extends OpMode {
     int selectedMotor = 0;
     int selectedServo = 0;
     int selectedCRServo = 0;
-    //int position = Motor1.getCurrentPosition();
-   // int position2 = Motor2.getCurrentPosition();
+    int position = Motor1.getCurrentPosition();
+    int position2 = Motor2.getCurrentPosition();
 
     @Override
     public void init() {
@@ -78,8 +78,8 @@ public class EncoderTestBench extends OpMode {
         catch(Exception ex) {
             telemetry.addData("Incorrect configuration! Must use STB configuration.", null);
         }
-        //telemetry.addData("Encoder Position", position);
-        //telemetry.addData("Encoder Position", position2);
+        telemetry.addData("Encoder Position", position);
+        telemetry.addData("Encoder Position", position2);
         Motor2.setDirection(DcMotor.Direction.REVERSE);
     }
 
