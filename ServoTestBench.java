@@ -53,12 +53,16 @@ public class ServoTestBench extends OpMode {
     public DcMotor Motor2;
     public DcMotor Motor3;
     public DcMotor Motor4;
+    public DcMotor MotorE1;
+    public DcMotor MotorE2;
 
     double servoPosition[];
 
     int selectedMotor = 0;
     int selectedServo = 0;
     int selectedCRServo = 0;
+
+
 
     @Override
     public void init() {
@@ -67,6 +71,12 @@ public class ServoTestBench extends OpMode {
 		 * that the names of the devices must match the names used when you
 		 * configured your robot and created the configuration file.
 		 */
+
+        MotorE1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        MotorE1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorE2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        MotorE2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         try {
             Servo1 = hardwareMap.servo.get("Servo1");
             Servo2 = hardwareMap.servo.get("Servo2");
@@ -82,6 +92,7 @@ public class ServoTestBench extends OpMode {
         catch(Exception ex) {
             telemetry.addData("Incorrect configuration! Must use STB configuration.", null);
         }
+
 
         servoPosition = new double[] { 0.0, 0.0, 0.0 };
     }
@@ -167,7 +178,6 @@ public class ServoTestBench extends OpMode {
                 Motor2.setPower(0);
                 Motor3.setPower(0);
                 Motor4.setPower(MotorPower);
-
             default:
                 break;
         }
