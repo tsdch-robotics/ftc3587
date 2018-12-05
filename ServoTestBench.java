@@ -72,10 +72,7 @@ public class ServoTestBench extends OpMode {
 		 * configured your robot and created the configuration file.
 		 */
 
-        MotorE1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        MotorE1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        MotorE2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        MotorE2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         try {
             Servo1 = hardwareMap.servo.get("Servo1");
