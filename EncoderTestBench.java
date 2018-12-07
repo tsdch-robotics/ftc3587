@@ -46,7 +46,7 @@ public class EncoderTestBench extends OpMode {
     public DcMotor Motor2;
     public DcMotor Motor3;
     public DcMotor Motor4;
-    double Motor1Encoder;
+    int Motor1Encoder;
     @Override
     public void init() {
         /*
@@ -64,13 +64,11 @@ public class EncoderTestBench extends OpMode {
         } catch (Exception ex) {
             telemetry.addData("Incorrect configuration! Must use STB configuration.", null);
         }
-
+        Motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Motor3.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Motor4.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        Motor1.setTargetPosition(720);
     }
 
     @Override
@@ -78,24 +76,19 @@ public class EncoderTestBench extends OpMode {
         boolean motor = gamepad1.a;
         boolean reset = gamepad1.b;
         Motor1Encoder = Motor1.getCurrentPosition();
+        if(motor==true) {
+            Motor1.setTargetPosition(5000);
+            Motor2.setTargetPosition(-5000);
+            Motor1.setPower(.5);
+            Motor2.setPower(.5);
+            }
 
-    if(motor == true){
-        Motor1.setPower(.5);
-        Motor2.setPower(-.5);
-        Motor3.setPower(.5);
-        Motor4.setPower(-.5);
-
-    }
-    else if(motor==false){
-        Motor1.setPower(0);
-        Motor2.setPower(0);
-        Motor3.setPower(0);
-        Motor4.setPower(0);
-    }
-    if(reset== true && Motor1Encoder >=720 )
+    if(reset== true)
     {
-        Motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Motor1.setTargetPosition(0);
+        Motor2.setTargetPosition(0);
+        Motor1.setPower(.5);
+        Motor2.setPower(.5);
     }
     telemetry.addData("Encoder=" , Motor1Encoder);
 
