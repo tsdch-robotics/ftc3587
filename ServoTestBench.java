@@ -43,59 +43,40 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Servo Test Bench", group="BBot")
 public class ServoTestBench extends OpMode {
-    public Servo Servo1;
-    public Servo Servo2;
-    public Servo Servo3;
-    public CRServo CRServo1;
-    public CRServo CRServo2;
-    public CRServo CRServo3;
-    public DcMotor Motor1;
-    public DcMotor Motor2;
-    public DcMotor Motor3;
-    public DcMotor Motor4;
-    public DcMotor MotorE1;
-    public DcMotor MotorE2;
+    private Servo servos[];
+    private CRServo CRservos[];
+    private DcMotor motors[];
 
-    double servoPosition[];
-
-    int selectedMotor = 0;
-    int selectedServo = 0;
-    int selectedCRServo = 0;
+    private int selectedServo = 0;
+    private double servoPosition[];
+    private int selectedCRServo = 0;
+    private int selectedMotor = 0;
 
 
 
     @Override
     public void init() {
-		/*
-		 * Use the hardwareMap to get the dc motors and servos by name. Note
-		 * that the names of the devices must match the names used when you
-		 * configured your robot and created the configuration file.
-		 */
+		// allocate arrays
+        servos = new Servo[3];
+        servoPosition = new double[] { 0.0, 0.0, 0.0 };
+        CRservos = new CRServo[3];
+        motors = new DcMotor[4];
 
-
-
+        // instead of using the robot base class, use hardwareMap directly (since this uses a special configuration)
         try {
-            Servo1 = hardwareMap.servo.get("Servo1");
-            Servo2 = hardwareMap.servo.get("Servo2");
-            Servo3 = hardwareMap.servo.get("Servo3");
-            CRServo1 = hardwareMap.crservo.get("CRServo1");
-            CRServo2 = hardwareMap.crservo.get("CRServo2");
-            CRServo3 = hardwareMap.crservo.get("CRServo3");
-            Motor1 = hardwareMap.dcMotor.get("Motor1");
-            Motor2 = hardwareMap.dcMotor.get("Motor2");
-            Motor3 = hardwareMap.dcMotor.get("Motor3");
-            Motor4 = hardwareMap.dcMotor.get("Motor4");
+            int i;
+            for(i = 0; i < 3; i++) servos[i] = hardwareMap.servo.get(String.format("Servo%d", i));
+            for(i = 0; i < 3; i++) CRservos[i] = hardwareMap.crservo.get(String.format("CRServo%d", i+3));
+            for(i = 0; i < 4; i++) motors[i] = hardwareMap.dcMotor.get(String.format("Motor%d", i));
         }
         catch(Exception ex) {
-            telemetry.addData("Incorrect configuration! Must use STB configuration.", null);
+            telemetry.addLine("Incorrect config selected! Must use STB configuration.");
         }
-
-
-        servoPosition = new double[] { 0.0, 0.0, 0.0 };
     }
 
     @Override
     public void loop() {
+        // discrete controls
         boolean ServoNext = gamepad1.dpad_up;
         boolean ServoPrev = gamepad1.dpad_down;
         boolean CRNext = gamepad1.left_bumper;
@@ -103,9 +84,9 @@ public class ServoTestBench extends OpMode {
         boolean MotorNext = gamepad1.right_bumper;
         boolean MotorPrev = (gamepad1.right_trigger > 0.5);
 
+        // continuous controls
         boolean ServoPosIncrease = gamepad1.b;
         boolean ServoPosDecrease = gamepad1.a;
-
         double CRServoPower = -gamepad1.left_stick_y;
         double MotorPower = -gamepad1.right_stick_y;
 
@@ -117,7 +98,7 @@ public class ServoTestBench extends OpMode {
         if(MotorNext) selectedMotor = (selectedMotor >= 3) ? 0 : selectedMotor + 1;
         if(MotorPrev) selectedMotor = (selectedMotor <= 0) ? 3 : selectedMotor - 1;
 
-        // now we know which servo and which CR servo is selected
+        // now we know which servo is selected...
         if(ServoPosIncrease) {
             double curPos = servoPosition[selectedServo];
             servoPosition[selectedServo] = (curPos >= 1.0) ? 1.0 : curPos + 0.01;
@@ -127,72 +108,38 @@ public class ServoTestBench extends OpMode {
             servoPosition[selectedServo] = (curPos <= 0.0) ? 0.0 : curPos - 0.01;
         }
 
-        Servo1.setPosition(servoPosition[0]);
-        Servo2.setPosition(servoPosition[1]);
-        Servo3.setPosition(servoPosition[2]);
+        // write out servo positions
+        for(int i = 0; i < 3; i++) servos[i].setPosition(servoPosition[i]);
 
-        switch(selectedCRServo) {
-            case 0:
-                CRServo1.setPower(CRServoPower);
-                CRServo2.setPower(0);
-                CRServo3.setPower(0);
-                break;
-            case 1:
-                CRServo1.setPower(0);
-                CRServo2.setPower(CRServoPower);
-                CRServo3.setPower(0);
-                break;
-            case 2:
-                CRServo1.setPower(0);
-                CRServo2.setPower(0);
-                CRServo3.setPower(CRServoPower);
-                break;
-            default:
-                break;
+        // write out CR servo speeds
+        for(int i = 0; i < 3; i++) {
+            if(i == selectedCRServo) CRservos[i].setPower(CRServoPower); // set active servo to gamepad value
+            else CRservos[i].setPower(0); // set inactive servos to zero
         }
 
-        switch(selectedMotor) {
-            case 0:
-                Motor1.setPower(MotorPower);
-                Motor2.setPower(0);
-                Motor3.setPower(0);
-                Motor4.setPower(0);
-                break;
-            case 1:
-                Motor1.setPower(0);
-                Motor2.setPower(MotorPower);
-                Motor3.setPower(0);
-                Motor4.setPower(0);
-                break;
-            case 2:
-                Motor1.setPower(0);
-                Motor2.setPower(0);
-                Motor3.setPower(MotorPower);
-                Motor4.setPower(0);
-                break;
-            case 3:
-                Motor1.setPower(0);
-                Motor2.setPower(0);
-                Motor3.setPower(0);
-                Motor4.setPower(MotorPower);
-            default:
-                break;
+        // if a new motor was selected, reset its encoder
+        if(MotorNext || MotorPrev) {
+            motors[selectedMotor].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motors[selectedMotor].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
 
+        // write out motor speeds
+        for(int i = 0; i < 4; i++) {
+            if(i == selectedMotor) motors[i].setPower(MotorPower); // active motor to gamepad value
+            else motors[i].setPower(0); // inactive motor to zero
+        }
 
-		telemetry.addData("Selected servo, CR servo, motor", "%d, %d, %d", selectedServo, selectedCRServo + 3, selectedMotor );
+        telemetry.addData("Selected servo, CR servo, motor", "%d, %d, %d", selectedServo, selectedCRServo + 3, selectedMotor );
         telemetry.addData("Servo positions", "%.2f %.2f %.2f", servoPosition[0], servoPosition[1], servoPosition[2]);
         telemetry.addData("CR servo speed", "%.2f", CRServoPower);
         telemetry.addData("Motor speed", "%.2f", MotorPower);
+        telemetry.addData("Motor position", "%d", motors[selectedMotor].getCurrentPosition());
+        telemetry.update();
 
-        // if any buttons are pressed, sleep for 0.3s to give user time to release button
+        // if any discrete-control buttons are pressed, sleep for 0.3s to give user time to release button
         if(ServoNext || ServoPrev || CRNext || CRPrev || MotorNext || MotorPrev) {
             try { Thread.sleep(300); }
             catch(Exception ex) {}
         }
     }
-
-    @Override
-    public void stop() { }
-
 }

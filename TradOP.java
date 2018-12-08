@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="TradOp", group="BBot")
 public class TradOP extends OpMode {
-    BBot robot = new BBot();   // Use robot's hardware
+    private BBot robot = new BBot();   // Use robot's hardware
     public ElapsedTime runtime = new ElapsedTime();
 
     double hookPosition = 0.4;
@@ -24,15 +24,15 @@ public class TradOP extends OpMode {
     @Override
     public void loop() {
         // drivetrain
-        // left stick controls direction - forward/back, rotate CW/CCW
-        // right stick X controls strafing - right/left
+        // left stick controls direction - forward/back, strafing left/right
+        // right stick X controls rotation - CW/CCW
         double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
         double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
         double rightX = gamepad1.right_stick_x;
-        final double v1 = r * Math.cos(robotAngle) + rightX;
-        final double v2 = r * Math.sin(robotAngle) - rightX;
-        final double v3 = r * Math.sin(robotAngle) + rightX;
-        final double v4 = r * Math.cos(robotAngle) - rightX;
+        final double v1 = r * Math.cos(robotAngle) - rightX;
+        final double v2 = r * Math.sin(robotAngle) + rightX;
+        final double v3 = r * Math.sin(robotAngle) - rightX;
+        final double v4 = r * Math.cos(robotAngle) + rightX;
 
         robot.DriveFrontLeft.setPower(v1);
         robot.DriveFrontRight.setPower(v2);
@@ -89,10 +89,4 @@ public class TradOP extends OpMode {
         telemetry.addData("Hook", "%s, %f", hookStatus, hookPosition);
         telemetry.addData("Intake", intakePower);
     }
-
-    @Override
-    public void stop() { }
 }
-
-
-
