@@ -52,8 +52,6 @@ public class ServoTestBench extends OpMode {
     private int selectedCRServo = 0;
     private int selectedMotor = 0;
 
-
-
     @Override
     public void init() {
 		// allocate arrays
@@ -129,6 +127,9 @@ public class ServoTestBench extends OpMode {
             else motors[i].setPower(0); // inactive motor to zero
         }
 
+        telemetry.addLine("## DPad U/D: select standard servo [0-2]; A/B: move -/+");
+        telemetry.addLine("## L bumper/trigger: select CR servo [3-5]; L stick: power");
+        telemetry.addLine("## R bumper/trigger: select motor [0-3]; R stick: power");
         telemetry.addData("Selected servo, CR servo, motor", "%d, %d, %d", selectedServo, selectedCRServo + 3, selectedMotor );
         telemetry.addData("Servo positions", "%.2f %.2f %.2f", servoPosition[0], servoPosition[1], servoPosition[2]);
         telemetry.addData("CR servo speed", "%.2f", CRServoPower);
@@ -136,9 +137,9 @@ public class ServoTestBench extends OpMode {
         telemetry.addData("Motor position", "%d", motors[selectedMotor].getCurrentPosition());
         telemetry.update();
 
-        // if any discrete-control buttons are pressed, sleep for 0.3s to give user time to release button
+        // if any discrete-control buttons are pressed, sleep for 250ms to give user time to release button
         if(ServoNext || ServoPrev || CRNext || CRPrev || MotorNext || MotorPrev) {
-            try { Thread.sleep(300); }
+            try { Thread.sleep(250); }
             catch(Exception ex) {}
         }
     }

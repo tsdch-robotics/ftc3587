@@ -33,16 +33,16 @@ public class BBot {
         hwMap = ahwMap; // reference to hardware map
 
         // initialize motors
-       DriveFrontLeft = hwMap.dcMotor.get("DriveFrontLeft");
+        DriveFrontLeft = hwMap.dcMotor.get("DriveFrontLeft");
         DriveBackLeft = hwMap.dcMotor.get("DriveBackLeft");
         DriveFrontRight = hwMap.dcMotor.get("DriveFrontRight");
         DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
         DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
-       ArmElevator = hwMap.dcMotor.get("ArmElevator");
+        ArmElevator = hwMap.dcMotor.get("ArmElevator");
 
         // initialize servos
-       ArmHook = hwMap.servo.get("ArmHook");
+        ArmHook = hwMap.servo.get("ArmHook");
         IntakeCR = hwMap.crservo.get("Intake");
 
         // initialize sensors
