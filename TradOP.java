@@ -51,15 +51,15 @@ public class TradOP extends OpMode {
 
 
         if(Elevator_up) { // if right bumper is held arm elevator is set to 1
-            robot.ArmElevator.setPower(1);
+            robot.Lift.setPower(1);
             elevatorStatus = "moving up";
         }
         else if(Elevator_down) { // if right trigger is pressed elevator is set to -1
-            robot.ArmElevator.setPower(-1);
+            robot.Lift.setPower(-1);
             elevatorStatus = "moving down";
         }
         else { // if neither are pressed elevator is set to 0
-            robot.ArmElevator.setPower(0);
+            robot.Lift.setPower(0);
             elevatorStatus = "idle";
         }
 
