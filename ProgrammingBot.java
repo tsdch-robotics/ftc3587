@@ -25,11 +25,6 @@ public class ProgrammingBot {
     public DcMotor DriveBackLeft;
     public DcMotor DriveBackRight;
 
-    // IMU = gyro + accelerometer
-    BNO055IMU imu;
-    double lastAngle;
-    double globalAngle;
-
     /* local OpMode members. */
     HardwareMap hwMap = null;
     private ElapsedTime period = new ElapsedTime();
@@ -55,47 +50,8 @@ public class ProgrammingBot {
         stopAllMotors();
     }
 
-    public void init_imu() {
-        // get the REV controller's builtin imu
-        imu = hwMap.get(BNO055IMU.class, "imu");
-
-        // set up parameters
-        BNO055IMU.Parameters params = new BNO055IMU.Parameters();
-        params.mode = BNO055IMU.SensorMode.IMU;
-        params.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        params.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        params.loggingEnabled = false;
-        imu.initialize(params);
 
 
-        while (imu.isGyroCalibrated()) { // wait for gyro to be calibrated
-            try { java.lang.Thread.sleep(50); } catch (Exception ex) {} // funky-looking sleep
-        }
-    }
-
-    public double getAngle() {
-        // read the Z axis angle, accounting for the transition from +180 <-> -180
-        double current = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-        double delta = current - lastAngle;
-
-        // An illustrative example: assume the robot is facing +179 degrees and makes a +2 degree turn.
-        // The raw IMU value (current) will roll over from +180 to -180, so the final raw angle will be -179.
-        // So delta = -179 - (+179) = -358.
-        // Since delta is less than -180, add 360 to it: -358 + 360 = +2 (the amount we turned!)
-        // This works the same way in the other direction.
-
-        if(delta > 180) delta -= 360;
-        else if(delta < -180) delta += 360;
-
-        globalAngle += delta; // change the global state
-        lastAngle = current; // save the current raw Z state
-        return globalAngle;
-    }
-
-    public void resetAngle() {
-        lastAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-        globalAngle = 0;
-    }
 
 //    public void turn(double degreesToTurn) {
 //        double targetHeading = 0;

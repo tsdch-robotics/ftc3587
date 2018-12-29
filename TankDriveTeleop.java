@@ -16,13 +16,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 public class TankDriveTeleop extends OpMode {
     ProgrammingBot robot = new ProgrammingBot();   // Use robot's hardware
     public ElapsedTime runtime = new ElapsedTime();
+    Gyro gyro;
 
     @Override
     public void init() {
         robot.init(hardwareMap);
-
-        // specifically request the gyroscope
-        robot.init_imu();
+        gyro = new Gyro(robot.hwMap, "imu"); // specifically initialize the gyro
         telemetry.addData("Status", "IMU calibrated!");
     }
 
@@ -56,12 +55,12 @@ public class TankDriveTeleop extends OpMode {
             robot.DriveBackRight.setPower(DriveRightPower);
         }
 
-        if(gamepad1.b) robot.resetAngle();
+        if(gamepad1.b) gyro.resetAngle();
 
 
         // driver data
         telemetry.addData("Left Right", String.format("%.2f", DriveLeftPower) + " " + String.format("%.2f", DriveRightPower));
-        telemetry.addData("Raw IMU Z angle", robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
-        telemetry.addData("Global Z angle", robot.getAngle());
+        telemetry.addData("Raw IMU Z angle", gyro.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
+        telemetry.addData("Global Z angle", gyro.getAngle());
     }
 }
