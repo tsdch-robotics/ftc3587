@@ -1,10 +1,18 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 /*
  * This is NOT an opmode. This file defines all the hardware on the robot
@@ -17,8 +25,10 @@ public class ProgrammingBot {
     public DcMotor DriveBackLeft;
     public DcMotor DriveBackRight;
 
-    public Servo ArmHook;
-    public CRServo IntakeCR;
+    // IMU = gyro + accelerometer
+    BNO055IMU imu;
+    double lastAngle;
+    double globalAngle;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -34,19 +44,57 @@ public class ProgrammingBot {
         DriveFrontLeft = hwMap.dcMotor.get("DriveFrontLeft");
         DriveBackLeft = hwMap.dcMotor.get("DriveBackLeft");
         DriveFrontRight = hwMap.dcMotor.get("DriveFrontRight");
-        DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
-        DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
 
-        // initialize servos
-        ArmHook = hwMap.servo.get("ArmHook");
-        IntakeCR = hwMap.crservo.get("Intake");
+        // TETRIX motors are reversed from regular motors
+        DriveFrontLeft.setDirection(DcMotor.Direction.REVERSE);
+        DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
 
-        // initialize sensors
-        //GyroCenter = hwMap.gyroSensor.get("GyroCenter");
-        //JewelCS = hwMap.colorSensor.get("JewelCS");
+        // don't initialize the gyro unless an op mode specifically requests it
 
         stopAllMotors();
+    }
+
+    public void init_imu() {
+        // get the REV controller's builtin imu
+        imu = hwMap.get(BNO055IMU.class, "imu");
+
+        // set up parameters
+        BNO055IMU.Parameters params = new BNO055IMU.Parameters();
+        params.mode = BNO055IMU.SensorMode.IMU;
+        params.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        params.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        params.loggingEnabled = false;
+        imu.initialize(params);
+
+
+        while (imu.isGyroCalibrated()) { // wait for gyro to be calibrated
+            try { java.lang.Thread.sleep(50); } catch (Exception ex) {} // funky-looking sleep
+        }
+    }
+
+    public double getAngle() {
+        // read the Z axis angle, accounting for the transition from +180 <-> -180
+        double current = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        double delta = current - lastAngle;
+
+        // An illustrative example: assume the robot is facing +179 degrees and makes a +2 degree turn.
+        // The raw IMU value (current) will roll over from +180 to -180, so the final raw angle will be -179.
+        // So delta = -179 - (+179) = -358.
+        // Since delta is less than -180, add 360 to it: -358 + 360 = +2 (the amount we turned!)
+        // This works the same way in the other direction.
+
+        if(delta > 180) delta -= 360;
+        else if(delta < -180) delta += 360;
+
+        globalAngle += delta; // change the global state
+        lastAngle = current; // save the current raw Z state
+        return globalAngle;
+    }
+
+    public void resetAngle() {
+        lastAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        globalAngle = 0;
     }
 
 //    public void turn(double degreesToTurn) {
