@@ -97,10 +97,4 @@ public class TradOP extends OpMode {
         telemetry.addData("Hook", "%s, %f", hookStatus, hookPosition);
         telemetry.addData("Intake", intakePower);
     }
-
-    @Override
-    public void stop() { }
 }
-
-
-

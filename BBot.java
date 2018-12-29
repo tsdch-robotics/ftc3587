@@ -127,8 +127,8 @@ public class BBot {
         DriveBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // extra encoders
-        ArmElevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        ArmElevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //ArmElevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       // ArmElevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /*
