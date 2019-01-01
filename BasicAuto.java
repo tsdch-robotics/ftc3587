@@ -49,11 +49,13 @@ public class BasicAuto extends LinearOpMode {
     }
 
     public void runOpMode() {
+        States current_state = States.LOWER;
         telemetry.addData("Status", "Initializing...");
         robot.init(hardwareMap);
         gyro = new Gyro(robot.hwMap, "imu"); // specifically initialize the gyro
-        States current_state = States.LOWER;
+        gyro.start();
         telemetry.addData("Status", "Ready!");
+        telemetry.update();
 
         // wait for the start button to be pressed.
         waitForStart();
@@ -65,11 +67,14 @@ public class BasicAuto extends LinearOpMode {
         while (current_state == States.LOWER) {
             // lower the robot off the hanger
             // FAKE NEWS! actually run the robot forward a little bit.
-            robot.setDriveMotors(1,1,1,1);
-
-            if(robot.DriveFrontRight.getCurrentPosition() > 100) {
-                current_state = States.MOVE_AWAY_HANGER;
+            gyro.resetHeading();
+            while(gyro.globalHeading > -90) {
+                telemetry.addData("Angle", gyro.globalHeading);
+                robot.setDriveMotors(0.5,-0.5,0,0);
+                telemetry.update();
             }
+            robot.stopAllMotors();
+            sleep(5000);
         }
 
         telemetry.addData("State", "Moving away from hanger");
