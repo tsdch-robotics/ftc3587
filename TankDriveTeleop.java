@@ -8,9 +8,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 @TeleOp(name="Tank Drive", group="BBot")
 public class TankDriveTeleop extends OpMode {
@@ -20,9 +17,10 @@ public class TankDriveTeleop extends OpMode {
 
     @Override
     public void init() {
+        telemetry.addData("Status", "Initializing...");
         robot.init(hardwareMap);
         gyro = new Gyro(robot.hwMap, "imu"); // specifically initialize the gyro
-        telemetry.addData("Status", "IMU calibrated!");
+        telemetry.addData("Status", "Ready!");
     }
 
     @Override
@@ -55,12 +53,12 @@ public class TankDriveTeleop extends OpMode {
             robot.DriveBackRight.setPower(DriveRightPower);
         }
 
-        if(gamepad1.b) gyro.resetAngle();
+        if(gamepad1.b) gyro.resetHeading();
 
 
         // driver data
         telemetry.addData("Left Right", String.format("%.2f", DriveLeftPower) + " " + String.format("%.2f", DriveRightPower));
         telemetry.addData("Raw IMU Z angle", gyro.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
-        telemetry.addData("Global Z angle", gyro.getAngle());
+        telemetry.addData("Global Z angle", gyro.getHeading());
     }
 }

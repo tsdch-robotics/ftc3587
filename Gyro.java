@@ -6,14 +6,11 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 public class Gyro {
     BNO055IMU imu; // IMU = gyro + accelerometer
-    public double lastAngle;
-    public double globalAngle;
+    private double lastAngle;
+    private double globalHeading;
 
     /**
      * Initialize the REV controller's builtin IMU.
@@ -33,12 +30,17 @@ public class Gyro {
         imu.initialize(params);
 
         while (imu.isGyroCalibrated()) { // wait for gyro to be calibrated
-            try { java.lang.Thread.sleep(50); } catch (Exception ex) {} // funky-looking sleep
+            // swallow the exception since we're in a while loop anyway
+            try { java.lang.Thread.sleep(50); } catch (Exception ex) {}
         }
     }
 
-    public double getAngle() {
-        // read the Z axis angle, accounting for the transition from +180 <-> -180
+    /**
+     * Read the Z axis angle, accounting for the transition from +180 <-> -180.
+     * Store the current angle in globalHeading.
+     * @return the current heading of the robot.
+     */
+    public double getHeading() {
         double rawImuAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
         double delta = rawImuAngle - lastAngle;
 
@@ -51,13 +53,16 @@ public class Gyro {
         if(delta > 180) delta -= 360;
         else if(delta < -180) delta += 360;
 
-        globalAngle += delta; // change the global state
+        globalHeading += delta; // change the global state
         lastAngle = rawImuAngle; // save the current raw Z state
-        return globalAngle;
+        return globalHeading;
     }
 
-    public void resetAngle() {
+    /**
+     * Reset the global heading to 0, and update the last angle for more accurate calculations.
+     */
+    public void resetHeading() {
         lastAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-        globalAngle = 0;
+        globalHeading = 0;
     }
 }

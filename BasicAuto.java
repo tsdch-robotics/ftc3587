@@ -42,19 +42,18 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 @Autonomous(name="Basic", group="BBot")
 public class BasicAuto extends LinearOpMode {
     ProgrammingBot robot = new ProgrammingBot();   // Use robot's hardware
+    Gyro gyro;
 
     private enum States { // states for the autonomous FSM
         LOWER, MOVE_AWAY_HANGER, TURN1, MOVE_INTO_CRATER, STOP;
     }
 
     public void runOpMode() {
+        telemetry.addData("Status", "Initializing...");
         robot.init(hardwareMap);
-
+        gyro = new Gyro(robot.hwMap, "imu"); // specifically initialize the gyro
         States current_state = States.LOWER;
-
-        // send telemetry message to signify robot waiting
-        telemetry.addData("Status", "Snoozing");
-        telemetry.update();
+        telemetry.addData("Status", "Ready!");
 
         // wait for the start button to be pressed.
         waitForStart();
