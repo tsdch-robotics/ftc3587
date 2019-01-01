@@ -35,9 +35,9 @@ public class BBot {
         DriveFrontLeft = hwMap.dcMotor.get("DriveFrontLeft");
         DriveBackLeft = hwMap.dcMotor.get("DriveBackLeft");
         DriveFrontRight = hwMap.dcMotor.get("DriveFrontRight");
-        //DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
+        DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
-        //DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
+        DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
 
         Lift = hwMap.dcMotor.get("Lift");
 
