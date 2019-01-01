@@ -19,8 +19,7 @@ public class BBot {
 
     // game element manipulation
     public DcMotor Lift;
-    public Servo ArmHook;
-    public CRServo IntakeCR;
+    //public CRServo IntakeCR;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -36,14 +35,14 @@ public class BBot {
         DriveFrontLeft = hwMap.dcMotor.get("DriveFrontLeft");
         DriveBackLeft = hwMap.dcMotor.get("DriveBackLeft");
         DriveFrontRight = hwMap.dcMotor.get("DriveFrontRight");
-        DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
+        //DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
-        DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
+        //DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
+
         Lift = hwMap.dcMotor.get("Lift");
 
         // initialize servos
-        ArmHook = hwMap.servo.get("ArmHook");
-        IntakeCR = hwMap.crservo.get("Intake");
+        //IntakeCR = hwMap.crservo.get("Intake");
 
         // initialize sensors
         //GyroCenter = hwMap.gyroSensor.get("GyroCenter");

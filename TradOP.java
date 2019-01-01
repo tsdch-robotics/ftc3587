@@ -21,7 +21,7 @@ public class TradOP extends OpMode {
         robot.init(hardwareMap);
     }
 
-    private String elevatorStatus = "";
+    private String LiftStatus = "";
 
     @Override
     public void loop() {
@@ -42,59 +42,28 @@ public class TradOP extends OpMode {
         robot.DriveBackRight.setPower(v4);
 
         // intake mechanism
-        double intakePower = -gamepad2.right_stick_y;
-        robot.IntakeCR.setPower(intakePower);
+        //double intakePower = -gamepad2.right_stick_y;
+        //robot.IntakeCR.setPower(intakePower);
 
         // elevator
-        boolean Elevator_up = gamepad2.right_bumper;
-        boolean Elevator_down = (gamepad2.right_trigger > 0.1);
+        boolean Lift_up = gamepad1.right_bumper;
+        boolean Lift_down = (gamepad1.right_trigger > 0.1);
 
-
-        if(Elevator_up) { // if right bumper is held arm elevator is set to 1
+        if(Lift_up) { // if right bumper is held arm elevator is set to 1
             robot.Lift.setPower(1);
-            elevatorStatus = "moving up";
+            LiftStatus = "moving up";
         }
-        else if(Elevator_down) { // if right trigger is pressed elevator is set to -1
+        else if(Lift_down) { // if right trigger is pressed elevator is set to -1
             robot.Lift.setPower(-1);
-            elevatorStatus = "moving down";
+            LiftStatus = "moving down";
         }
         else { // if neither are pressed elevator is set to 0
             robot.Lift.setPower(0);
-            elevatorStatus = "idle";
+            LiftStatus = "idle";
         }
-
-        // hook
-        boolean HookUp = gamepad2.dpad_up;
-        boolean HookDown = gamepad2.dpad_down;
-        boolean HookOverride = gamepad2.x;
-        boolean HookCradle = gamepad2.b;
-        String hookStatus = "";
-
-        if (HookUp) {
-            hookPosition = (hookPosition < 1) ? hookPosition + 0.05 : 1;
-            hookStatus = "moving up";
-        }
-        else if (HookDown) {
-            hookPosition = (hookPosition > 0.4) ? hookPosition - 0.05 : 0.4;
-            hookStatus = "moving down";
-        }
-        else if(HookOverride) {
-            hookPosition = 0.25;
-            hookStatus = "override";
-        }
-        else if(HookCradle)
-        {
-            hookPosition = .6;
-            hookStatus = "cradle";
-        }
-        else {
-            hookStatus = "idle";
-        }
-        robot.ArmHook.setPosition(hookPosition);
 
         // driver data
-        telemetry.addData("Elevator", elevatorStatus);
-        telemetry.addData("Hook", "%s, %f", hookStatus, hookPosition);
-        telemetry.addData("Intake", intakePower);
+        telemetry.addData("Lift", LiftStatus);
+        //telemetry.addData("Intake", intakePower);
     }
 }

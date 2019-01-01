@@ -94,48 +94,30 @@ public class TankDriveTeleop extends OpMode {
         String elevatorStatus = "";
 
         if(Elevator_up) { // if right bumper is held arm elevator is set to 1
-            robot.ArmElevator.setPower(1);
+            robot.Lift.setPower(1);
             elevatorStatus = "up";
         }
         else if(Elevator_down) { // if right trigger is pressed elevator is set to -1
-            robot.ArmElevator.setPower(-1);
+            robot.Lift.setPower(-1);
             elevatorStatus = "down";
         }
         else { // if neither are pressed elevator is set to 0
-            robot.ArmElevator.setPower(0);
+            robot.Lift.setPower(0);
             elevatorStatus="off";
         }
 
-        // hook
-        boolean HookUp = gamepad2.dpad_up;
-        boolean HookDown = gamepad2.dpad_down;
-        String hookStatus = "";
-
-        if (HookUp) {
-            HookPosition = (HookPosition < 1) ? HookPosition + 0.05 : HookPosition;
-            hookStatus = "Moving up";
-        }
-        else if (HookDown) {
-            HookPosition = (HookPosition > 0) ? HookPosition - 0.05 : HookPosition;
-            hookStatus = "Moving down";
-        }
-
-        else {
-            hookStatus = "idle";
-        }
-        robot.ArmHook.setPosition(HookPosition);
 
      //intake
 
        boolean intakePower = gamepad2.left_bumper;
 
-        if (intakePower) {
-            robot.IntakeCR.setPower(-1);
-        }
+       // if (intakePower) {
+          //  robot.IntakeCR.setPower(-1);
+        //}
 
-        else {
-            robot.IntakeCR.setPower(0);
-        }
+        //else {
+          //  robot.IntakeCR.setPower(0);
+        //}
         /*
          * Telemetry for debugging
          */
