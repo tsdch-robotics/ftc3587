@@ -55,7 +55,7 @@ public class TradOP extends OpMode {
         }
         else if(Lift_down) { // if right trigger is pressed elevator is set to -1
             robot.Lift.setPower(-1);
-            LiftStatus = "moving down";
+            LiftStatus = "moving down";  
         }
         else { // if neither are pressed elevator is set to 0
             robot.Lift.setPower(0);
