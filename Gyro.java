@@ -7,14 +7,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
-import java.util.concurrent.locks.ReentrantLock;
-
-public class Gyro extends Thread {
+public class Gyro {
     BNO055IMU imu; // IMU = gyro + accelerometer
     private double lastAngle;
-    public double globalHeading; // allow access without going through other methods
-
-    private final ReentrantLock headingLock = new ReentrantLock();
+    private double globalHeading;
 
     /**
      * Initialize the REV controller's builtin IMU.
@@ -46,23 +42,19 @@ public class Gyro extends Thread {
      */
     public double getHeading() {
         double rawImuAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-        // grab the lock to update the angles
-        headingLock.lock();
-        try {
-            double delta = rawImuAngle - lastAngle;
+        double delta = rawImuAngle - lastAngle;
 
-            // An illustrative example: assume the robot is facing +179 degrees (last angle) and makes a +2 degree turn.
-            // The raw IMU value will roll over from +180 to -180, so the final raw angle will be -179.
-            // So delta = -179 - (+179) = -358.
-            // Since delta is less than -180, add 360 to it: -358 + 360 = +2 (the amount we turned!)
-            // This works the same way in the other direction.
+        // An illustrative example: assume the robot is facing +179 degrees (last angle) and makes a +2 degree turn.
+        // The raw IMU value will roll over from +180 to -180, so the final raw angle will be -179.
+        // So delta = -179 - (+179) = -358.
+        // Since delta is less than -180, add 360 to it: -358 + 360 = +2 (the amount we turned!)
+        // This works the same way in the other direction.
 
-            if(delta > 180) delta -= 360;
-            else if(delta < -180) delta += 360;
+        if(delta > 180) delta -= 360;
+        else if(delta < -180) delta += 360;
 
-            globalHeading += delta; // change the global state
-            lastAngle = rawImuAngle; // save the current raw Z state
-        } finally { headingLock.unlock(); }
+        globalHeading += delta; // change the global state
+        lastAngle = rawImuAngle; // save the current raw Z state
         return globalHeading;
     }
 
@@ -70,17 +62,7 @@ public class Gyro extends Thread {
      * Reset the global heading to 0, and update the last angle for more accurate calculations.
      */
     public void resetHeading() {
-        headingLock.lock();
-        try {
-            lastAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-            globalHeading = 0;
-        } finally { headingLock.unlock(); }
-    }
-
-    public void run() {
-        while(true) { // continuously update the heading every 50 ms
-            getHeading();
-            try { Thread.sleep(50); } catch(InterruptedException ex) {} // silently swallow exception
-        }
+        lastAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        globalHeading = 0;
     }
 }

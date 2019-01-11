@@ -20,7 +20,6 @@ public class TankDriveTeleop extends OpMode {
         telemetry.addData("Status", "Initializing...");
         robot.init(hardwareMap);
         gyro = new Gyro(robot.hwMap, "imu"); // specifically initialize the gyro
-        gyro.start();
         telemetry.addData("Status", "Ready!");
     }
 
@@ -59,7 +58,7 @@ public class TankDriveTeleop extends OpMode {
 
         // driver data
         telemetry.addData("Left Right", String.format("%.2f", DriveLeftPower) + " " + String.format("%.2f", DriveRightPower));
-        telemetry.addData("Heading", gyro.globalHeading);
-        telemetry.addData("IMU position", gyro.imu.getPosition());
+        telemetry.addData("Raw IMU Z angle", gyro.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
+        telemetry.addData("Global Z angle", gyro.getHeading());
     }
 }
