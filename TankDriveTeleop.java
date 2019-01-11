@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
-@TeleOp(name="Tank Drive", group="BBot")
+@TeleOp(name="Tank Drive", group="ProgrammingBot")
 public class TankDriveTeleop extends OpMode {
     ProgrammingBot robot = new ProgrammingBot();   // Use robot's hardware
     public ElapsedTime runtime = new ElapsedTime();
