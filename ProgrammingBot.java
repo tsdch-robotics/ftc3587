@@ -42,8 +42,8 @@ public class ProgrammingBot {
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
 
         // TETRIX motors are reversed from regular motors
-        //DriveFrontLeft.setDirection(DcMotor.Direction.REVERSE);
-        //DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
+        DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
+        DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
 
         // don't initialize the gyro unless an op mode specifically requests it
 
