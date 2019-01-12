@@ -1,18 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.hardware.bosch.BNO055IMU;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 /*
  * This is NOT an opmode. This file defines all the hardware on the robot
@@ -49,57 +40,6 @@ public class ProgrammingBot {
 
         stopAllMotors();
     }
-
-
-
-
-//    public void turn(double degreesToTurn) {
-//        double targetHeading = 0;
-//
-//        // stop robot
-//        DriveFrontLeft.setPower(0.0);
-//        DriveFrontRight.setPower(0.0);
-//        DriveBackLeft.setPower(0.0);
-//        DriveBackRight.setPower(0.0);
-//
-        // reset heading
-        //GyroCenter.calibrate();
-        //while(GyroCenter.isCalibrating()); // wait to finish calibrating
-
-        // determine which direction to turn
-//        if (degreesToTurn > 0){
-//            targetHeading = degreesToTurn;
-//        }
-//        if (degreesToTurn < 0) {
-//            targetHeading = 360.0 + degreesToTurn;
-//        }
-
-
-        // execute turn
-//         if (targetHeading > 180) {
-//             DriveFrontLeft.setPower(1.0);
-//             DriveFrontRight.setPower(1.0);
-//             DriveBackLeft.setPower(1.0);
-//             DriveBackRight.setPower(1.0);
-//             while (GyroCenter.getHeading() > targetHeading); // wait until robot reaches heading
-//             DriveFrontLeft.setPower(0.0);
-//             DriveFrontRight.setPower(0.0);
-//             DriveBackLeft.setPower(0.0);
-//             DriveBackRight.setPower(0.0);
-//         }
-//
-//         else {
-//             DriveFrontLeft.setPower(-1.0);
-//             DriveFrontRight.setPower(-1.0);
-//             DriveBackLeft.setPower(-1.0);
-//             DriveBackRight.setPower(-1.0);
-//             while (GyroCenter.getHeading() < targetHeading); // wait until robot reaches heading
-//             DriveFrontLeft.setPower(0.0);
-//             DriveFrontRight.setPower(0.0);
-//             DriveBackLeft.setPower(0.0);
-//             DriveBackRight.setPower(0.0);
-//         }
-//    }
 
     public void setDriveMotors(double FrontL, double FrontR, double BackL, double BackR) {
         DriveFrontLeft.setPower(FrontL);

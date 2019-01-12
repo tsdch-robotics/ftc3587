@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class TradOP extends OpMode {
     private ProgrammingBot robot = new ProgrammingBot();   // Use robot's hardware
     public ElapsedTime runtime = new ElapsedTime();
+    Gyro gyro;
 
     @Override
     public void init() {
@@ -17,6 +18,9 @@ public class TradOP extends OpMode {
          * configured your robot and created the configuration file.
          */
         robot.init(hardwareMap);
+        gyro = new Gyro(robot.hwMap, "imu"); // specifically initialize the gyro
+        gyro.start();
+        telemetry.addData("Status", "Ready!");
     }
 
     @Override
@@ -24,9 +28,9 @@ public class TradOP extends OpMode {
         // drivetrain
         // left stick controls direction - forward/back, strafing left/right
         // right stick X controls rotation - CW/CCW
-        double r = Math.hypot(-gamepad1.left_stick_x, gamepad1.left_stick_y);
-        double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4;
-        double rightX = gamepad1.right_stick_x;
+        double r = Math.hypot(gamepad1.left_stick_x, -gamepad1.left_stick_y);
+        double robotAngle = Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
+        double rightX = -gamepad1.right_stick_x;
         final double v1 = r * Math.cos(robotAngle) - rightX;
         final double v2 = r * Math.sin(robotAngle) + rightX;
         final double v3 = r * Math.sin(robotAngle) - rightX;
@@ -36,5 +40,9 @@ public class TradOP extends OpMode {
         robot.DriveFrontRight.setPower(v2);
         robot.DriveBackLeft.setPower(v3);
         robot.DriveBackRight.setPower(v4);
+
+        if(gamepad1.b) gyro.resetHeading();
+
+        telemetry.addData("Heading", gyro.globalHeading);
     }
 }

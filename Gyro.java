@@ -1,14 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-
-import com.qualcomm.robotcore.util.RobotLog;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -39,13 +36,14 @@ public class Gyro extends Thread {
 
         while (imu.isGyroCalibrated()) { // wait for gyro to be calibrated
             // swallow the exception since we're in a while loop anyway
-            try { java.lang.Thread.sleep(50); } catch (Exception ex) {}
+            try { java.lang.Thread.sleep(25); } catch (Exception ex) {}
         }
     }
 
     /**
      * Read the Z axis angle, accounting for the transition from +180 <-> -180.
      * Store the current angle in globalHeading.
+     * Positive angles (+) are counterclockwise/CCW, negative angles (-) are clockwise/CW.
      * @return the current heading of the robot.
      */
     public double getHeading() {
@@ -74,22 +72,20 @@ public class Gyro extends Thread {
      * Reset the global heading to 0, and update the last angle for more accurate calculations.
      */
     public void resetHeading() {
-        headingLock.lock();
+        headingLock.lock(); // grab the lock to avoid conflicting with getHeading
         try {
             lastAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
             globalHeading = 0;
         } finally { headingLock.unlock(); }
     }
 
+    /**
+     * Gyro update thread. Continuously update the heading every 50 ms unless an exit has been requested.
+     */
     public void run() {
-        RobotLog.i("[gyro] starting...");
-        while(!exit) { // continuously update the heading every 50 ms
-            RobotLog.i("[gyro] updating heading...");
+        while(!exit) {
             getHeading();
-            try { Thread.sleep(50); } catch(InterruptedException ex) {
-                RobotLog.i("[gyro] sleep interrupted");
-            } // silently swallow exception
+            try { Thread.sleep(50); } catch(InterruptedException ex) { } // silently swallow exception
         }
-        RobotLog.i("[gyro] exiting...");
     }
 }

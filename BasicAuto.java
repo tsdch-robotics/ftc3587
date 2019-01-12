@@ -49,15 +49,11 @@ public class BasicAuto extends LinearOpMode {
         LOWER, MOVE_AWAY_HANGER, TURN1, MOVE_INTO_CRATER, STOP;
     }
 
-    public BasicAuto() {
-        msStuckDetectStop = 1200;
-    }
-
     public void runOpMode() {
         States current_state = States.LOWER;
         telemetry.addData("Status", "Initializing...");
         robot.init(hardwareMap);
-        gyro = new Gyro(robot.hwMap, "imu"); // specifically initialize the gyro
+        gyro = new Gyro(robot.hwMap, "imu"); // special initialization for gyro
         gyro.start();
         telemetry.addData("Status", "Ready!");
         telemetry.update();
@@ -69,36 +65,18 @@ public class BasicAuto extends LinearOpMode {
         telemetry.addData("Status", "Running");
         telemetry.addData("State", "Lowering");
         telemetry.update();
-        while (current_state == States.LOWER && opModeIsActive()) {
+        while (current_state == States.LOWER) {
             // lower the robot off the hanger
             // FAKE NEWS! actually run the robot forward a little bit.
-            RobotLog.i("[aut] start of state loop");
             gyro.resetHeading();
             while(gyro.globalHeading > -90) {
-                RobotLog.i("[aut] start of heading loop");
                 telemetry.addData("Angle", gyro.globalHeading);
-                robot.setDriveMotors(0.5,-0.5,0,0);
+                robot.setDriveMotors(0.5,-0.5,0.5,-0.5);
                 telemetry.update();
-                if(!opModeIsActive()) {
-                    RobotLog.i("[aut] exit 1 requested, signal gyro exit...");
-//                    gyro.exit = true;
-//                    sleep(100);
-                    return;
-                }
-            }
-            RobotLog.i("[aut] outside of gyro loop");
-            if(!opModeIsActive()) {
-                RobotLog.i("[aut] exit 2 requested, signal gyro exit...");
-                gyro.exit = true;
+                if(!opModeIsActive()) return; // check termination in the innermost loop
             }
             robot.stopAllMotors();
-            RobotLog.i("[aut] sleeping for 5 seconds...");
             sleep(5000);
-        }
-        RobotLog.i("[aut] outside of state loop ");
-        if(!opModeIsActive()) {
-            RobotLog.i("[aut] exit 3 requested, signal gyro exit...");
-            return;
         }
 
         telemetry.addData("State", "Moving away from hanger");
