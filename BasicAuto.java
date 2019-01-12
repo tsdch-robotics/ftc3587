@@ -38,6 +38,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.util.RobotLog;
 
 @Autonomous(name="Basic", group="BBot")
 public class BasicAuto extends LinearOpMode {
@@ -46,6 +47,10 @@ public class BasicAuto extends LinearOpMode {
 
     private enum States { // states for the autonomous FSM
         LOWER, MOVE_AWAY_HANGER, TURN1, MOVE_INTO_CRATER, STOP;
+    }
+
+    public BasicAuto() {
+        msStuckDetectStop = 1200;
     }
 
     public void runOpMode() {
@@ -64,17 +69,36 @@ public class BasicAuto extends LinearOpMode {
         telemetry.addData("Status", "Running");
         telemetry.addData("State", "Lowering");
         telemetry.update();
-        while (current_state == States.LOWER) {
+        while (current_state == States.LOWER && opModeIsActive()) {
             // lower the robot off the hanger
             // FAKE NEWS! actually run the robot forward a little bit.
+            RobotLog.i("[aut] start of state loop");
             gyro.resetHeading();
             while(gyro.globalHeading > -90) {
+                RobotLog.i("[aut] start of heading loop");
                 telemetry.addData("Angle", gyro.globalHeading);
                 robot.setDriveMotors(0.5,-0.5,0,0);
                 telemetry.update();
+                if(!opModeIsActive()) {
+                    RobotLog.i("[aut] exit 1 requested, signal gyro exit...");
+//                    gyro.exit = true;
+//                    sleep(100);
+                    return;
+                }
+            }
+            RobotLog.i("[aut] outside of gyro loop");
+            if(!opModeIsActive()) {
+                RobotLog.i("[aut] exit 2 requested, signal gyro exit...");
+                gyro.exit = true;
             }
             robot.stopAllMotors();
+            RobotLog.i("[aut] sleeping for 5 seconds...");
             sleep(5000);
+        }
+        RobotLog.i("[aut] outside of state loop ");
+        if(!opModeIsActive()) {
+            RobotLog.i("[aut] exit 3 requested, signal gyro exit...");
+            return;
         }
 
         telemetry.addData("State", "Moving away from hanger");
@@ -83,36 +107,6 @@ public class BasicAuto extends LinearOpMode {
             robot.setDriveMotors(0,0,0,0);
             // this will stay stuck here for testing purposes
         }
-            // lower the robot off the hanger
 
-            //if(arm is lowered) {
-            // current_state = States.MOVE_AWAY_HANGER;
-
-        telemetry.addData("State", "Turn towards crater");
-        telemetry.update();
-        while (current_state == States.TURN1) {
-            // lower the robot off the hanger
-
-            //if(arm is lowered) {
-            // current_state = States.MOVE_AWAY_HANGER;
-
-        }
-
-        telemetry.addData("State", "Moving into crater");
-        telemetry.update();
-        while (current_state == States.MOVE_INTO_CRATER) {
-            // lower the robot off the hanger
-
-            //if(arm is lowered) {
-            // current_state = States.MOVE_AWAY_HANGER;
-        }
-
-        telemetry.addData("Status", "Finished");
-        telemetry.addData("State", "Stop");
-        telemetry.update();
-        while (current_state == States.STOP) {
-            // stop all motors
-            robot.stopAllMotors();
-        }
     }
 }

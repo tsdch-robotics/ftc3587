@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+
+import com.qualcomm.robotcore.util.RobotLog;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -15,6 +18,7 @@ public class Gyro extends Thread {
     public double globalHeading; // allow access without going through other methods
 
     private final ReentrantLock headingLock = new ReentrantLock();
+    public volatile boolean exit = false;
 
     /**
      * Initialize the REV controller's builtin IMU.
@@ -78,9 +82,14 @@ public class Gyro extends Thread {
     }
 
     public void run() {
-        while(true) { // continuously update the heading every 50 ms
+        RobotLog.i("[gyro] starting...");
+        while(!exit) { // continuously update the heading every 50 ms
+            RobotLog.i("[gyro] updating heading...");
             getHeading();
-            try { Thread.sleep(50); } catch(InterruptedException ex) {} // silently swallow exception
+            try { Thread.sleep(50); } catch(InterruptedException ex) {
+                RobotLog.i("[gyro] sleep interrupted");
+            } // silently swallow exception
         }
+        RobotLog.i("[gyro] exiting...");
     }
 }
