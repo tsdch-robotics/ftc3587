@@ -44,8 +44,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class EncoderTestBench extends OpMode {
     public DcMotor Motor1;
     public DcMotor Motor2;
-    public DcMotor Motor3;
-    public DcMotor Motor4;
+    public Servo ServoSlap;
+    public CRServo ServoSuck;
+    //public DcMotor Motor3;
+    //public DcMotor Motor4;
     int Motor1Encoder;
     @Override
     public void init() {
@@ -59,15 +61,15 @@ public class EncoderTestBench extends OpMode {
         try {
             Motor1 = hardwareMap.dcMotor.get("Motor1");
             Motor2 = hardwareMap.dcMotor.get("Motor2");
-            Motor3 = hardwareMap.dcMotor.get("Motor3");
-            Motor4 = hardwareMap.dcMotor.get("Motor4");
+            ServoSlap = hardwareMap.servo.get("ServoSlap");
+            ServoSuck = hardwareMap.crservo.get("ServoSuck");
+            //Motor3 = hardwareMap.dcMotor.get("Motor3");
+            //Motor4 = hardwareMap.dcMotor.get("Motor4");
         } catch (Exception ex) {
             telemetry.addData("Incorrect configuration! Must use STB configuration.", null);
         }
         Motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
     }
 
@@ -75,20 +77,70 @@ public class EncoderTestBench extends OpMode {
     public void loop() {
         boolean motor = gamepad1.a;
         boolean reset = gamepad1.b;
+        boolean resetencoder = gamepad1.dpad_right;
+        boolean slapup = gamepad1.dpad_up;
+        boolean slapdown = gamepad1.dpad_down;
+        boolean  suckon = gamepad1.x;
+        boolean suckoff = gamepad1.y;
+        float Rotatearmforward = gamepad1.right_trigger;
+        boolean Rotatearmbackward = gamepad1.right_bumper;
         Motor1Encoder = Motor1.getCurrentPosition();
         if(motor==true) {
-            Motor1.setTargetPosition(5000);
-            Motor2.setTargetPosition(-5000);
+            Motor1.setTargetPosition(10650);
+            //Motor2.setTargetPosition(720);
             Motor1.setPower(.5);
-            Motor2.setPower(.5);
+            //Motor2.setPower(.5);
             }
+            if(Rotatearmbackward)
+            {
+                Motor2.setPower(-1);
+            }
+            else if(Rotatearmforward>0.1)
+            {
+                Motor2.setPower(1);
+            }
+            else
+            {
+                Motor2.setPower(0);
+            }
+        if(slapup)
+        {
+            ServoSlap.setPosition(1);
+        }
+        else if(slapdown)
+        {
+            ServoSlap.setPosition(0);
+        }
+        if(suckon)
+        {
+            ServoSuck.setPower(-1);
+        }
+        else if(suckoff)
+        {
+            ServoSuck.setPower(1);
+        }
+        else
+        {
+            ServoSuck.setPower(0);
+        }
+
+
+
+
+
+
+
 
     if(reset== true)
     {
-        Motor1.setTargetPosition(0);
-        Motor2.setTargetPosition(0);
+        Motor1.setTargetPosition(3050);
         Motor1.setPower(.5);
-        Motor2.setPower(.5);
+    }
+    if(resetencoder)
+    {
+        Motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motor1.setTargetPosition(0);
+        Motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
     telemetry.addData("Encoder=" , Motor1Encoder);
 
