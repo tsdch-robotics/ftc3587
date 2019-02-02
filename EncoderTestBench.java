@@ -44,6 +44,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class EncoderTestBench extends OpMode {
     public DcMotor Motor1;
     public DcMotor Motor2;
+    public DcMotor Motor3;
     public Servo ServoSlap;
     public CRServo ServoSuck;
     //public DcMotor Motor3;
@@ -61,6 +62,7 @@ public class EncoderTestBench extends OpMode {
         try {
             Motor1 = hardwareMap.dcMotor.get("Motor1");
             Motor2 = hardwareMap.dcMotor.get("Motor2");
+            Motor3 = hardwareMap.dcMotor.get("Motor3");
             ServoSlap = hardwareMap.servo.get("ServoSlap");
             ServoSuck = hardwareMap.crservo.get("ServoSuck");
             //Motor3 = hardwareMap.dcMotor.get("Motor3");
@@ -80,11 +82,20 @@ public class EncoderTestBench extends OpMode {
         boolean resetencoder = gamepad1.dpad_right;
         boolean slapup = gamepad1.dpad_up;
         boolean slapdown = gamepad1.dpad_down;
+        boolean rotate = gamepad1.dpad_left;
         boolean  suckon = gamepad1.x;
         boolean suckoff = gamepad1.y;
         float Rotatearmforward = gamepad1.right_trigger;
         boolean Rotatearmbackward = gamepad1.right_bumper;
         Motor1Encoder = Motor1.getCurrentPosition();
+        if(rotate)
+        {
+            Motor3.setPower(.25);
+        }
+        else if(rotate ==false)
+        {
+            Motor3.setPower(0);
+        }
         if(motor==true) {
             Motor1.setTargetPosition(10650);
             //Motor2.setTargetPosition(720);

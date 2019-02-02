@@ -19,7 +19,6 @@ public class BBot {
 
     // game element manipulation
     public DcMotor Lift;
-    //public CRServo IntakeCR;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;

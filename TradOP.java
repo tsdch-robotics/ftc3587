@@ -9,8 +9,6 @@ public class TradOP extends OpMode {
     private BBot robot = new BBot();   // Use robot's hardware
     public ElapsedTime runtime = new ElapsedTime();
 
-    double hookPosition = 0.4;
-
     @Override
     public void init() {
         /*
@@ -41,9 +39,6 @@ public class TradOP extends OpMode {
         robot.DriveBackLeft.setPower(v3);
         robot.DriveBackRight.setPower(v4);
 
-        // intake mechanism
-        //double intakePower = -gamepad2.right_stick_y;
-        //robot.IntakeCR.setPower(intakePower);
 
         // elevator
         boolean Lift_up = gamepad1.right_bumper;
