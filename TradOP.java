@@ -28,7 +28,7 @@ public class TradOP extends OpMode {
         // drivetrain
         // left stick controls direction - forward/back, strafing left/right
         // right stick X controls rotation - CW/CCW
-        double r = Math.hypot(gamepad1.left_stick_x, -gamepad1.left_stick_y);
+        double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
         double robotAngle = Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
         double rightX = -gamepad1.right_stick_x;
         final double v1 = r * Math.cos(robotAngle) - rightX;
@@ -44,5 +44,10 @@ public class TradOP extends OpMode {
         if(gamepad1.b) gyro.resetHeading();
 
         telemetry.addData("Heading", gyro.globalHeading);
+        telemetry.addData("Front Left: ", v1);
+        telemetry.addData("Front Right: ", v2);
+        telemetry.addData("Back Left: ", v3);
+        telemetry.addData("Back Right: ", v4);
+
     }
 }
