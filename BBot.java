@@ -24,6 +24,10 @@ public class BBot {
     HardwareMap hwMap = null;
     private ElapsedTime period = new ElapsedTime();
 
+    // constant encoder counts
+    public final double REVCoreHexEncoder = 288.0;
+    public final double REVHD401Encoder = 1120.0;
+
     public BBot() { }
 
     /* Initialize standard Hardware interfaces */

@@ -44,13 +44,11 @@ public class TradAuto extends LinearOpMode {
     BBot robot = new BBot();   // Use robot's hardware
 
     private enum States { // states for the autonomous FSM
-        LOWER, MOVE_AWAY_HANGER, TURN1, MOVE_INTO_CRATER, STOP;
+        LOWERING, CLEAR_LANDER, RETRACT_LIFT, STOP;
     }
 
     public void runOpMode() {
         robot.init(hardwareMap);
-
-        States current_state = States.LOWER;
 
         // send telemetry message to signify robot waiting
         telemetry.addData("Status", "Snoozing");
@@ -60,49 +58,45 @@ public class TradAuto extends LinearOpMode {
         waitForStart();
 
         // State machine for robot
+        States current_state = States.LOWERING;
         telemetry.addData("Status", "Running");
         telemetry.addData("State", "Lowering");
         telemetry.update();
-        while (current_state == States.LOWER) {
-            // lower the robot off the hanger
-            // FAKE NEWS! actually run the robot forward a little bit.
-            robot.setDriveMotors(1,1,1,1);
 
-            if(robot.DriveFrontRight.getCurrentPosition() > 100) {
-                current_state = States.MOVE_AWAY_HANGER;
+        while (current_state == States.LOWERING) {
+            // lower the robot off the hanger
+            robot.Lift.setPower(1.0);
+
+            telemetry.addData("Lift Position", robot.Lift.getCurrentPosition());
+            if(robot.Lift.getCurrentPosition() > robot.REVHD401Encoder * 15) {
+                current_state = States.CLEAR_LANDER;
+                robot.Lift.setPower(0.0);
             }
         }
 
-        telemetry.addData("State", "Moving away from hanger");
+        telemetry.addData("State", "Clearing Lift, prepping for colored balls");
         telemetry.update();
-        while (current_state == States.MOVE_AWAY_HANGER) {
-            robot.setDriveMotors(0,0,0,0);
-            // this will stay stuck here for testing purposes
-        }
-        // lower the robot off the hanger
+        while (current_state == States.CLEAR_LANDER) {
+            robot.setDriveMotors(-1,-1,-1,-1);
 
-        //if(arm is lowered) {
-        // current_state = States.MOVE_AWAY_HANGER;
-
-        telemetry.addData("State", "Turn towards crater");
-        telemetry.update();
-        while (current_state == States.TURN1) {
-            // lower the robot off the hanger
-
-            //if(arm is lowered) {
-            // current_state = States.MOVE_AWAY_HANGER;
-
+            telemetry.addData("Drive Position", robot.DriveFrontRight.getCurrentPosition());
+            if(robot.DriveFrontRight.getCurrentPosition() > robot.REVHD401Encoder * 0.5) {
+                current_state = States.RETRACT_LIFT;
+                robot.setDriveMotors(0.0,0.0,0.0,0.0);
+            }
         }
 
-        telemetry.addData("State", "Moving into crater");
+        telemetry.addData("State", "Clearing Lift, prepping for colored balls");
         telemetry.update();
-        while (current_state == States.MOVE_INTO_CRATER) {
-            // lower the robot off the hanger
+        while (current_state == States.RETRACT_LIFT) {
+            robot.Lift.setPower(-1.0);
+            telemetry.addData("Drive Position", robot.DriveFrontRight.getCurrentPosition());
+            if(robot.Lift.getCurrentPosition() > robot.REVHD401Encoder * 10) {
+                current_state = States.STOP;
+                robot.Lift.setPower(0.0);
 
-            //if(arm is lowered) {
-            // current_state = States.MOVE_AWAY_HANGER;
+            }
         }
-
         telemetry.addData("Status", "Finished");
         telemetry.addData("State", "Stop");
         telemetry.update();
