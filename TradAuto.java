@@ -67,39 +67,34 @@ public class TradAuto extends LinearOpMode {
         while (current_state == States.LOWERING) {
             // lower the robot off the hanger
             robot.Lift.setPower(1.0);
-            if(robot.Lift.getCurrentPosition() > robot.REVHD401Encoder * 14.5) {
+            if(robot.Lift.getCurrentPosition() > robot.REVHD401Encoder * 10) {
                 current_state = States.CLEAR_LANDER;
                 robot.Lift.setPower(0.0);
-                robot.Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
             if(!opModeIsActive()) return; // check termination in the innermost loop
         }
+        robot.Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //telemetry.addData("State", "Clearing Lift, prepping for colored balls");
+        //telemetry.update();
 
-        telemetry.addData("State", "Clearing Lift, prepping for colored balls");
-        telemetry.update();
         while (current_state == States.CLEAR_LANDER) {
             robot.setDriveMotors(-0.5,-0.5,-0.5,-0.5);
-            telemetry.addData("Drive Position", robot.DriveFrontRight.getCurrentPosition());
-            if(robot.DriveFrontRight.getCurrentPosition() > -robot.REVHD401Encoder * 20) {
+            if(robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 1) {
                 current_state = States.RETRACT_LIFT;
                 robot.setDriveMotors(0.0,0.0,0.0,0.0);
-                robot.DriveFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
             if(!opModeIsActive()) return; // check termination in the innermost loop
         }
-
-        telemetry.addData("State", "Clearing Lift, prepping for colored balls");
-        telemetry.update();
-        telemetry.addData("Lift:" ,robot.Lift.getCurrentPosition());
-
+        robot.DriveFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //telemetry.addData("State", "Clearing Lift, prepping for colored balls");
+        //telemetry.update();
+        //telemetry.addData("Lift:" ,robot.Lift.getCurrentPosition());
         
         while (current_state == States.RETRACT_LIFT) {
             robot.Lift.setPower(-1.0);
-            telemetry.addData("Drive Position", robot.DriveFrontRight.getCurrentPosition());
-            if(robot.Lift.getCurrentPosition() < -robot.REVHD401Encoder * 10) {
+            if(robot.Lift.getCurrentPosition() < -robot.REVHD401Encoder * 8) {
                 current_state = States.STOP;
                 robot.Lift.setPower(0.0);
-
             }
             if(!opModeIsActive()) return; // check termination in the innermost loop
         }
