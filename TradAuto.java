@@ -72,6 +72,7 @@ public class TradAuto extends LinearOpMode {
                 current_state = States.CLEAR_LANDER;
                 robot.Lift.setPower(0.0);
             }
+            if(!opModeIsActive()) return; // check termination in the innermost loop
         }
 
         telemetry.addData("State", "Clearing Lift, prepping for colored balls");
@@ -84,6 +85,7 @@ public class TradAuto extends LinearOpMode {
                 current_state = States.RETRACT_LIFT;
                 robot.setDriveMotors(0.0,0.0,0.0,0.0);
             }
+            if(!opModeIsActive()) return; // check termination in the innermost loop
         }
 
         telemetry.addData("State", "Clearing Lift, prepping for colored balls");
@@ -96,6 +98,7 @@ public class TradAuto extends LinearOpMode {
                 robot.Lift.setPower(0.0);
 
             }
+            if(!opModeIsActive()) return; // check termination in the innermost loop
         }
         telemetry.addData("Status", "Finished");
         telemetry.addData("State", "Stop");
@@ -103,6 +106,7 @@ public class TradAuto extends LinearOpMode {
         while (current_state == States.STOP) {
             // stop all motors
             robot.stopAllMotors();
+            if(!opModeIsActive()) return; // check termination in the innermost loop
         }
     }
 }

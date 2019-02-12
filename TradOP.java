@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class TradOP extends OpMode {
     private BBot robot = new BBot();   // Use robot's hardware
     public ElapsedTime runtime = new ElapsedTime();
+    Gyro gyro;
 
     @Override
     public void init() {
@@ -17,6 +18,10 @@ public class TradOP extends OpMode {
          * configured your robot and created the configuration file.
          */
         robot.init(hardwareMap);
+        robot.init(hardwareMap);
+        gyro = new Gyro(robot.hwMap, "imu"); // specifically initialize the gyro
+        gyro.start();
+        telemetry.addData("Status", "Ready!");
     }
 
     private String LiftStatus = "";
@@ -59,6 +64,6 @@ public class TradOP extends OpMode {
 
         // driver data
         telemetry.addData("Lift", LiftStatus);
-        //telemetry.addData("Intake", intakePower);
+        telemetry.addData("Gyro Directions", gyro.globalHeading);
     }
 }
