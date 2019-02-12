@@ -38,6 +38,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous(name="Ralph's Auto", group="BBot")
 public class TradAuto extends LinearOpMode {
@@ -90,6 +91,8 @@ public class TradAuto extends LinearOpMode {
 
         telemetry.addData("State", "Clearing Lift, prepping for colored balls");
         telemetry.update();
+        robot.Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        
         while (current_state == States.RETRACT_LIFT) {
             robot.Lift.setPower(-1.0);
             telemetry.addData("Drive Position", robot.DriveFrontRight.getCurrentPosition());
