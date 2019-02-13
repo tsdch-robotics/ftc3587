@@ -19,6 +19,8 @@ public class BBot {
 
     // game element manipulation
     public DcMotor Lift;
+    public DcMotor ArmInOut;
+    public DcMotor ArmUpDown;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -44,6 +46,10 @@ public class BBot {
 
         Lift = hwMap.dcMotor.get("Lift");
         Lift.setDirection(DcMotor.Direction.REVERSE);
+
+        ArmInOut = hwMap.dcMotor.get("ArmInOut");
+        ArmUpDown = hwMap.dcMotor.get("ArmUpDown");
+        
 
         // initialize servos
         //IntakeCR = hwMap.crservo.get("Intake");
@@ -116,6 +122,8 @@ public class BBot {
         DriveBackLeft.setPower(0.0);
         DriveBackRight.setPower(0.0);
         Lift.setPower(0.0);
+        ArmInOut.setPower(0.0);
+        ArmUpDown.setPower(0.0);
     }
 
     public void resetAllEncoders() {

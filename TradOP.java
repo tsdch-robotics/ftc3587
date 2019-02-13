@@ -24,6 +24,8 @@ public class TradOP extends OpMode {
     }
 
     private String LiftStatus = "";
+    private String AVS = "";
+    private String AHS = "";
 
     @Override
     public void loop() {
@@ -61,8 +63,39 @@ public class TradOP extends OpMode {
             LiftStatus = "idle";
         }
 
+        // arm
+        boolean Arm_Up = gamepad2.right_bumper;
+        boolean Arm_Down = (gamepad2.right_trigger > 0.1);
+
+        if (Arm_Up) {
+            robot.ArmUpDown.setPower(1.0);
+            AVS = "up";
+        } else if(Arm_Down) {
+            robot.ArmUpDown.setPower(-1.0);
+            AVS = "down";
+        } else {
+            robot.ArmUpDown.setPower(0.0);
+            AVS = "idle";
+        }
+
+        boolean Arm_Out = gamepad2.dpad_up;
+        boolean Arm_In = gamepad2.dpad_down;
+
+        if (Arm_Out) {
+            robot.ArmInOut.setPower(1.0);
+            AHS = "out";
+        } else if(Arm_In) {
+            robot.ArmInOut.setPower(-1.0);
+            AHS = "in";
+        } else {
+            robot.ArmInOut.setPower(0.0);
+            AHS = "idle";
+        }
+
         // driver data
         telemetry.addData("Lift", LiftStatus);
+        telemetry.addData("Arm", AVS);
+        telemetry.addData("Arm", AHS);
         //telemetry.addData("Gyro Directions", gyro.globalHeading);
     }
 }
