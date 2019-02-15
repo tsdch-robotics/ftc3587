@@ -26,15 +26,17 @@ public class TradOP extends OpMode {
     private String LiftStatus = "";
     private String AVS = "";
     private String AHS = "";
+    private String Intake = "";
+    private String PhatServo = "";
 
     @Override
     public void loop() {
         // drivetrain
         // left stick controls direction - forward/back, strafing left/right
         // right stick X controls rotation - CW/CCW
-        double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
-        double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
-        double rightX = gamepad1.right_stick_x;
+        double r = Math.hypot(gamepad1.left_stick_x, -gamepad1.left_stick_y);
+        double robotAngle = Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
+        double rightX = -gamepad1.right_stick_x;
         final double v1 = r * Math.cos(robotAngle) - rightX;
         final double v2 = r * Math.sin(robotAngle) + rightX;
         final double v3 = r * Math.sin(robotAngle) - rightX;
@@ -64,22 +66,18 @@ public class TradOP extends OpMode {
         }
 
         // arm
-        boolean Arm_Up = gamepad2.right_bumper;
-        boolean Arm_Down = (gamepad2.right_trigger > 0.1);
 
-        if (Arm_Up) {
-            robot.ArmUpDown.setPower(1.0);
+        robot.ArmUpDown.setPower(gamepad2.left_stick_y);
+        if (gamepad2.left_stick_y > 0) {
             AVS = "up";
-        } else if(Arm_Down) {
-            robot.ArmUpDown.setPower(-1.0);
+        } else if (gamepad2.left_stick_y < 0) {
             AVS = "down";
         } else {
-            robot.ArmUpDown.setPower(0.0);
             AVS = "idle";
         }
 
-        boolean Arm_Out = gamepad2.dpad_up;
-        boolean Arm_In = gamepad2.dpad_down;
+        boolean Arm_Out = (gamepad2.right_trigger > 0.1);
+        boolean Arm_In = gamepad2.right_bumper;
 
         if (Arm_Out) {
             robot.ArmInOut.setPower(1.0);
@@ -92,10 +90,37 @@ public class TradOP extends OpMode {
             AHS = "idle";
         }
 
+        boolean Spit = gamepad2.a;
+        boolean Zucc = gamepad2.b;
+
+        if (Spit) {
+            robot.Brotation.setPower(1.0);
+            Intake = "spit";
+        } else if(Zucc) {
+            robot.Brotation.setPower(-1.0);
+            Intake = "zucc";
+        } else {
+            robot.Brotation.setPower(0.0);
+            Intake = "idle";
+        }
+
+        boolean Store = gamepad2.dpad_down;
+        boolean Active = gamepad2.dpad_up;
+
+        if (Store) {
+            robot.PhatServo.setPosition(0.0);
+            PhatServo = "spit";
+        } else if(Active) {
+            robot.PhatServo.setPosition(1.0);
+            PhatServo = "zucc";
+        }
+
         // driver data
         telemetry.addData("Lift", LiftStatus);
         telemetry.addData("Arm", AVS);
         telemetry.addData("Arm", AHS);
+        telemetry.addData("Brotation", Intake);
+        telemetry.addData("PhatServo", PhatServo);
         //telemetry.addData("Gyro Directions", gyro.globalHeading);
     }
 }

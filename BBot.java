@@ -21,6 +21,11 @@ public class BBot {
     public DcMotor Lift;
     public DcMotor ArmInOut;
     public DcMotor ArmUpDown;
+    public Servo StupidStick;
+
+    // Intake
+    public CRServo Brotation;
+    public Servo PhatServo;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -49,16 +54,18 @@ public class BBot {
 
         ArmInOut = hwMap.dcMotor.get("ArmInOut");
         ArmUpDown = hwMap.dcMotor.get("ArmUpDown");
-        
 
         // initialize servos
-        //IntakeCR = hwMap.crservo.get("Intake");
+        StupidStick = hwMap.servo.get("StupidStick");
+        Brotation = hwMap.crservo.get("Brotation");
+        PhatServo = hwMap.servo.get("PhatServo");
 
         // initialize sensors
         //GyroCenter = hwMap.gyroSensor.get("GyroCenter");
         //JewelCS = hwMap.colorSensor.get("JewelCS");
 
         stopAllMotors();
+        initServos();
     }
 
 //    public void turn(double degreesToTurn) {
@@ -126,6 +133,11 @@ public class BBot {
         ArmUpDown.setPower(0.0);
     }
 
+    public void initServos() {
+        StupidStick.setPosition(0.0);
+        Brotation.setPower(0.0);
+        PhatServo.setPosition(0.0);
+    }
     public void resetAllEncoders() {
         // reset drive encoders
         DriveFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
