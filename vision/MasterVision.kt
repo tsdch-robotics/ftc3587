@@ -6,7 +6,7 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer
 
 
-public class MasterVision(private val parameters: VuforiaLocalizer.Parameters, val hMap: HardwareMap, val useFlash:Boolean, val tfLiteAlgorithm: TFLiteAlgorithm) : Thread() {
+class MasterVision(private val parameters: VuforiaLocalizer.Parameters, val hMap: HardwareMap, val useFlash:Boolean, val tfLiteAlgorithm: TFLiteAlgorithm) : Thread() {
     var vuforiaLocalizer: VuforiaLocalizer? = null
     val tfLite = TFLite(this)
 
