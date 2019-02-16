@@ -7,7 +7,7 @@ import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
-@TeleOp
+@TeleOp(name = "VisionJavaExample", group = "BBot")
 @Disabled
 public class VisionJavaExample extends LinearOpMode{
     MasterVision vision;

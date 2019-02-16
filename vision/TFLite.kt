@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.vision
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory
-//import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector
+
 
 class TFLite(private val master: MasterVision) {
     companion object {
