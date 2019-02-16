@@ -48,6 +48,7 @@ public class TankDriveTeleop extends OpMode {
     private String Intake = "";
     private String PhatServo = "";
     public ElapsedTime runtime = new ElapsedTime();
+    boolean slowcheck = false;
 
     double HookPosition = 0.0;
 
@@ -77,6 +78,7 @@ public class TankDriveTeleop extends OpMode {
         float liftdown = gamepad1.right_trigger;
 
 
+
         if (RightStrafe) {
             // to right strafe, right motors towards each other, left motors away from each other
             robot.DriveFrontLeft.setPower(1);
@@ -97,13 +99,20 @@ public class TankDriveTeleop extends OpMode {
             robot.DriveFrontRight.setPower(-DriveRightPower);
             robot.DriveBackRight.setPower(-DriveRightPower);
         }
-        else if (slow)
+        else if (slow == true && slowcheck == false)
         {
-            robot.DriveBackLeft.setPower(DriveLeftPower/2);
-            robot.DriveFrontLeft.setPower(DriveLeftPower/2);
-            robot.DriveFrontRight.setPower(DriveRightPower/2);
-            robot.DriveBackRight.setPower(DriveRightPower/2);
+          slowcheck = true;
         }
+        if(slowcheck == true)
+        {
+            robot.DriveBackLeft.setPower(DriveLeftPower/4);
+            robot.DriveFrontLeft.setPower(DriveLeftPower/4);
+            robot.DriveFrontRight.setPower(DriveRightPower/4);
+            robot.DriveBackRight.setPower(DriveRightPower/4);
+        }
+        if(slowcheck == true && slow == true)
+            slowcheck = false;
+
         else {
             // write the values to the motors
             robot.DriveBackLeft.setPower(DriveLeftPower);
@@ -114,6 +123,7 @@ public class TankDriveTeleop extends OpMode {
         if(liftup)
         {
             robot.Lift.setPower(1);
+
         }
         else if(liftdown>.1)
         {
@@ -128,22 +138,22 @@ public class TankDriveTeleop extends OpMode {
         // intake mechanism variables
 
         // elevator
-        boolean Elevator_up = gamepad2.right_bumper;
-        boolean Elevator_down = (gamepad2.right_trigger > 0.1);
-        String elevatorStatus = "";
+       // boolean Elevator_up = gamepad2.right_bumper;
+   //     boolean Elevator_down = (gamepad2.right_trigger > 0.1);
+    //    String elevatorStatus = "";
 
-        if(Elevator_up) { // if right bumper is held arm elevator is set to 1
-            robot.Lift.setPower(1);
-            elevatorStatus = "up";
-        }
-        else if(Elevator_down) { // if right trigger is pressed elevator is set to -1
-            robot.Lift.setPower(-1);
-            elevatorStatus = "down";
-        }
-        else { // if neither are pressed elevator is set to 0
-            robot.Lift.setPower(0);
-            elevatorStatus="off";
-        }
+      //  if(Elevator_up) { // if right bumper is held arm elevator is set to 1
+        //    robot.Lift.setPower(1);
+          //  elevatorStatus = "up";
+        //}
+        //else if(Elevator_down) { // if right trigger is pressed elevator is set to -1
+          //  robot.Lift.setPower(-1);
+            //elevatorStatus = "down";
+        //}
+        //else { // if neither are pressed elevator is set to 0
+          //  robot.Lift.setPower(0);
+            //elevatorStatus="off";
+        //}
         robot.ArmUpDown.setPower(gamepad2.left_stick_y);
         if (gamepad2.left_stick_y > 0) {
             AVS = "up";
@@ -210,6 +220,7 @@ public class TankDriveTeleop extends OpMode {
         telemetry.addData("Arm", AHS);
         telemetry.addData("Intake",Intake);
         telemetry.addData("Flip Servo", PhatServo);
+        telemetry.addData("slow", slowcheck);
     }
 
 

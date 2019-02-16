@@ -45,7 +45,7 @@ public class TradAuto extends LinearOpMode {
     BBot robot = new BBot();   // Use robot's hardware
 
     private enum States { // states for the autonomous FSM
-        LOWERING, CLEAR_LANDER, RETRACT_LIFT, STOP;
+        LOWERING, CLEAR_LANDER, RETRACT_LIFT, NAV_2_PIT, DROP_IDOL, STOP;
     }
 
     public void runOpMode() {
@@ -66,6 +66,8 @@ public class TradAuto extends LinearOpMode {
 
         robot.Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.Lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        robot.resetAllEncoders();
 
         while (current_state == States.LOWERING) {
             // lower the robot off the hanger
@@ -94,8 +96,26 @@ public class TradAuto extends LinearOpMode {
         while (current_state == States.RETRACT_LIFT) {
             robot.Lift.setPower(-1.0);
             if(robot.Lift.getCurrentPosition() < -robot.REVHD401Encoder * 10) {
-                current_state = States.STOP;
+                current_state = States.NAV_2_PIT;
                 robot.Lift.setPower(0.0);
+            }
+            if(!opModeIsActive()) return; // check termination in the innermost loop
+        }
+
+        while (current_state == States.NAV_2_PIT) {
+            robot.setDriveMotors(-0.5,-0.5,-0.5,-0.5);
+            if(robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.75) {
+                current_state = States.DROP_IDOL;
+                robot.setDriveMotors(0,0,0,0);
+            }
+            if(!opModeIsActive()) return; // check termination in the innermost loop
+        }
+        robot.resetAllEncoders();
+
+        while (current_state == States.DROP_IDOL) {
+            robot.StupidStick.setPosition(0);
+            if(robot.DriveFrontRight.getCurrentPosition() == 0) {
+                current_state = States.STOP;
             }
             if(!opModeIsActive()) return; // check termination in the innermost loop
         }

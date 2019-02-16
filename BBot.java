@@ -134,7 +134,7 @@ public class BBot {
     }
 
     public void initServos() {
-        StupidStick.setPosition(0.25);
+        StupidStick.setPosition(0.75);
         Brotation.setPower(0.0);
         PhatServo.setPosition(0.0);
     }
