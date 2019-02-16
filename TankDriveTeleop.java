@@ -71,7 +71,11 @@ public class TankDriveTeleop extends OpMode {
         boolean LeftStrafe = gamepad1.dpad_left;
         boolean RightStrafe = gamepad1.dpad_right;
         boolean IntakeCR = gamepad2.left_bumper;
-        boolean Reverse = gamepad1.right_bumper;
+        boolean Reverse = gamepad1.y;
+        boolean slow = gamepad1.x;
+        boolean liftup = gamepad1.right_bumper;
+        float liftdown = gamepad1.right_trigger;
+
 
         if (RightStrafe) {
             // to right strafe, right motors towards each other, left motors away from each other
@@ -93,6 +97,13 @@ public class TankDriveTeleop extends OpMode {
             robot.DriveFrontRight.setPower(-DriveRightPower);
             robot.DriveBackRight.setPower(-DriveRightPower);
         }
+        else if (slow)
+        {
+            robot.DriveBackLeft.setPower(DriveLeftPower/2);
+            robot.DriveFrontLeft.setPower(DriveLeftPower/2);
+            robot.DriveFrontRight.setPower(DriveRightPower/2);
+            robot.DriveBackRight.setPower(DriveRightPower/2);
+        }
         else {
             // write the values to the motors
             robot.DriveBackLeft.setPower(DriveLeftPower);
@@ -100,6 +111,19 @@ public class TankDriveTeleop extends OpMode {
             robot.DriveFrontRight.setPower(DriveRightPower);
             robot.DriveBackRight.setPower(DriveRightPower);
         }
+        if(liftup)
+        {
+            robot.Lift.setPower(1);
+        }
+        else if(liftdown>.1)
+        {
+            robot.Lift.setPower(-1);
+        }
+        else
+        {
+            robot.Lift.setPower(0);
+        }
+
 
         // intake mechanism variables
 

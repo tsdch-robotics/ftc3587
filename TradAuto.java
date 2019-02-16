@@ -64,18 +64,20 @@ public class TradAuto extends LinearOpMode {
         telemetry.addData("State", "Lowering");
         telemetry.update();
 
+        robot.Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.Lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         while (current_state == States.LOWERING) {
             // lower the robot off the hanger
             robot.Lift.setPower(1.0);
-            if(robot.Lift.getCurrentPosition() > robot.REVHD401Encoder * 10) {
+            if(robot.Lift.getCurrentPosition() > robot.REVHD401Encoder * 13) {
                 current_state = States.CLEAR_LANDER;
                 robot.Lift.setPower(0.0);
             }
             if(!opModeIsActive()) return; // check termination in the innermost loop
         }
         robot.Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //telemetry.addData("State", "Clearing Lift, prepping for colored balls");
-        //telemetry.update();
+        robot.Lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         while (current_state == States.CLEAR_LANDER) {
             robot.setDriveMotors(-0.5,-0.5,-0.5,-0.5);
@@ -85,14 +87,13 @@ public class TradAuto extends LinearOpMode {
             }
             if(!opModeIsActive()) return; // check termination in the innermost loop
         }
-        robot.DriveFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //telemetry.addData("State", "Clearing Lift, prepping for colored balls");
+        robot.resetAllEncoders();
         //telemetry.update();
         //telemetry.addData("Lift:" ,robot.Lift.getCurrentPosition());
         
         while (current_state == States.RETRACT_LIFT) {
             robot.Lift.setPower(-1.0);
-            if(robot.Lift.getCurrentPosition() < -robot.REVHD401Encoder * 8) {
+            if(robot.Lift.getCurrentPosition() < -robot.REVHD401Encoder * 10) {
                 current_state = States.STOP;
                 robot.Lift.setPower(0.0);
             }
