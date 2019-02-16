@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 /*
  * This is NOT an opmode. This file defines all the hardware on the robot
  * and some common helper functions (stop motors, reset encoders, etc.)
-*/
+ */
 public class BBot {
     // class variables for all hardware
     public DcMotor DriveFrontLeft;
@@ -19,10 +19,21 @@ public class BBot {
 
     // game element manipulation
     public DcMotor Lift;
+    public DcMotor ArmInOut;
+    public DcMotor ArmUpDown;
+    public Servo StupidStick;
+
+    // Intake
+    public CRServo Brotation;
+    public Servo PhatServo;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
     private ElapsedTime period = new ElapsedTime();
+
+    // constant encoder counts
+    public final double REVCoreHexEncoder = 288.0;
+    public final double REVHD401Encoder = 1120.0;
 
     public BBot() { }
 
@@ -34,69 +45,28 @@ public class BBot {
         DriveFrontLeft = hwMap.dcMotor.get("DriveFrontLeft");
         DriveBackLeft = hwMap.dcMotor.get("DriveBackLeft");
         DriveFrontRight = hwMap.dcMotor.get("DriveFrontRight");
-        DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
+        DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
         DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
 
         Lift = hwMap.dcMotor.get("Lift");
+        Lift.setDirection(DcMotor.Direction.REVERSE);
+
+        ArmInOut = hwMap.dcMotor.get("ArmInOut");
+        ArmUpDown = hwMap.dcMotor.get("ArmUpDown");
 
         // initialize servos
-        //IntakeCR = hwMap.crservo.get("Intake");
+        StupidStick = hwMap.servo.get("StupidStick");
+        Brotation = hwMap.crservo.get("Brotation");
+        PhatServo = hwMap.servo.get("PhatServo");
 
         // initialize sensors
         //GyroCenter = hwMap.gyroSensor.get("GyroCenter");
         //JewelCS = hwMap.colorSensor.get("JewelCS");
 
         stopAllMotors();
+        initServos();
     }
-
-//    public void turn(double degreesToTurn) {
-//        double targetHeading = 0;
-//
-//        // stop robot
-//        DriveFrontLeft.setPower(0.0);
-//        DriveFrontRight.setPower(0.0);
-//        DriveBackLeft.setPower(0.0);
-//        DriveBackRight.setPower(0.0);
-//
-        // reset heading
-        //GyroCenter.calibrate();
-        //while(GyroCenter.isCalibrating()); // wait to finish calibrating
-
-        // determine which direction to turn
-//        if (degreesToTurn > 0){
-//            targetHeading = degreesToTurn;
-//        }
-//        if (degreesToTurn < 0) {
-//            targetHeading = 360.0 + degreesToTurn;
-//        }
-
-
-        // execute turn
-//         if (targetHeading > 180) {
-//             DriveFrontLeft.setPower(1.0);
-//             DriveFrontRight.setPower(1.0);
-//             DriveBackLeft.setPower(1.0);
-//             DriveBackRight.setPower(1.0);
-//             while (GyroCenter.getHeading() > targetHeading); // wait until robot reaches heading
-//             DriveFrontLeft.setPower(0.0);
-//             DriveFrontRight.setPower(0.0);
-//             DriveBackLeft.setPower(0.0);
-//             DriveBackRight.setPower(0.0);
-//         }
-//
-//         else {
-//             DriveFrontLeft.setPower(-1.0);
-//             DriveFrontRight.setPower(-1.0);
-//             DriveBackLeft.setPower(-1.0);
-//             DriveBackRight.setPower(-1.0);
-//             while (GyroCenter.getHeading() < targetHeading); // wait until robot reaches heading
-//             DriveFrontLeft.setPower(0.0);
-//             DriveFrontRight.setPower(0.0);
-//             DriveBackLeft.setPower(0.0);
-//             DriveBackRight.setPower(0.0);
-//         }
-//    }
 
     public void setDriveMotors(double FrontL, double FrontR, double BackL, double BackR) {
         DriveFrontLeft.setPower(FrontL);
@@ -111,8 +81,15 @@ public class BBot {
         DriveBackLeft.setPower(0.0);
         DriveBackRight.setPower(0.0);
         Lift.setPower(0.0);
+        ArmInOut.setPower(0.0);
+        ArmUpDown.setPower(0.0);
     }
 
+    public void initServos() {
+        StupidStick.setPosition(0.0);
+        Brotation.setPower(0.0);
+        PhatServo.setPosition(0.0);
+    }
     public void resetAllEncoders() {
         // reset drive encoders
         DriveFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -126,7 +103,7 @@ public class BBot {
 
         // extra encoders
         //ArmElevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-       // ArmElevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        // ArmElevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /*
