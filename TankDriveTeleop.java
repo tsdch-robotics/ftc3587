@@ -49,7 +49,6 @@ public class TankDriveTeleop extends OpMode {
     private String PhatServo = "";
     public ElapsedTime runtime = new ElapsedTime();
     boolean slowcheck = false;
-
     double HookPosition = 0.0;
 
 
@@ -99,6 +98,9 @@ public class TankDriveTeleop extends OpMode {
             robot.DriveFrontRight.setPower(-DriveRightPower);
             robot.DriveBackRight.setPower(-DriveRightPower);
         }
+        if(slowcheck == true && slow == true)
+            slowcheck = false;
+
         else if (slow == true && slowcheck == false)
         {
           slowcheck = true;
@@ -110,9 +112,6 @@ public class TankDriveTeleop extends OpMode {
             robot.DriveFrontRight.setPower(DriveRightPower/4);
             robot.DriveBackRight.setPower(DriveRightPower/4);
         }
-        if(slowcheck == true && slow == true)
-            slowcheck = false;
-
         else {
             // write the values to the motors
             robot.DriveBackLeft.setPower(DriveLeftPower);
