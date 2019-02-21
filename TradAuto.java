@@ -29,31 +29,38 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.view.View;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name="Ralph's Auto", group="BBot")
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.teamcode.vision.MasterVision;
+import org.firstinspires.ftc.teamcode.vision.SampleRandomizedPositions;
+import org.firstinspires.ftc.teamcode.vision.VisionSampling;
+
+@Autonomous(name="Trad Auto", group="BBot")
 public class TradAuto extends LinearOpMode {
     BBot robot = new BBot();   // Use robot's hardware
+    MasterVision vision;
+    SampleRandomizedPositions goldPosition;
 
     private enum States { // states for the autonomous FSM
-        LOWERING, CLEAR_LANDER, RETRACT_LIFT, NAV_2_PIT, DROP_IDOL, STOP;
+        Sampling, LOWERING, CLEAR_LANDER, RETRACT_LIFT, NAV_2_PIT, DROP_IDOL_TURN, NAV_2_CRATER, STOP;
     }
 
     public void runOpMode() {
         robot.init(hardwareMap);
-
         // send telemetry message to signify robot waiting
         telemetry.addData("Status", "Snoozing");
         telemetry.update();
+
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;// recommended camera direction
+        parameters.vuforiaLicenseKey = "AYuwB/n/////AAABmc2iWLR8g0iipnUkJKVfgAYw+QI3BcT5KMR/SavKNiO/7h1HrtK20ekoQerKKc0YoamY11r9MOZzcgz6ku69rBwqrrl08VUqzKn+d49/pW3Gi6SseQMgb5piXwASgO9XHeqCFgmD+NkR52ta3MGEI8X6FGAt3uATqM20EPbIugPpnNjsdCgCav51jMCUI5kvgG4AjO4MIN/kPE4PlJ3ZUI7/lTSDZ8nImPoRuJQ9VWJrjOJzY6/ylE9V5j5r5nkixzVwLJ1GzA0vYsvFc+62J11ZuhiAoc1zxzpe8VK4ibSxwCP1lFRSg+6T8jiX4OXYnzovD4ghLc+0KXtF+hl9niNSkiBY7oaRYGwQW1MlgzJ9";
+
+        vision = new MasterVision(parameters, hardwareMap, true, MasterVision.TFLiteAlgorithm.INFER_RIGHT);
+        vision.init();// enables the camera overlay. this will take a couple of seconds
+        vision.enable();// enables the tracking algorithms. this might also take a little time
 
         // wait for the start button to be pressed.
         waitForStart();
@@ -64,6 +71,48 @@ public class TradAuto extends LinearOpMode {
         telemetry.addData("State", "Lowering");
         telemetry.update();
 
+        while (current_state == States.Sampling) {
+            VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+            parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;// recommended camera direction
+            parameters.vuforiaLicenseKey = "AYuwB/n/////AAABmc2iWLR8g0iipnUkJKVfgAYw+QI3BcT5KMR/SavKNiO/7h1HrtK20ekoQerKKc0YoamY11r9MOZzcgz6ku69rBwqrrl08VUqzKn+d49/pW3Gi6SseQMgb5piXwASgO9XHeqCFgmD+NkR52ta3MGEI8X6FGAt3uATqM20EPbIugPpnNjsdCgCav51jMCUI5kvgG4AjO4MIN/kPE4PlJ3ZUI7/lTSDZ8nImPoRuJQ9VWJrjOJzY6/ylE9V5j5r5nkixzVwLJ1GzA0vYsvFc+62J11ZuhiAoc1zxzpe8VK4ibSxwCP1lFRSg+6T8jiX4OXYnzovD4ghLc+0KXtF+hl9niNSkiBY7oaRYGwQW1MlgzJ9";
+
+            vision = new MasterVision(parameters, hardwareMap, true, MasterVision.TFLiteAlgorithm.INFER_RIGHT);
+            vision.init();// enables the camera overlay. this will take a couple of seconds
+            vision.enable();// enables the tracking algorithms. this might also take a little time
+
+            waitForStart();
+
+            vision.disable();// disables tracking algorithms. this will free up your phone's processing power for other jobs.
+
+            goldPosition = vision.getTfLite().getLastKnownSampleOrder();
+
+            while(opModeIsActive()){
+                telemetry.addData("goldPosition was", goldPosition);// giving feedback
+
+                switch (goldPosition){ // using for things in the autonomous program
+                    case LEFT:
+                        telemetry.addLine("going to the left");
+                        break;
+                    case CENTER:
+                        telemetry.addLine("going straight");
+                        break;
+                    case RIGHT:
+                        telemetry.addLine("going to the right");
+                        break;
+                    case UNKNOWN:
+                        telemetry.addLine("staying put");
+                        break;
+                }
+
+                telemetry.update();
+            }
+
+            vision.shutdown();
+            sleep(500);
+            current_state = States.LOWERING;
+        }
+
+
         robot.Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.Lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -72,60 +121,75 @@ public class TradAuto extends LinearOpMode {
         while (current_state == States.LOWERING) {
             // lower the robot off the hanger
             robot.Lift.setPower(1.0);
-            if(robot.Lift.getCurrentPosition() > robot.REVHD401Encoder * 13) {
+            if (robot.Lift.getCurrentPosition() > robot.REVHD401Encoder * 13) {
                 current_state = States.CLEAR_LANDER;
                 robot.Lift.setPower(0.0);
             }
-            if(!opModeIsActive()) return; // check termination in the innermost loop
+            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
         robot.Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.Lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         while (current_state == States.CLEAR_LANDER) {
-            robot.setDriveMotors(-0.5,-0.5,-0.5,-0.5);
-            if(robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 1) {
+            robot.setDriveMotors(-0.5, -0.5, -0.5, -0.5);
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 1) {
                 current_state = States.RETRACT_LIFT;
-                robot.setDriveMotors(0.0,0.0,0.0,0.0);
+                robot.setDriveMotors(0.0, 0.0, 0.0, 0.0);
             }
-            if(!opModeIsActive()) return; // check termination in the innermost loop
+            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
         robot.resetAllEncoders();
         //telemetry.update();
         //telemetry.addData("Lift:" ,robot.Lift.getCurrentPosition());
-        
+
         while (current_state == States.RETRACT_LIFT) {
             robot.Lift.setPower(-1.0);
-            if(robot.Lift.getCurrentPosition() < -robot.REVHD401Encoder * 10) {
+            if (robot.Lift.getCurrentPosition() < -robot.REVHD401Encoder * 10) {
                 current_state = States.NAV_2_PIT;
                 robot.Lift.setPower(0.0);
             }
-            if(!opModeIsActive()) return; // check termination in the innermost loop
+            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
         while (current_state == States.NAV_2_PIT) {
-            robot.setDriveMotors(-0.5,-0.5,-0.5,-0.5);
-            if(robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.75) {
-                current_state = States.DROP_IDOL;
-                robot.setDriveMotors(0,0,0,0);
+            robot.setDriveMotors(-0.5, -0.5, -0.5, -0.5);
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 1.5) {
+                robot.setDriveMotors(0, 0, 0, 0);
+                current_state = States.DROP_IDOL_TURN;
             }
-            if(!opModeIsActive()) return; // check termination in the innermost loop
+            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
         robot.resetAllEncoders();
+        robot.StupidStick.setPosition(0);
+        sleep(500);
 
-        while (current_state == States.DROP_IDOL) {
-            robot.StupidStick.setPosition(0);
-            if(robot.DriveFrontRight.getCurrentPosition() == 0) {
+        while (current_state == States.DROP_IDOL_TURN) {
+            robot.setDriveMotors(0.5, 0.5, 0.5, 0.5); //turns right
+            if (robot.DriveFrontRight.getCurrentPosition() > robot.REVHD401Encoder * 2) {
                 current_state = States.STOP;
+                robot.setDriveMotors(0, 0, 0, 0);
             }
-            if(!opModeIsActive()) return; // check termination in the innermost loop
+            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
+
+        robot.resetAllEncoders();
+
+           /* while (current_state == States.NAV_2_CRATER) {
+                robot.setDriveMotors(.5, .5, .5, .5);
+                if (robot.DriveFrontRight.getCurrentPosition() > robot.REVHD401Encoder * 7) {
+                    current_state = States.STOP;
+                    robot.setDriveMotors(0, 0, 0, 0);
+                }
+                if (!opModeIsActive()) return; // check termination in the innermost loop
+            }
+            */
         telemetry.addData("Status", "Finished");
         telemetry.addData("State", "Stop");
         telemetry.update();
         while (current_state == States.STOP) {
             // stop all motors
             robot.stopAllMotors();
-            if(!opModeIsActive()) return; // check termination in the innermost loop
+            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
     }
 }
