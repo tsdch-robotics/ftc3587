@@ -72,7 +72,7 @@ public class TradAuto extends LinearOpMode {
         telemetry.update();
 
         while (current_state == States.Sampling) {
-            VuforiaLocalizer.Parameters parameters1 = new VuforiaLocalizer.Parameters();
+            VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
             parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;// recommended camera direction
             parameters.vuforiaLicenseKey = "AYuwB/n/////AAABmc2iWLR8g0iipnUkJKVfgAYw+QI3BcT5KMR/SavKNiO/7h1HrtK20ekoQerKKc0YoamY11r9MOZzcgz6ku69rBwqrrl08VUqzKn+d49/pW3Gi6SseQMgb5piXwASgO9XHeqCFgmD+NkR52ta3MGEI8X6FGAt3uATqM20EPbIugPpnNjsdCgCav51jMCUI5kvgG4AjO4MIN/kPE4PlJ3ZUI7/lTSDZ8nImPoRuJQ9VWJrjOJzY6/ylE9V5j5r5nkixzVwLJ1GzA0vYsvFc+62J11ZuhiAoc1zxzpe8VK4ibSxwCP1lFRSg+6T8jiX4OXYnzovD4ghLc+0KXtF+hl9niNSkiBY7oaRYGwQW1MlgzJ9";
 
