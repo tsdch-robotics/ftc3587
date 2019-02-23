@@ -74,27 +74,24 @@ public class TradAuto extends LinearOpMode {
 
         while (current_state == States.Sampling) {
             goldPosition = vision.getTfLite().getLastKnownSampleOrder();
+            telemetry.addData("goldPosition was", goldPosition);// giving feedback
 
-            while(opModeIsActive()){
-                telemetry.addData("goldPosition was", goldPosition);// giving feedback
-
-                switch (goldPosition){ // using for things in the autonomous program
-                    case LEFT:
-                        telemetry.addLine("going to the left");
-                        break;
-                    case CENTER:
-                        telemetry.addLine("going straight");
-                        break;
-                    case RIGHT:
-                        telemetry.addLine("going to the right");
-                        break;
-                    case UNKNOWN:
-                        telemetry.addLine("staying put");
-                        break;
-                }
-
-                telemetry.update();
+            switch (goldPosition) { // using for things in the autonomous program
+                case LEFT:
+                    telemetry.addLine("going to the left");
+                    break;
+                case CENTER:
+                    telemetry.addLine("going straight");
+                    break;
+                case RIGHT:
+                    telemetry.addLine("going to the right");
+                    break;
+                case UNKNOWN:
+                    telemetry.addLine("staying put");
+                    break;
             }
+
+            telemetry.update();
 
             vision.shutdown();
             sleep(500);
@@ -209,15 +206,45 @@ public class TradAuto extends LinearOpMode {
 
 
         robot.resetAllEncoders();
-        robot.StupidStick.setPosition(0);
+        robot.StupidStick.setPosition(0); //drop idol
         sleep(500);
 
         while (current_state == States.DROP_IDOL_TURN) {
-            robot.setDriveMotors(0.5, 0.5, 0.5, 0.5); //turns right
-            if (robot.DriveFrontRight.getCurrentPosition() > robot.REVHD401Encoder * 2) {
-                current_state = States.STOP;
-                robot.setDriveMotors(0, 0, 0, 0);
+            switch (goldPosition) { // using for things in the autonomous program
+                case LEFT:
+                    telemetry.addLine("came from the left");
+                    robot.setDriveMotors(-0.5, 0.5, -0.5, 0.5); //turns right
+                    if (robot.DriveFrontRight.getCurrentPosition() > robot.REVHD401Encoder * 2) {
+                        current_state = States.STOP;
+                        robot.setDriveMotors(0, 0, 0, 0);
+                    }
+                    break;
+                case CENTER:
+                    telemetry.addLine("coming from center");
+                    robot.setDriveMotors(-0.5, 0.5, -0.5, 0.5); //turns right
+                    if (robot.DriveFrontRight.getCurrentPosition() > robot.REVHD401Encoder * 1) {
+                        current_state = States.STOP;
+                        robot.setDriveMotors(0, 0, 0, 0);
+                    }
+                    break;
+                case RIGHT:
+                    telemetry.addLine("coming from right");
+                    robot.setDriveMotors(-0.5, 0.5, -0.5, 0.5); //turns right
+                    if (robot.DriveFrontRight.getCurrentPosition() > robot.REVHD401Encoder * 0.5) {
+                        current_state = States.STOP;
+                        robot.setDriveMotors(0, 0, 0, 0);
+                    }
+                    break;
+                case UNKNOWN:
+                    telemetry.addLine("coming from center");
+                    robot.setDriveMotors(-0.5, 0.5, -0.5, 0.5); //turns right
+                    if (robot.DriveFrontRight.getCurrentPosition() > robot.REVHD401Encoder * 1) {
+                        current_state = States.STOP;
+                        robot.setDriveMotors(0, 0, 0, 0);
+                    }
+                    break;
             }
+
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
