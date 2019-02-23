@@ -45,7 +45,7 @@ public class TradAuto extends LinearOpMode {
     SampleRandomizedPositions goldPosition;
 
     private enum States { // states for the autonomous FSM
-        Sampling, LOWERING, CLEAR_LANDER, RETRACT_LIFT, NAV_2_PIT, DROP_IDOL_TURN, NAV_2_CRATER, STOP;
+        Sampling, LOWERING, CLEAR_LANDER, RETRACT_LIFT, PICKDIRECTION, TURN_LEFT, NAV_LEFT, CENTER, TURN_RIGHT, NAV_RIGHT, NAV_2_PIT, DROP_IDOL_TURN, NAV_2_CRATER, STOP;
     }
 
     public void runOpMode() {
@@ -121,7 +121,7 @@ public class TradAuto extends LinearOpMode {
 
         while (current_state == States.CLEAR_LANDER) {
             robot.setDriveMotors(-0.5, -0.5, -0.5, -0.5);
-            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 1) {
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
                 current_state = States.RETRACT_LIFT;
                 robot.setDriveMotors(0.0, 0.0, 0.0, 0.0);
             }
@@ -134,20 +134,80 @@ public class TradAuto extends LinearOpMode {
         while (current_state == States.RETRACT_LIFT) {
             robot.Lift.setPower(-1.0);
             if (robot.Lift.getCurrentPosition() < -robot.REVHD401Encoder * 10) {
-                current_state = States.NAV_2_PIT;
+                current_state = States.PICKDIRECTION;
                 robot.Lift.setPower(0.0);
             }
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
-        while (current_state == States.NAV_2_PIT) {
+        while (current_state == States.PICKDIRECTION) {
+            switch (goldPosition){ // using for things in the autonomous program
+                case LEFT:
+                    telemetry.addLine("going to the left");
+                    current_state = States.TURN_LEFT;
+                    break;
+                case CENTER:
+                    telemetry.addLine("going straight");
+                    current_state = States.CENTER;
+                    break;
+                case RIGHT:
+                    telemetry.addLine("going to the right");
+                    current_state = States.TURN_RIGHT;
+                    break;
+                case UNKNOWN:
+                    telemetry.addLine("help! going strait");
+                    current_state = States.CENTER;
+                    break;
+            }
+            if (!opModeIsActive()) return; // check termination in the innermost loop
+        }
+
+        while (current_state == States.TURN_LEFT) {
+            robot.setDriveMotors(0.0, -0.25, 0.0, -0.25);
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
+                robot.setDriveMotors(0, 0, 0, 0);
+                current_state = States.NAV_LEFT;
+            }
+            if (!opModeIsActive()) return; // check termination in the innermost loop
+        }
+
+        while (current_state == States.NAV_LEFT) {
             robot.setDriveMotors(-0.5, -0.5, -0.5, -0.5);
-            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 1.5) {
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 1) {
                 robot.setDriveMotors(0, 0, 0, 0);
                 current_state = States.DROP_IDOL_TURN;
             }
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
+
+        while (current_state == States.CENTER) {
+            robot.setDriveMotors(-0.25, -0.25, -0.25, -0.25);
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
+                robot.setDriveMotors(0, 0, 0, 0);
+                current_state = States.DROP_IDOL_TURN;
+            }
+            if (!opModeIsActive()) return; // check termination in the innermost loop
+        }
+
+        while (current_state == States.TURN_RIGHT) {
+            robot.setDriveMotors(-0.25, 0.0, -0.25, 0.0);
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
+                robot.setDriveMotors(0, 0, 0, 0);
+                current_state = States.NAV_RIGHT;
+            }
+            if (!opModeIsActive()) return; // check termination in the innermost loop
+        }
+
+        while (current_state == States.NAV_RIGHT) {
+            robot.setDriveMotors(-0.5, -0.5, -0.5, -0.5);
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 1) {
+                robot.setDriveMotors(0, 0, 0, 0);
+                current_state = States.DROP_IDOL_TURN;
+            }
+            if (!opModeIsActive()) return; // check termination in the innermost loop
+        }
+
+
         robot.resetAllEncoders();
         robot.StupidStick.setPosition(0);
         sleep(500);
