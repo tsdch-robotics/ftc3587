@@ -36,7 +36,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.vision.MasterVision;
 import org.firstinspires.ftc.teamcode.vision.SampleRandomizedPositions;
-import org.firstinspires.ftc.teamcode.vision.VisionSampling;
+import org.firstinspires.ftc.teamcode.vision.TFLite;
 
 @Autonomous(name="Trad Auto", group="BBot")
 public class TradAuto extends LinearOpMode {
@@ -45,7 +45,7 @@ public class TradAuto extends LinearOpMode {
     SampleRandomizedPositions goldPosition;
 
     private enum States { // states for the autonomous FSM
-        Sampling, LOWERING, CLEAR_LANDER, RETRACT_LIFT, PICKDIRECTION, TURN_LEFT, NAV_LEFT, CENTER, TURN_RIGHT, NAV_RIGHT, NAV_2_PIT, DROP_IDOL_TURN, NAV_2_CRATER, STOP;
+        Sampling, LOWERING, CLEAR_LANDER, RETRACT_LIFT, PICKDIRECTION, TURN_LEFT, NAV_LEFT, TURN_2_DEPOT_L, NAV_2_DEPOT_L, CENTER, TURN_RIGHT, NAV_RIGHT, TURN_2_DEPOT_R, NAV_2_DEPOT_R, NAV_2_PIT, DROP_IDOL_TURN, NAV_2_CRATER, STOP;
     }
 
     public void runOpMode() {
@@ -66,7 +66,7 @@ public class TradAuto extends LinearOpMode {
         waitForStart();
 
         // State machine for robot
-        States current_state = States.LOWERING;
+        States current_state = States.Sampling;
         telemetry.addData("Status", "Running");
         telemetry.addData("State", "Lowering");
         telemetry.update();
@@ -137,6 +137,8 @@ public class TradAuto extends LinearOpMode {
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
+        robot.resetAllEncoders();
+
         while (current_state == States.PICKDIRECTION) {
             switch (goldPosition){ // using for things in the autonomous program
                 case LEFT:
@@ -159,8 +161,10 @@ public class TradAuto extends LinearOpMode {
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
+        robot.resetAllEncoders();
+
         while (current_state == States.TURN_LEFT) {
-            robot.setDriveMotors(0.0, -0.25, 0.0, -0.25);
+            robot.setDriveMotors(0.25, -0.25, 0.25, -0.25);
             if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
                 robot.setDriveMotors(0, 0, 0, 0);
                 current_state = States.NAV_LEFT;
@@ -168,8 +172,32 @@ public class TradAuto extends LinearOpMode {
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
+        robot.resetAllEncoders();
+
         while (current_state == States.NAV_LEFT) {
             robot.setDriveMotors(-0.5, -0.5, -0.5, -0.5);
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 1) {
+                robot.setDriveMotors(0, 0, 0, 0);
+                current_state = States.TURN_2_DEPOT_L;
+            }
+            if (!opModeIsActive()) return; // check termination in the innermost loop
+        }
+
+        robot.resetAllEncoders();
+
+        while (current_state == States.TURN_2_DEPOT_L) {
+            robot.setDriveMotors(-0.25, 0.25, -0.25, 0.25);
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
+                robot.setDriveMotors(0, 0, 0, 0);
+                current_state = States.NAV_2_DEPOT_L;
+            }
+            if (!opModeIsActive()) return; // check termination in the innermost loop
+        }
+
+        robot.resetAllEncoders();
+
+        while (current_state == States.NAV_2_DEPOT_L) {
+            robot.setDriveMotors(-0.25, -0.25, -0.25, -0.25);
             if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 1) {
                 robot.setDriveMotors(0, 0, 0, 0);
                 current_state = States.DROP_IDOL_TURN;
@@ -177,17 +205,21 @@ public class TradAuto extends LinearOpMode {
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
+        robot.resetAllEncoders();
+
         while (current_state == States.CENTER) {
             robot.setDriveMotors(-0.25, -0.25, -0.25, -0.25);
-            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 2) {
                 robot.setDriveMotors(0, 0, 0, 0);
                 current_state = States.DROP_IDOL_TURN;
             }
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
+        robot.resetAllEncoders();
+
         while (current_state == States.TURN_RIGHT) {
-            robot.setDriveMotors(-0.25, 0.0, -0.25, 0.0);
+            robot.setDriveMotors(-0.25, 0.25, -0.25, 0.25);
             if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
                 robot.setDriveMotors(0, 0, 0, 0);
                 current_state = States.NAV_RIGHT;
@@ -195,8 +227,30 @@ public class TradAuto extends LinearOpMode {
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
+        robot.resetAllEncoders();
+
         while (current_state == States.NAV_RIGHT) {
             robot.setDriveMotors(-0.5, -0.5, -0.5, -0.5);
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 1) {
+                robot.setDriveMotors(0, 0, 0, 0);
+                current_state = States.TURN_2_DEPOT_R;
+            }
+            if (!opModeIsActive()) return; // check termination in the innermost loop
+        }
+
+        while (current_state == States.TURN_2_DEPOT_R) {
+            robot.setDriveMotors(0.25, -0.25, 0.25, -0.25);
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
+                robot.setDriveMotors(0, 0, 0, 0);
+                current_state = States.NAV_2_DEPOT_R;
+            }
+            if (!opModeIsActive()) return; // check termination in the innermost loop
+        }
+
+        robot.resetAllEncoders();
+
+        while (current_state == States.NAV_2_DEPOT_R) {
+            robot.setDriveMotors(-0.25, -0.25, -0.25, -0.25);
             if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 1) {
                 robot.setDriveMotors(0, 0, 0, 0);
                 current_state = States.DROP_IDOL_TURN;
@@ -204,6 +258,7 @@ public class TradAuto extends LinearOpMode {
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
+        robot.resetAllEncoders();
 
         robot.resetAllEncoders();
         robot.StupidStick.setPosition(0); //drop idol

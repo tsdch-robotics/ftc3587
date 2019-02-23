@@ -67,7 +67,9 @@ public class TradOP extends OpMode {
 
         // arm
 
-        robot.ArmUpDown.setPower(gamepad2.left_stick_y);
+        robot.ArmUpDown1.setPower(gamepad2.left_stick_y);
+        robot.ArmUpDown2.setPower(gamepad2.left_stick_y);
+
         if (gamepad2.left_stick_y > 0) {
             AVS = "up";
         } else if (gamepad2.left_stick_y < 0) {

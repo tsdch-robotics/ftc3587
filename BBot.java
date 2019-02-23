@@ -20,7 +20,8 @@ public class BBot {
     // game element manipulation
     public DcMotor Lift;
     public DcMotor ArmInOut;
-    public DcMotor ArmUpDown;
+    public DcMotor ArmUpDown1;
+    public DcMotor ArmUpDown2;
     public Servo StupidStick;
 
     // Intake
@@ -53,7 +54,9 @@ public class BBot {
         Lift.setDirection(DcMotor.Direction.REVERSE);
 
         ArmInOut = hwMap.dcMotor.get("ArmInOut");
-        ArmUpDown = hwMap.dcMotor.get("ArmUpDown");
+        ArmUpDown1 = hwMap.dcMotor.get("ArmUpDown1");
+        ArmUpDown2 = hwMap.dcMotor.get("ArmUpDown2");
+        ArmUpDown2.setDirection(DcMotor.Direction.REVERSE);
 
         // initialize servos
         StupidStick = hwMap.servo.get("StupidStick");
@@ -130,7 +133,8 @@ public class BBot {
         DriveBackRight.setPower(0.0);
         Lift.setPower(0.0);
         ArmInOut.setPower(0.0);
-        ArmUpDown.setPower(0.0);
+        ArmUpDown1.setPower(0.0);
+        ArmUpDown2.setPower(0.0);
     }
 
     public void initServos() {
@@ -150,8 +154,16 @@ public class BBot {
         DriveBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // extra encoders
-        //ArmElevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-       // ArmElevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        ArmInOut.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ArmInOut.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        ArmUpDown1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ArmUpDown1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        ArmUpDown2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ArmUpDown2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /*

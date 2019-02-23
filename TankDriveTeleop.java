@@ -153,7 +153,9 @@ public class TankDriveTeleop extends OpMode {
           //  robot.Lift.setPower(0);
             //elevatorStatus="off";
         //}
-        robot.ArmUpDown.setPower(gamepad2.left_stick_y);
+        robot.ArmUpDown1.setPower(gamepad2.left_stick_y);
+        robot.ArmUpDown2.setPower(gamepad2.left_stick_y);
+
         if (gamepad2.left_stick_y > 0) {
             AVS = "up";
         } else if (gamepad2.left_stick_y < 0) {
@@ -198,18 +200,6 @@ public class TankDriveTeleop extends OpMode {
             PhatServo = "zucc";
         }
 
-
-     //intake
-
-       boolean intakePower = gamepad2.left_bumper;
-
-       // if (intakePower) {
-          //  robot.IntakeCR.setPower(-1);
-        //}
-
-        //else {
-          //  robot.IntakeCR.setPower(0);
-        //}
         /*
          * Telemetry for debugging
          */
