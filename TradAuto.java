@@ -58,7 +58,7 @@ public class TradAuto extends LinearOpMode {
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;// recommended camera direction
         parameters.vuforiaLicenseKey = "AYuwB/n/////AAABmc2iWLR8g0iipnUkJKVfgAYw+QI3BcT5KMR/SavKNiO/7h1HrtK20ekoQerKKc0YoamY11r9MOZzcgz6ku69rBwqrrl08VUqzKn+d49/pW3Gi6SseQMgb5piXwASgO9XHeqCFgmD+NkR52ta3MGEI8X6FGAt3uATqM20EPbIugPpnNjsdCgCav51jMCUI5kvgG4AjO4MIN/kPE4PlJ3ZUI7/lTSDZ8nImPoRuJQ9VWJrjOJzY6/ylE9V5j5r5nkixzVwLJ1GzA0vYsvFc+62J11ZuhiAoc1zxzpe8VK4ibSxwCP1lFRSg+6T8jiX4OXYnzovD4ghLc+0KXtF+hl9niNSkiBY7oaRYGwQW1MlgzJ9";
 
-        vision = new MasterVision(parameters, hardwareMap, true, MasterVision.TFLiteAlgorithm.INFER_RIGHT);
+        vision = new MasterVision(parameters, hardwareMap, true, MasterVision.TFLiteAlgorithm.INFER_LEFT);
         vision.init();// enables the camera overlay. this will take a couple of seconds
         vision.enable();// enables the tracking algorithms. this might also take a little time
 
@@ -118,7 +118,7 @@ public class TradAuto extends LinearOpMode {
 
         while (current_state == States.CLEAR_LANDER) {
             robot.setDriveMotors(-0.5, -0.5, -0.5, -0.5);
-            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.15) {
                 current_state = States.RETRACT_LIFT;
                 robot.setDriveMotors(0.0, 0.0, 0.0, 0.0);
             }
@@ -164,8 +164,8 @@ public class TradAuto extends LinearOpMode {
         robot.resetAllEncoders();
 
         while (current_state == States.TURN_LEFT) {
-            robot.setDriveMotors(0.25, -0.25, 0.25, -0.25);
-            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
+            robot.setDriveMotors(-0.25, 0.25, -0.25, 0.25);
+            if (robot.DriveFrontRight.getCurrentPosition() > robot.REVHD401Encoder * 0.20) {
                 robot.setDriveMotors(0, 0, 0, 0);
                 current_state = States.NAV_LEFT;
             }
@@ -176,7 +176,7 @@ public class TradAuto extends LinearOpMode {
 
         while (current_state == States.NAV_LEFT) {
             robot.setDriveMotors(-0.5, -0.5, -0.5, -0.5);
-            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 1) {
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
                 robot.setDriveMotors(0, 0, 0, 0);
                 current_state = States.TURN_2_DEPOT_L;
             }
@@ -186,8 +186,8 @@ public class TradAuto extends LinearOpMode {
         robot.resetAllEncoders();
 
         while (current_state == States.TURN_2_DEPOT_L) {
-            robot.setDriveMotors(-0.25, 0.25, -0.25, 0.25);
-            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
+            robot.setDriveMotors(0.25, -0.25, 0.25, -0.25);
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.20) {
                 robot.setDriveMotors(0, 0, 0, 0);
                 current_state = States.NAV_2_DEPOT_L;
             }
@@ -219,8 +219,8 @@ public class TradAuto extends LinearOpMode {
         robot.resetAllEncoders();
 
         while (current_state == States.TURN_RIGHT) {
-            robot.setDriveMotors(-0.25, 0.25, -0.25, 0.25);
-            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
+            robot.setDriveMotors(0.25, -0.25, 0.25, -0.25);
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.20) {
                 robot.setDriveMotors(0, 0, 0, 0);
                 current_state = States.NAV_RIGHT;
             }
@@ -231,7 +231,7 @@ public class TradAuto extends LinearOpMode {
 
         while (current_state == States.NAV_RIGHT) {
             robot.setDriveMotors(-0.5, -0.5, -0.5, -0.5);
-            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 1) {
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
                 robot.setDriveMotors(0, 0, 0, 0);
                 current_state = States.TURN_2_DEPOT_R;
             }
@@ -239,8 +239,8 @@ public class TradAuto extends LinearOpMode {
         }
 
         while (current_state == States.TURN_2_DEPOT_R) {
-            robot.setDriveMotors(0.25, -0.25, 0.25, -0.25);
-            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
+            robot.setDriveMotors(-0.25, 0.25, -0.25, 0.25); //turn left
+            if (robot.DriveFrontRight.getCurrentPosition() > robot.REVHD401Encoder * 0.2) {
                 robot.setDriveMotors(0, 0, 0, 0);
                 current_state = States.NAV_2_DEPOT_R;
             }
@@ -260,7 +260,6 @@ public class TradAuto extends LinearOpMode {
 
         robot.resetAllEncoders();
 
-        robot.resetAllEncoders();
         robot.StupidStick.setPosition(0); //drop idol
         sleep(500);
 
@@ -268,32 +267,32 @@ public class TradAuto extends LinearOpMode {
             switch (goldPosition) { // using for things in the autonomous program
                 case LEFT:
                     telemetry.addLine("came from the left");
-                    robot.setDriveMotors(-0.5, 0.5, -0.5, 0.5); //turns right
-                    if (robot.DriveFrontRight.getCurrentPosition() > robot.REVHD401Encoder * 2) {
+                    robot.setDriveMotors(0.5, -0.5, 0.5, -0.5); //turns right
+                    if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 1) {
                         current_state = States.STOP;
                         robot.setDriveMotors(0, 0, 0, 0);
                     }
                     break;
                 case CENTER:
                     telemetry.addLine("coming from center");
-                    robot.setDriveMotors(-0.5, 0.5, -0.5, 0.5); //turns right
-                    if (robot.DriveFrontRight.getCurrentPosition() > robot.REVHD401Encoder * 1) {
+                    robot.setDriveMotors(0.5, -0.5, 0.5, -0.5); //turns right
+                    if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
                         current_state = States.STOP;
                         robot.setDriveMotors(0, 0, 0, 0);
                     }
                     break;
                 case RIGHT:
                     telemetry.addLine("coming from right");
-                    robot.setDriveMotors(-0.5, 0.5, -0.5, 0.5); //turns right
-                    if (robot.DriveFrontRight.getCurrentPosition() > robot.REVHD401Encoder * 0.5) {
+                    robot.setDriveMotors(0.5, -0.5, 0.5, -0.5); //turns right
+                    if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.20) {
                         current_state = States.STOP;
                         robot.setDriveMotors(0, 0, 0, 0);
                     }
                     break;
                 case UNKNOWN:
                     telemetry.addLine("coming from center");
-                    robot.setDriveMotors(-0.5, 0.5, -0.5, 0.5); //turns right
-                    if (robot.DriveFrontRight.getCurrentPosition() > robot.REVHD401Encoder * 1) {
+                    robot.setDriveMotors(0.5, -0.5, 0.5, -0.5); //turns right
+                    if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
                         current_state = States.STOP;
                         robot.setDriveMotors(0, 0, 0, 0);
                     }

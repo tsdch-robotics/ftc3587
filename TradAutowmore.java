@@ -33,7 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name="Trad Auto", group="BBot")
+@Autonomous(name="Trad Auto w more", group="BBot")
 public class TradAutowmore extends LinearOpMode {
     BBot robot = new BBot();   // Use robot's hardware
 
