@@ -29,7 +29,7 @@ public class PocketBot {
     // internal variables (DO NOT MODIFY)
     HardwareMap hwMap = null;
     protected ElapsedTime period = new ElapsedTime();
-    final String vKey = "AbFBF+7/////AAAAGa/gIXOlBktXs2sS6yoBjiIuh1aNum98eoDbvnjL19QRg5cvOdwMqBPOqfpp1EBPRmxEsInZKXFnwsNZendSBGEmdkf2nnSY3kTzHUXvr9VzNknBFPKHG1VVfKNLqscbUkiFVj8ubGv0xgl09aTZFg1qc+QkBkpNEZBHoIzCzK+M4qhRkdhq0glhmX8H/AdEeJG22S3PPylBXG03ZZZAtCozcN5PBIrvkZg+hg66vbfPzoAzQZCifsfzmT3LHAiiNvX69DBmfllexEBSxuqDID2y8toMFWx/4D4N+55hO7QcQc2qhLBMSwqKRfvGNDlc6ELcIuROkUPA5hXX/GJyrARwqc4vI3xvHMNBTFWp/Zkz";
+
 
     public PocketBot() { }
 
