@@ -195,9 +195,10 @@ public class TankDriveTeleop extends OpMode {
             //AHS = "idle";
        // }
 
-        if (Arm_Out) {
-            robot.
-        }
+        if (Arm_Out)
+        { robot.ArmExtend.setPower(.7);
+        }else if (Arm_In)
+        robot.ArmExtend.setPower(-.7);
 
         boolean Spit = gamepad2.a;
         boolean Zucc = gamepad2.b;

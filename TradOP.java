@@ -81,20 +81,28 @@ public class TradOP extends OpMode {
             boolean Arm_Up = (gamepad2.left_stick_y > 0);
             boolean Arm_Down = (gamepad2.left_stick_y < 0);
 
+
+
         robot.ArmUpDownR.setPower(gamepad2.left_stick_y);
         robot.ArmUpDownL.setPower(gamepad2.left_stick_y);
 
         if (Arm_Up) {
-            robot.ArmUpDownL.setPower(.3);
-            robot.ArmUpDownR.setPower(.3);
-        } else if (Arm_Down)
             robot.ArmUpDownL.setPower(-.3);
-            robot.ArmUpDownR.setPower((-.3));
+            robot.ArmUpDownR.setPower(.3);
+        }
 
+        else if (Arm_Down) {
+            robot.ArmUpDownL.setPower(.3);
+            robot.ArmUpDownR.setPower(-.3);
+        }
+        else {
+                robot.ArmUpDownR.setPower(0);
+                robot.ArmUpDownL.setPower(0);
+            }
 
         boolean Arm_Out = (gamepad2.right_trigger > 0.1);
         boolean Arm_In = gamepad2.right_bumper;
-
+/*
         if (Arm_Out) {
             robot.ArmServo.setPower(1.0);
             AHS = "out";
@@ -105,7 +113,7 @@ public class TradOP extends OpMode {
             robot.ArmServo.setPower(0.0);
             AHS = "idle";
         }
-
+*/
         boolean Spit = gamepad2.a;
         boolean Zucc = gamepad2.b;
 

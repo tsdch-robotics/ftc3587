@@ -21,8 +21,9 @@ public class BBot {
     public DcMotor Lift;
     public DcMotor ArmUpDownR;
     public DcMotor ArmUpDownL;
+    public DcMotor ArmExtend;
     public Servo StupidStick; //Idol servo
-    public CRServo ArmServo; //In out servo
+    //public CRServo ArmServo; //In out servo
 
     // Intake
     public CRServo Brotation; //Intake
@@ -61,7 +62,7 @@ public class BBot {
         StupidStick = hwMap.servo.get("StupidStick");
         Brotation = hwMap.crservo.get("Brotation");
         PhatServo = hwMap.servo.get("PhatServo");
-        ArmServo = hwMap.crservo.get("ArmServo");
+        //ArmServo = hwMap.crservo.get("ArmServo");
 
         // initialize sensors
         //GyroCenter = hwMap.gyroSensor.get("GyroCenter");
@@ -145,7 +146,7 @@ public class BBot {
         StupidStick.setPosition(0.75);
         Brotation.setPower(0.0);
         PhatServo.setPosition(0.0);
-        ArmServo.setPower(0.0);
+        //ArmServo.setPower(0.0);
     }
     public void resetAllEncoders() {
         // reset drive encoders
