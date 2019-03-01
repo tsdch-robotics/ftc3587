@@ -67,8 +67,8 @@ public class TradOP extends OpMode {
 
         // arm
 
-        robot.ArmUpDown1.setPower(gamepad2.left_stick_y);
-        robot.ArmUpDown2.setPower(gamepad2.left_stick_y);
+        robot.ArmUpDownR.setPower(gamepad2.left_stick_y);
+        robot.ArmUpDownL.setPower(gamepad2.left_stick_y);
 
         if (gamepad2.left_stick_y > 0) {
             AVS = "up";
@@ -82,13 +82,13 @@ public class TradOP extends OpMode {
         boolean Arm_In = gamepad2.right_bumper;
 
         if (Arm_Out) {
-            robot.ArmInOut.setPower(1.0);
+            robot.ArmServo.setPower(1.0);
             AHS = "out";
         } else if(Arm_In) {
-            robot.ArmInOut.setPower(-1.0);
+            robot.ArmServo.setPower(-1.0);
             AHS = "in";
         } else {
-            robot.ArmInOut.setPower(0.0);
+            robot.ArmServo.setPower(0.0);
             AHS = "idle";
         }
 
@@ -111,10 +111,10 @@ public class TradOP extends OpMode {
 
         if (Store) {
             robot.PhatServo.setPosition(0.0);
-            PhatServo = "spit";
+            PhatServo = "store";
         } else if(Active) {
             robot.PhatServo.setPosition(1.0);
-            PhatServo = "zucc";
+            PhatServo = "active";
         }
 
         // driver data

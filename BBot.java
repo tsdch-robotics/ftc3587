@@ -19,14 +19,14 @@ public class BBot {
 
     // game element manipulation
     public DcMotor Lift;
-    public DcMotor ArmInOut;
-    public DcMotor ArmUpDown1;
-    public DcMotor ArmUpDown2;
-    public Servo StupidStick;
+    public DcMotor ArmUpDownR;
+    public DcMotor ArmUpDownL;
+    public Servo StupidStick; //Idol servo
+    public CRServo ArmServo; //In out servo
 
     // Intake
-    public CRServo Brotation;
-    public Servo PhatServo;
+    public CRServo Brotation; //Intake
+    public Servo PhatServo; //Store or active intake
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -53,15 +53,15 @@ public class BBot {
         Lift = hwMap.dcMotor.get("Lift");
         Lift.setDirection(DcMotor.Direction.REVERSE);
 
-        ArmInOut = hwMap.dcMotor.get("ArmInOut");
-        ArmUpDown1 = hwMap.dcMotor.get("ArmUpDown1");
-        ArmUpDown2 = hwMap.dcMotor.get("ArmUpDown2");
-        ArmUpDown2.setDirection(DcMotor.Direction.REVERSE);
+        ArmUpDownR = hwMap.dcMotor.get("ArmUpDownR");
+        ArmUpDownL = hwMap.dcMotor.get("ArmUpDownL");
+        ArmUpDownL.setDirection(DcMotor.Direction.REVERSE);
 
         // initialize servos
         StupidStick = hwMap.servo.get("StupidStick");
         Brotation = hwMap.crservo.get("Brotation");
         PhatServo = hwMap.servo.get("PhatServo");
+        ArmServo = hwMap.crservo.get("ArmServo");
 
         // initialize sensors
         //GyroCenter = hwMap.gyroSensor.get("GyroCenter");
@@ -126,21 +126,26 @@ public class BBot {
         DriveBackRight.setPower(BackR);
     }
 
+    public void setArmUpDownMotors(double ArmUpDown) {
+        ArmUpDownR.setPower(ArmUpDown);
+        ArmUpDownL.setPower(ArmUpDown);
+    }
+
     public void stopAllMotors() {
         DriveFrontLeft.setPower(0.0);
         DriveFrontRight.setPower(0.0);
         DriveBackLeft.setPower(0.0);
         DriveBackRight.setPower(0.0);
         Lift.setPower(0.0);
-        ArmInOut.setPower(0.0);
-        ArmUpDown1.setPower(0.0);
-        ArmUpDown2.setPower(0.0);
+        ArmUpDownR.setPower(0.0);
+        ArmUpDownL.setPower(0.0);
     }
 
     public void initServos() {
         StupidStick.setPosition(0.75);
         Brotation.setPower(0.0);
         PhatServo.setPosition(0.0);
+        ArmServo.setPower(0.0);
     }
     public void resetAllEncoders() {
         // reset drive encoders
@@ -157,13 +162,10 @@ public class BBot {
         Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        ArmInOut.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        ArmInOut.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        ArmUpDown1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        ArmUpDown1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        ArmUpDown2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        ArmUpDown2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        ArmUpDownR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ArmUpDownR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        ArmUpDownL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ArmUpDownL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /*

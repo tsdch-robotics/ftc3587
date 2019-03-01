@@ -45,7 +45,7 @@ public class TradAuto extends LinearOpMode {
     SampleRandomizedPositions goldPosition;
 
     private enum States { // states for the autonomous FSM
-        Sampling, LOWERING, CLEAR_LANDER, RETRACT_LIFT, PICKDIRECTION, TURN_LEFT, NAV_LEFT, TURN_2_DEPOT_L, NAV_2_DEPOT_L, CENTER, TURN_RIGHT, NAV_RIGHT, TURN_2_DEPOT_R, NAV_2_DEPOT_R, NAV_2_PIT, DROP_IDOL_TURN, NAV_2_CRATER, STOP;
+        Sampling, LOWERING, CLEAR_LANDER, RETRACT_LIFT, PICKDIRECTION, TURN_LEFT, NAV_LEFT, TURN_2_DEPOT_L, NAV_2_DEPOT_L, CENTER, TURN_RIGHT, NAV_RIGHT, TURN_2_DEPOT_R, NAV_2_DEPOT_R, NAV_2_PIT, DROP_IDOL_TURN, NAV_2_CRATER, ARM_IN_CRATER, STOP;
     }
 
     public void runOpMode() {
@@ -269,32 +269,32 @@ public class TradAuto extends LinearOpMode {
                     telemetry.addLine("came from the left");
                     robot.setDriveMotors(0.5, -0.5, 0.5, -0.5); //turns right
                     if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 1) {
-                        current_state = States.STOP;
                         robot.setDriveMotors(0, 0, 0, 0);
+                        current_state = States.NAV_2_CRATER;
                     }
                     break;
                 case CENTER:
                     telemetry.addLine("coming from center");
                     robot.setDriveMotors(0.5, -0.5, 0.5, -0.5); //turns right
                     if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
-                        current_state = States.STOP;
                         robot.setDriveMotors(0, 0, 0, 0);
+                        current_state = States.NAV_2_CRATER;
                     }
                     break;
                 case RIGHT:
                     telemetry.addLine("coming from right");
                     robot.setDriveMotors(0.5, -0.5, 0.5, -0.5); //turns right
                     if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.20) {
-                        current_state = States.STOP;
                         robot.setDriveMotors(0, 0, 0, 0);
+                        current_state = States.NAV_2_CRATER;
                     }
                     break;
                 case UNKNOWN:
                     telemetry.addLine("coming from center");
                     robot.setDriveMotors(0.5, -0.5, 0.5, -0.5); //turns right
                     if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.5) {
-                        current_state = States.STOP;
                         robot.setDriveMotors(0, 0, 0, 0);
+                        current_state = States.NAV_2_CRATER;
                     }
                     break;
             }
@@ -302,17 +302,29 @@ public class TradAuto extends LinearOpMode {
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
+        robot.PhatServo.setPosition(1.0);
         robot.resetAllEncoders();
 
-           /* while (current_state == States.NAV_2_CRATER) {
-                robot.setDriveMotors(.5, .5, .5, .5);
-                if (robot.DriveFrontRight.getCurrentPosition() > robot.REVHD401Encoder * 7) {
-                    current_state = States.STOP;
-                    robot.setDriveMotors(0, 0, 0, 0);
-                }
-                if (!opModeIsActive()) return; // check termination in the innermost loop
+        while (current_state == States.NAV_2_CRATER) {
+            robot.setDriveMotors(.5, .5, .5, .5);
+            if (robot.DriveFrontRight.getCurrentPosition() > robot.REVHD401Encoder * 5) {
+                current_state = States.ARM_IN_CRATER;
+                robot.setDriveMotors(0, 0, 0, 0);
             }
-            */
+            if (!opModeIsActive()) return; // check termination in the innermost loop
+            }
+
+        robot.resetAllEncoders();
+
+        while (current_state == States.ARM_IN_CRATER) {
+            robot.setArmUpDownMotors(1.0);
+            if (robot.ArmUpDownR.getCurrentPosition() > robot.REVHD401Encoder * 2) {
+                robot.setArmUpDownMotors(0);
+                current_state = States.STOP;
+            }
+        }
+
+
         telemetry.addData("Status", "Finished");
         telemetry.addData("State", "Stop");
         telemetry.update();
