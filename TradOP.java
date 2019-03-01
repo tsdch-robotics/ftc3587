@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class TradOP extends OpMode {
     private ProgrammingBot robot = new ProgrammingBot();   // Use robot's hardware
     public ElapsedTime runtime = new ElapsedTime();
-    Gyro gyro;
+    //Gyro gyro;
 
     @Override
     public void init() {
@@ -18,8 +18,8 @@ public class TradOP extends OpMode {
          * configured your robot and created the configuration file.
          */
         robot.init(hardwareMap);
-        gyro = new Gyro(robot.hwMap, "imu"); // specifically initialize the gyro
-        gyro.start();
+        //gyro = new Gyro(robot.hwMap, "imu"); // specifically initialize the gyro
+        //gyro.start();
         telemetry.addData("Status", "Ready!");
     }
 
@@ -41,8 +41,8 @@ public class TradOP extends OpMode {
         robot.DriveBackLeft.setPower(v3);
         robot.DriveBackRight.setPower(v4);
 
-        if(gamepad1.b) gyro.resetHeading();
+        //if(gamepad1.b) gyro.resetHeading();
 
-        telemetry.addData("Heading", gyro.globalHeading);
+        //telemetry.addData("Heading", gyro.globalHeading);
     }
 }
