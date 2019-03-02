@@ -77,7 +77,6 @@ public class TankDriveTeleop extends OpMode {
         float liftdown = gamepad1.right_trigger;
 
 
-
         if (RightStrafe) {
             // to right strafe, right motors towards each other, left motors away from each other
             robot.DriveFrontLeft.setPower(1);
@@ -90,46 +89,36 @@ public class TankDriveTeleop extends OpMode {
             robot.DriveFrontRight.setPower(1);
             robot.DriveBackLeft.setPower(1);
             robot.DriveBackRight.setPower(-1);
-        }
-        else if(Reverse)
-        {
+        } else if (Reverse) {
             robot.DriveBackLeft.setPower(-DriveLeftPower);
             robot.DriveFrontLeft.setPower(-DriveLeftPower);
             robot.DriveFrontRight.setPower(-DriveRightPower);
             robot.DriveBackRight.setPower(-DriveRightPower);
         }
-        if(slowcheck == true && slow == true)
+        if (slowcheck == true && slow == true)
             slowcheck = false;
 
-        else if (slow == true && slowcheck == false)
-        {
-          slowcheck = true;
+        else if (slow == true && slowcheck == false) {
+            slowcheck = true;
         }
-        if(slowcheck == true)
-        {
-            robot.DriveBackLeft.setPower(DriveLeftPower/4);
-            robot.DriveFrontLeft.setPower(DriveLeftPower/4);
-            robot.DriveFrontRight.setPower(DriveRightPower/4);
-            robot.DriveBackRight.setPower(DriveRightPower/4);
-        }
-        else {
+        if (slowcheck == true) {
+            robot.DriveBackLeft.setPower(DriveLeftPower / 4);
+            robot.DriveFrontLeft.setPower(DriveLeftPower / 4);
+            robot.DriveFrontRight.setPower(DriveRightPower / 4);
+            robot.DriveBackRight.setPower(DriveRightPower / 4);
+        } else {
             // write the values to the motors
             robot.DriveBackLeft.setPower(DriveLeftPower);
             robot.DriveFrontLeft.setPower(DriveLeftPower);
             robot.DriveFrontRight.setPower(DriveRightPower);
             robot.DriveBackRight.setPower(DriveRightPower);
         }
-        if(liftup)
-        {
+        if (liftup) {
             robot.Lift.setPower(1);
 
-        }
-        else if(liftdown>.1)
-        {
+        } else if (liftdown > .1) {
             robot.Lift.setPower(-1);
-        }
-        else
-        {
+        } else {
             robot.Lift.setPower(0);
         }
 
@@ -140,76 +129,83 @@ public class TankDriveTeleop extends OpMode {
         boolean Lift_up = gamepad1.right_bumper;
         boolean Lift_down = (gamepad1.right_trigger > 0.1);
 
-        if(Lift_up) { // if right bumper is held arm elevator is set to 1
+       if (Lift_up) { // if right bumper is held arm elevator is set to 1
             robot.Lift.setPower(1);
             LiftStatus = "moving up";
-        }
-        else if(Lift_down) { // if right trigger is pressed elevator is set to -1
+        } else if (Lift_down) { // if right trigger is pressed elevator is set to -1
             robot.Lift.setPower(-1);
             LiftStatus = "moving down";
-        }
-        else { // if neither are pressed elevator is set to 0
+        } else { // if neither are pressed elevator is set to 0
             robot.Lift.setPower(0);
             LiftStatus = "idle";
         }
 
-        // arm
-
-        //robot.ArmUpDownR.setPower(gamepad2.left_stick_y);
-        //robot.ArmUpDownL.setPower(gamepad2.left_stick_y);
-
-        //if (gamepad2.left_stick_y > 0) {
-        //  AVS = "up";
-        //} else if (gamepad2.left_stick_y < 0) {
-          //AVS = "down";
-        //} else {
-        //  AVS = "idle";
-        //}
-
+        // arm rotation
         boolean Arm_Up = (gamepad2.left_stick_y > 0);
         boolean Arm_Down = (gamepad2.left_stick_y < 0);
 
-        robot.ArmUpDownR.setPower(gamepad2.left_stick_y);
-        robot.ArmUpDownL.setPower(gamepad2.left_stick_y);
+        if (Arm_Down) {
+            robot.ArmUpDownR.setPower(-gamepad2.left_stick_y);
+            robot.ArmUpDownL.setPower(-gamepad2.left_stick_y);
+        } else if (Arm_Up) {
+            robot.ArmUpDownR.setPower(-gamepad2.left_stick_y * 2);
+            robot.ArmUpDownL.setPower(-gamepad2.left_stick_y * 2);
+        }
+        else {
+            robot.ArmUpDownR.setPower(0);
+            robot.ArmUpDownL.setPower(0);
+        }
 
-        if (Arm_Up) {
-            robot.ArmUpDownL.setPower(.3);
-            robot.ArmUpDownR.setPower(.3);
-        } else if (Arm_Down)
-            robot.ArmUpDownL.setPower(-.3);
-        robot.ArmUpDownR.setPower((-.3));
 
+  //      if (Arm_Up) {
+//            robot.ArmUpDownL.setPower(.5);
+//            robot.ArmUpDownR.setPower(.5);
+//        }
+//        else if (Arm_Down){
+//            robot.ArmUpDownL.setPower(-.5);
+//            robot.ArmUpDownR.setPower(-.5);
+//        }
+//        else {
+//            robot.ArmUpDownL.setPower(0);
+//            robot.ArmUpDownR.setPower(0);
+//        }
+//
+        // arm extension
         boolean Arm_Out = (gamepad2.right_trigger > 0.1);
         boolean Arm_In = gamepad2.right_bumper;
 
-
-
-       // if (Arm_Out) {
-         //   robot.ArmServo.setPower(1.0);
-           // AHS = "out";
-        //} else if(Arm_In) {
-          //  robot.ArmServo.setPower(-1.0);
-           // AHS = "in";
-        //} else {
-          //  robot.ArmServo.setPower(0.0);
-            //AHS = "idle";
-       // }
-
-        if (Arm_Out)
-        { robot.ArmExtend.setPower(.7);
-        }else if (Arm_In)
-        robot.ArmExtend.setPower(-.7);
-
+        if (Arm_Out) {
+            robot.ArmExtend.setPower(.7);
+        }
+        else if (Arm_In) {
+            robot.ArmExtend.setPower(-.7);
+        }
+        else {
+            robot.ArmExtend.setPower(0);
+        }
+     /*
+        if (Arm_Out) {
+            robot.Raise.setPower(1);
+        } else if (Arm_In) {
+            robot.Raise.setPower(0);
+        } else
+            robot.Raise.setPower(.5);
+        }
+*/
         boolean Spit = gamepad2.a;
         boolean Zucc = gamepad2.b;
+
+
 
         if (Spit) {
             robot.Brotation.setPower(1.0);
             Intake = "spit";
-        } else if(Zucc) {
+        }
+        else if(Zucc) {
             robot.Brotation.setPower(-1.0);
             Intake = "zucc";
-        } else {
+        }
+        else {
             robot.Brotation.setPower(0.0);
             Intake = "idle";
         }
@@ -218,17 +214,18 @@ public class TankDriveTeleop extends OpMode {
         boolean Active = gamepad2.dpad_up;
 
         if (Store) {
-            robot.PhatServo.setPosition(0.0);
+            robot.PhatServo.setPosition(1.0);
             PhatServo = "store";
         } else if(Active) {
-            robot.PhatServo.setPosition(1.0);
+            robot.PhatServo.setPosition(0.0);
             PhatServo = "active";
         }
 
         // driver data
         telemetry.addData("Lift", LiftStatus);
-        telemetry.addData("Arm", AVS);
-        telemetry.addData("Arm", AHS);
+       // telemetry.addData("Arm", AVS);
+       // telemetry.addData("Arm", AHS);
+
         telemetry.addData("Brotation", Intake);
         telemetry.addData("PhatServo", PhatServo);
         //telemetry.addData("Gyro Directions", gyro.globalHeading);

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -28,6 +29,7 @@ public class BBot {
     // Intake
     public CRServo Brotation; //Intake
     public Servo PhatServo; //Store or active intake
+   // public CRServo Raise; // continuous servo to raise arm
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -50,18 +52,21 @@ public class BBot {
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
         DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
         DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
+        ArmExtend = hwMap.dcMotor.get("ArmExtend");
 
         Lift = hwMap.dcMotor.get("Lift");
-        Lift.setDirection(DcMotor.Direction.REVERSE);
+//       Lift.setDirection(DcMotor.Direction.REVERSE);
 
         ArmUpDownR = hwMap.dcMotor.get("ArmUpDownR");
         ArmUpDownL = hwMap.dcMotor.get("ArmUpDownL");
-        ArmUpDownL.setDirection(DcMotor.Direction.REVERSE);
+
+
 
         // initialize servos
         StupidStick = hwMap.servo.get("StupidStick");
         Brotation = hwMap.crservo.get("Brotation");
         PhatServo = hwMap.servo.get("PhatServo");
+       // Raise = hwMap.crservo.get("Raise");
         //ArmServo = hwMap.crservo.get("ArmServo");
 
         // initialize sensors
@@ -144,7 +149,7 @@ public class BBot {
 
     public void initServos() {
         StupidStick.setPosition(0.75);
-        Brotation.setPower(0.0);
+      //  Brotation.setPower(0.5);
         PhatServo.setPosition(0.0);
         //ArmServo.setPower(0.0);
     }

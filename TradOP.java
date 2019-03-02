@@ -87,13 +87,13 @@ public class TradOP extends OpMode {
         robot.ArmUpDownL.setPower(gamepad2.left_stick_y);
 
         if (Arm_Up) {
-            robot.ArmUpDownL.setPower(-.3);
-            robot.ArmUpDownR.setPower(.3);
+            robot.ArmUpDownL.setPower(.3);
+            robot.ArmUpDownR.setPower(-.3);
         }
 
         else if (Arm_Down) {
-            robot.ArmUpDownL.setPower(.3);
-            robot.ArmUpDownR.setPower(-.3);
+            robot.ArmUpDownL.setPower(-.3);
+            robot.ArmUpDownR.setPower(.3);
         }
         else {
                 robot.ArmUpDownR.setPower(0);
