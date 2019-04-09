@@ -173,7 +173,7 @@ public class TradAuto extends LinearOpMode {
 
         while (current_state == States.TURN_LEFT) {
             telemetry.addLine("TurnLeft");
-            robot.setDriveMotors(-0.25, 0.25, -0.25, 0.25);
+            robot.setDriveMotors(-0.5, 0.5, -0.5, 0.5);
             if (robot.DriveFrontRight.getCurrentPosition() > robot.REVHD401Encoder * 0.20) {
                 robot.setDriveMotors(0, 0, 0, 0);
                 current_state = States.NAV_LEFT;
@@ -235,8 +235,8 @@ public class TradAuto extends LinearOpMode {
         while (current_state == States.TURN_RIGHT) {
             telemetry.addLine("Turnright");
             telemetry.update();
-            robot.setDriveMotors(0.25, -0.25, 0.25, -0.25);
-            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.15) {
+            robot.setDriveMotors(0.5, -0.5, 0.5, -0.5);
+            if (robot.DriveFrontRight.getCurrentPosition() < -robot.REVHD401Encoder * 0.2) {
                 robot.setDriveMotors(0, 0, 0, 0);
                 current_state = States.NAV_RIGHT;
             }

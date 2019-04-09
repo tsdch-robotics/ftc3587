@@ -55,7 +55,7 @@ public class BBot {
         ArmExtend = hwMap.dcMotor.get("ArmExtend");
 
         Lift = hwMap.dcMotor.get("Lift");
-//       Lift.setDirection(DcMotor.Direction.REVERSE);
+        Lift.setDirection(DcMotor.Direction.REVERSE);
 
         ArmUpDownR = hwMap.dcMotor.get("ArmUpDownR");
         ArmUpDownL = hwMap.dcMotor.get("ArmUpDownL");
@@ -150,7 +150,7 @@ public class BBot {
     public void initServos() {
         StupidStick.setPosition(0.75);
       //  Brotation.setPower(0.5);
-        PhatServo.setPosition(0.0);
+        PhatServo.setPosition(1);
         //ArmServo.setPower(0.0);
     }
     public void resetAllEncoders() {

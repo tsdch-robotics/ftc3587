@@ -145,11 +145,11 @@ public class TankDriveTeleop extends OpMode {
         boolean Arm_Down = (gamepad2.left_stick_y < 0);
 
         if (Arm_Down) {
+            robot.ArmUpDownR.setPower(-gamepad2.left_stick_y / 4);
+            robot.ArmUpDownL.setPower(-gamepad2.left_stick_y / 4);
+        } else if (Arm_Up) {
             robot.ArmUpDownR.setPower(-gamepad2.left_stick_y);
             robot.ArmUpDownL.setPower(-gamepad2.left_stick_y);
-        } else if (Arm_Up) {
-            robot.ArmUpDownR.setPower(-gamepad2.left_stick_y * 2);
-            robot.ArmUpDownL.setPower(-gamepad2.left_stick_y * 2);
         }
         else {
             robot.ArmUpDownR.setPower(0);
