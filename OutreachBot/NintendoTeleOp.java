@@ -16,8 +16,8 @@ public class NintendoTeleOp extends OpMode {
 
     @Override
     public void loop(){
-        float LeftSideMotors = -gamepad1.left_stick_y;
-        float RightSideMotors = -gamepad1.right_stick_y;
+        float LeftSideMotors = -gamepad1.left_stick_y + gamepad1.left_stick_x;
+        float RightSideMotors = -gamepad1.left_stick_y - gamepad1.left_stick_x;
 
         robot.LeftFrontMotor.setPower(LeftSideMotors);
         robot.RightFrontMotor.setPower(RightSideMotors);

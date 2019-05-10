@@ -26,6 +26,8 @@ public class MarioBot {
         hwMap = ahwMap; // reference to hardware map
 
         // Give Motors Names (HwMap)
+        DCMC = hwMap.dcMotorController.get("MotorControler0");
+
         LeftFrontMotor = hwMap.dcMotor.get("LeftFrontMotor");
         RightFrontMotor = hwMap.dcMotor.get("RightFrontMotor");
         RightFrontMotor.setDirection(DcMotor.Direction.REVERSE);
