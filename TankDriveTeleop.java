@@ -5,13 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 // garbage gyro imports
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
-@TeleOp(name="Tank Drive", group="ProgrammingBot")
+
+@TeleOp(name="Tank Drive", group="MiniProgrammingBot")
 public class TankDriveTeleop extends OpMode {
-    ProgrammingBot robot = new ProgrammingBot();   // Use robot's hardware
+    MiniProgrammingBot robot = new MiniProgrammingBot();   // Use robot's hardware
     public ElapsedTime runtime = new ElapsedTime();
     Gyro gyro;
 

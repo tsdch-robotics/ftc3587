@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name="TradOp", group="ProgrammingBot")
+@TeleOp(name="TradOp", group="MiniProgrammingBot")
 public class TradOP extends OpMode {
-    private ProgrammingBot robot = new ProgrammingBot();   // Use robot's hardware
+    private MiniProgrammingBot robot = new MiniProgrammingBot();   // Use robot's hardware
     public ElapsedTime runtime = new ElapsedTime();
     //Gyro gyro;
 

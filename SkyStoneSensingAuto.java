@@ -32,8 +32,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Autonomous(name="Basic", group="BBot")
-public class BasicAuto extends LinearOpMode {
+@Autonomous(name="Skystone Sensing", group="BBot")
+public class SkyStoneSensingAuto extends LinearOpMode {
     MiniProgrammingBot robot = new MiniProgrammingBot();   // Use robot's hardware
     Gyro gyro;
 

@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * This is NOT an opmode. This file defines all the hardware on the robot
  * and some common helper functions (stop motors, reset encoders, etc.)
 */
-public class ProgrammingBot {
+public class MiniProgrammingBot {
     // class variables for all hardware
     public DcMotor DriveFrontLeft;
     public DcMotor DriveFrontRight;
@@ -20,7 +20,7 @@ public class ProgrammingBot {
     HardwareMap hwMap = null;
     private ElapsedTime period = new ElapsedTime();
 
-    public ProgrammingBot() { }
+    public MiniProgrammingBot() { }
 
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
