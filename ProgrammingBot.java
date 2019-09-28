@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -15,6 +16,8 @@ public class ProgrammingBot {
     public DcMotor DriveFrontRight;
     public DcMotor DriveBackLeft;
     public DcMotor DriveBackRight;
+    public DcMotor IntakeLeft;
+    public DcMotor IntakeRight;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -26,15 +29,19 @@ public class ProgrammingBot {
     public void init(HardwareMap ahwMap) {
         hwMap = ahwMap; // reference to hardware map
 
-        // initialize motors
+        // initialize drivetrain
         DriveFrontLeft = hwMap.dcMotor.get("DriveFrontLeft");
         DriveBackLeft = hwMap.dcMotor.get("DriveBackLeft");
         DriveFrontRight = hwMap.dcMotor.get("DriveFrontRight");
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
-
         // reverse one side of the drivetrain so that directions are more natural
-        DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
-        DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
+        DriveFrontLeft.setDirection(DcMotor.Direction.REVERSE);
+        DriveBackLeft.setDirection(DcMotor.Direction.REVERSE);
+
+        // initialize intake
+        IntakeLeft = hwMap.dcMotor.get("IntakeLeft");
+        IntakeRight = hwMap.dcMotor.get("IntakeRight");
+        IntakeRight.setDirection(DcMotor.Direction.REVERSE);
 
         // don't initialize the gyro unless an op mode specifically requests it
 
@@ -53,6 +60,9 @@ public class ProgrammingBot {
         DriveFrontRight.setPower(0.0);
         DriveBackLeft.setPower(0.0);
         DriveBackRight.setPower(0.0);
+
+        IntakeLeft.setPower(0.0);
+        IntakeRight.setPower(0.0);
     }
 
     public void resetAllEncoders() {

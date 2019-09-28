@@ -41,6 +41,22 @@ public class TradOP extends OpMode {
         robot.DriveBackLeft.setPower(v3);
         robot.DriveBackRight.setPower(v4);
 
+        //Instake
+        boolean IntakeForward = gamepad1.right_trigger > 0.5;
+        boolean IntakeReverse = gamepad1.right_bumper;
+
+        if (IntakeForward) {
+            robot.IntakeLeft.setPower(1.0);
+            robot.IntakeRight.setPower(1.0);
+        }
+        else if (IntakeReverse) {
+            robot.IntakeLeft.setPower(-1.0);
+            robot.IntakeRight.setPower(-1.0);
+        }
+        else {
+            robot.IntakeLeft.setPower(0.0);
+            robot.IntakeRight.setPower(0.0);
+        }
         //if(gamepad1.b) gyro.resetHeading();
 
         //telemetry.addData("Heading", gyro.globalHeading);
