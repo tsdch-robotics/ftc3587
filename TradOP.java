@@ -57,6 +57,13 @@ public class TradOP extends OpMode {
             robot.IntakeLeft.setPower(0.0);
             robot.IntakeRight.setPower(0.0);
         }
+
+        if (gamepad1.y) {
+            robot.StupidStick.setPosition(0.0);
+        }
+        else if (gamepad1.b){
+            robot.StupidStick.setPosition(0.8);
+        }
         //if(gamepad1.b) gyro.resetHeading();
 
         //telemetry.addData("Heading", gyro.globalHeading);

@@ -18,6 +18,7 @@ public class ProgrammingBot {
     public DcMotor DriveBackRight;
     public DcMotor IntakeLeft;
     public DcMotor IntakeRight;
+    public Servo StupidStick;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -45,6 +46,10 @@ public class ProgrammingBot {
 
         // don't initialize the gyro unless an op mode specifically requests it
 
+        //initialize servos
+        StupidStick = hwMap.servo.get("StupidStick");
+
+        initAllServos();
         stopAllMotors();
     }
 
@@ -63,6 +68,10 @@ public class ProgrammingBot {
 
         IntakeLeft.setPower(0.0);
         IntakeRight.setPower(0.0);
+    }
+
+    public void initAllServos() {
+        StupidStick.setPosition(0.0);
     }
 
     public void resetAllEncoders() {
