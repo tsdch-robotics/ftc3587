@@ -29,7 +29,6 @@ public class TankDriveTeleop extends OpMode {
         float DriveRightPower = -gamepad1.right_stick_y;
         boolean LeftStrafe = gamepad1.dpad_left;
         boolean RightStrafe = gamepad1.dpad_right;
-        boolean IntakeCR = gamepad2.left_bumper;
 
         if (RightStrafe) {
             // to right strafe, right motors towards each other, left motors away from each other

@@ -15,7 +15,10 @@ public class MiniProgrammingBot {
     public DcMotor DriveFrontRight;
     public DcMotor DriveBackLeft;
     public DcMotor DriveBackRight;
+    public DcMotor ArmUpDown;
 
+    public Servo Grabber;
+    public Servo Turner;
     /* local OpMode members. */
     HardwareMap hwMap = null;
     private ElapsedTime period = new ElapsedTime();
@@ -27,18 +30,25 @@ public class MiniProgrammingBot {
         hwMap = ahwMap; // reference to hardware map
 
         // initialize motors
-        DriveFrontLeft = hwMap.dcMotor.get("DriveFrontLeft");
+        //DriveFrontLeft = hwMap.dcMotor.get("DriveFrontLeft");
         DriveBackLeft = hwMap.dcMotor.get("DriveBackLeft");
-        DriveFrontRight = hwMap.dcMotor.get("DriveFrontRight");
+        //DriveFrontRight = hwMap.dcMotor.get("DriveFrontRight");
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
+        ArmUpDown = hwMap.dcMotor.get("ArmUpDown");
 
         // reverse one side of the drivetrain so that directions are more natural
-        DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
+        //DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
         DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
 
-        // don't initialize the gyro unless an op mode specifically requests it
+        // initialize servos
+        Grabber = hwMap.servo.get("Grabber");
+        Turner = hwMap.servo.get("Turner");
 
+        // don't initialize the gyro unless an op mode specifically requests it
         stopAllMotors();
+
+        Grabber.setPosition(0.0);
+        Turner.setPosition(0.0);
     }
 
     public void setDriveMotors(double FrontL, double FrontR, double BackL, double BackR) {
@@ -53,6 +63,7 @@ public class MiniProgrammingBot {
         DriveFrontRight.setPower(0.0);
         DriveBackLeft.setPower(0.0);
         DriveBackRight.setPower(0.0);
+        ArmUpDown.setPower(0.0);
     }
 
     public void resetAllEncoders() {
@@ -65,6 +76,9 @@ public class MiniProgrammingBot {
         DriveFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         DriveBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         DriveBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        ArmUpDown.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ArmUpDown.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /*
