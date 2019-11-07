@@ -6,6 +6,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
+import org.firstinspires.ftc.robotcontroller.external.samples.SensorDigitalTouch;
+
 /*
  * This is NOT an opmode. This file defines all the hardware on the robot
  * and some common helper functions (stop motors, reset encoders, etc.)
@@ -19,6 +22,9 @@ public class ProgrammingBot {
     public DcMotor IntakeLeft;
     public DcMotor IntakeRight;
     public Servo StupidStick;
+    //public SensorColor RCS;
+    //public SensorColor LCS;
+    //public SensorDigitalTouch IntakeTouch;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -36,8 +42,8 @@ public class ProgrammingBot {
         DriveFrontRight = hwMap.dcMotor.get("DriveFrontRight");
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
         // reverse one side of the drivetrain so that directions are more natural
-        DriveFrontLeft.setDirection(DcMotor.Direction.REVERSE);
-        DriveBackLeft.setDirection(DcMotor.Direction.REVERSE);
+        DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
+        DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
 
         // initialize intake
         IntakeLeft = hwMap.dcMotor.get("IntakeLeft");

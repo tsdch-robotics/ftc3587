@@ -38,6 +38,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 @Autonomous(name="Basic", group="BBot")
@@ -46,15 +48,45 @@ public class BasicAuto extends LinearOpMode {
     Gyro gyro;
 
     private enum States { // states for the autonomous FSM
-        LOWER, MOVE_AWAY_HANGER, TURN1, MOVE_INTO_CRATER, STOP;
+        MOVE_2_STONES, TURN_2_SCAN, SCAN_STONES, GET_NEW_STONE, MOVE_BACK, MOVE_INTO_STONES, INTAKE_STONE, STOP;
     }
 
     public void runOpMode() {
-        States current_state = States.LOWER;
+        States current_state = States.MOVE_2_STONES;
         telemetry.addData("Status", "Initializing...");
         robot.init(hardwareMap);
+
+        //gyro init
         gyro = new Gyro(robot.hwMap, "imu"); // special initialization for gyro
         gyro.start();
+
+        //touch sensor init
+        DigitalChannel digitalTouch;
+        digitalTouch = hardwareMap.get(DigitalChannel.class, "sensor_digital");
+        digitalTouch.setMode(DigitalChannel.Mode.INPUT);
+
+        //color sensor
+        ColorSensor RCS;
+        // hsvValues is an array that will hold the hue, saturation, and value information.
+        float hsvValues[] = {0F,0F,0F};
+
+        // values is a reference to the hsvValues array.
+        final float values[] = hsvValues;
+
+        // get a reference to the RelativeLayout so we can change the background
+        // color of the Robot Controller app to match the hue detected by the RGB sensor.
+        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+        // bPrevState and bCurrState represent the previous and current state of the button.
+        boolean bPrevState = false;
+        boolean bCurrState = false;
+        // bLedOn represents the state of the LED.
+        boolean bLedOn = true;
+        // get a reference to our ColorSensor object.
+        RCS = hardwareMap.get(ColorSensor.class, "RCS");
+        // Set the LED in the beginning
+        RCS.enableLed(bLedOn);
+
         telemetry.addData("Status", "Ready!");
         telemetry.update();
 
@@ -63,28 +95,106 @@ public class BasicAuto extends LinearOpMode {
 
         // State machine for robot
         telemetry.addData("Status", "Running");
-        telemetry.addData("State", "Lowering");
+        telemetry.addData("State", "Moving to stones");
         telemetry.update();
-        while (current_state == States.LOWER) {
-            // lower the robot off the hanger
+        telemetry.addData("Motor position: ", robot.DriveFrontLeft.getCurrentPosition());
+
+        robot.resetAllEncoders();
+        gyro.resetHeading();
+
+        while (current_state == States.MOVE_2_STONES) {
+            // move from wall to stones
             // FAKE NEWS! actually run the robot forward a little bit.
-            gyro.resetHeading();
-            while(gyro.globalHeading > -90) {
-                telemetry.addData("Angle", gyro.globalHeading);
-                robot.setDriveMotors(0.5,-0.5,0.5,-0.5);
-                telemetry.update();
-                if(!opModeIsActive()) return; // check termination in the innermost loop
+            robot.setDriveMotors(0.5, 0.5, 0.5, 0.5);
+            telemetry.update();
+            if (robot.DriveFrontLeft.getCurrentPosition() > 1500) {
+                current_state = States.TURN_2_SCAN;
+                robot.setDriveMotors(0.0, 0.0, 0.0, 0.0);
             }
+            if(!opModeIsActive()) return; // check termination in the innermost loop
+        }
+
             robot.stopAllMotors();
-            sleep(5000);
-        }
+            sleep(1000);
 
-        telemetry.addData("State", "Moving away from hanger");
+        telemetry.addData("State", "Moving away from wall");
         telemetry.update();
-        while (current_state == States.MOVE_AWAY_HANGER) {
-            robot.setDriveMotors(0,0,0,0);
-            // this will stay stuck here for testing purposes
+
+
+        while (current_state == States.TURN_2_SCAN) {
+            robot.setDriveMotors(-0.5,0.5,-0.5,0.5);
+            if (gyro.globalHeading < -90) {
+                current_state = States.STOP;
+                robot.setDriveMotors(0.0, 0.0, 0.0, 0.0);
+                telemetry.addData("Gyro position: ", gyro.globalHeading);
+                telemetry.update();
+            }
+            if(!opModeIsActive()) return; // check termination in the innermost loop
         }
 
+        robot.stopAllMotors();
+        sleep(5000);
+
+        while (current_state == States.SCAN_STONES) {
+            if (RCS.alpha() > 150) {    //skystone
+                robot.stopAllMotors();
+                current_state = States.MOVE_BACK;
+            } else {
+                robot.stopAllMotors();
+                current_state = States.GET_NEW_STONE;
+            }
+            if(!opModeIsActive()) return; // check termination in the innermost loop
+        }
+
+        robot.stopAllMotors();
+        sleep(5000);
+
+        while (current_state == States.GET_NEW_STONE) {
+            robot.setDriveMotors(0.5,0.5,0.5,0.5);
+            if (robot.DriveFrontLeft.getCurrentPosition() >1300) {
+                robot.stopAllMotors();
+                current_state = States.SCAN_STONES;
+            }
+            if(!opModeIsActive()) return; // check termination in the innermost loop
+        }
+
+        while (current_state == States.MOVE_BACK) {
+            robot.setDriveMotors(-0.5,-0.5,-0.5,-0.5);
+            if (robot.DriveFrontLeft.getCurrentPosition() < 1300) {
+                current_state = States.MOVE_INTO_STONES;
+                robot.stopAllMotors();
+            }
+            if(!opModeIsActive()) return; // check termination in the innermost loop
+        }
+
+        while (current_state == States.MOVE_INTO_STONES) {
+            robot.setDriveMotors(0.5,-0.5,-0.5,0.5);
+            if (robot.DriveFrontLeft.getCurrentPosition() > 1300) {
+                current_state = States.STOP;
+                robot.stopAllMotors();
+            }
+            if(!opModeIsActive()) return; // check termination in the innermost loop
+        }
+
+        while (current_state == States.INTAKE_STONE) {
+            if (digitalTouch.getState() == false) {
+                // button is pressed.
+                telemetry.addData("Button", "PRESSED");
+                robot.IntakeLeft.setPower(0.0);
+                robot.IntakeRight.setPower(0.0);
+            } else {
+                // button is not pressed.
+                telemetry.addData("Button", "NOT PRESSED");
+                robot.IntakeLeft.setPower(1.0);
+                robot.IntakeRight.setPower(1.0);
+            }
+            if(!opModeIsActive()) return; // check termination in the innermost loop
+        }
+        //telemetry.addData("Angle", gyro.globalHeading);
+
+        while (current_state == States.STOP) {
+            robot.stopAllMotors();
+            if(!opModeIsActive()) return; // check termination in the innermost loop
+        }
     }
 }
