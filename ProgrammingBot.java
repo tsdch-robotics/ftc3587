@@ -42,8 +42,8 @@ public class ProgrammingBot {
         DriveFrontRight = hwMap.dcMotor.get("DriveFrontRight");
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
         // reverse one side of the drivetrain so that directions are more natural
-        DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
-        DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
+        DriveFrontLeft.setDirection(DcMotor.Direction.REVERSE);
+        DriveBackLeft.setDirection(DcMotor.Direction.REVERSE);
 
         // initialize intake
         IntakeLeft = hwMap.dcMotor.get("IntakeLeft");
@@ -90,6 +90,20 @@ public class ProgrammingBot {
         DriveFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         DriveBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         DriveBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public int inchesToEncoderCounts(int inches) {
+        // CONSTANTS that only change when hardware changes are made to the robot
+        final int countsPerShaftRotation = 560; // only change this if you change what motor you're using
+        final int shaftToWheelRatio = 3; // 1 turn of the motor shaft results in X turns of the wheel
+        final int wheelDiameter = 4; // diameter of the wheel in inches
+
+        // CALCULATIONS - don't change these!
+        double wheelCircumference = Math.PI * wheelDiameter; // inches
+        double countsPerWheelRotation = ((double) countsPerShaftRotation) / ((double) shaftToWheelRatio);
+        double countsPerInch = countsPerWheelRotation / wheelCircumference;
+
+        return (int)(countsPerInch * inches);
     }
 
     /*

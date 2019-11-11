@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
@@ -15,16 +16,20 @@ public class Gyro extends Thread {
     public double globalHeading; // allow access without going through other methods
 
     private final ReentrantLock headingLock = new ReentrantLock();
-    public volatile boolean exit = false;
+
+    private LinearOpMode opMode;
 
     /**
      * Initialize the REV controller's builtin IMU.
      * @param hwMap: the robot's hardware map (usually robot.hwMap).
      * @param imuName: the name of the IMU in the robot configuration (usually "imu").
      */
-    public Gyro(HardwareMap hwMap, String imuName) {
+    public Gyro(HardwareMap hwMap, String imuName, LinearOpMode opmode) {
         // get the REV controller's builtin imu
         imu = hwMap.get(BNO055IMU.class, imuName);
+
+        // save a reference to the robot's opmode so we can detect opmode termination
+        opMode = opmode;
 
         // set up parameters
         BNO055IMU.Parameters params = new BNO055IMU.Parameters();
@@ -83,7 +88,7 @@ public class Gyro extends Thread {
      * Gyro update thread. Continuously update the heading every 50 ms unless an exit has been requested.
      */
     public void run() {
-        while(!exit) {
+        while(!opMode.opModeIsActive()) {
             getHeading();
             try { Thread.sleep(50); } catch(InterruptedException ex) { } // silently swallow exception
         }

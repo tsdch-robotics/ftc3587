@@ -56,8 +56,8 @@ public class BasicAuto extends LinearOpMode {
         telemetry.addData("Status", "Initializing...");
         robot.init(hardwareMap);
 
-        //gyro init
-        gyro = new Gyro(robot.hwMap, "imu"); // special initialization for gyro
+        // gyro init
+        gyro = new Gyro(robot.hwMap, "imu", this); // special initialization for gyro
         gyro.start();
 
         //touch sensor init
@@ -68,7 +68,7 @@ public class BasicAuto extends LinearOpMode {
         //color sensor
         ColorSensor RCS;
         // hsvValues is an array that will hold the hue, saturation, and value information.
-        float hsvValues[] = {0F,0F,0F};
+        float hsvValues[] = {0F, 0F, 0F};
 
         // values is a reference to the hsvValues array.
         final float values[] = hsvValues;
@@ -107,31 +107,40 @@ public class BasicAuto extends LinearOpMode {
             // FAKE NEWS! actually run the robot forward a little bit.
             robot.setDriveMotors(0.5, 0.5, 0.5, 0.5);
             telemetry.update();
-            if (robot.DriveFrontLeft.getCurrentPosition() > 1500) {
+            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(34)) {
                 current_state = States.TURN_2_SCAN;
                 robot.setDriveMotors(0.0, 0.0, 0.0, 0.0);
             }
-            if(!opModeIsActive()) return; // check termination in the innermost loop
+            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
-            robot.stopAllMotors();
-            sleep(1000);
+        robot.stopAllMotors();
+        sleep(1000);
 
-        telemetry.addData("State", "Moving away from wall");
+        telemetry.addData("State", "Turning");
         telemetry.update();
 
+        gyro.resetHeading();
 
+        double motorSpeed = 0.5;
+        int degreeSet = 30;
         while (current_state == States.TURN_2_SCAN) {
-            robot.setDriveMotors(-0.5,0.5,-0.5,0.5);
-            if (gyro.globalHeading < -90) {
+            robot.setDriveMotors(-motorSpeed, motorSpeed, -motorSpeed, motorSpeed);
+            telemetry.addData("Gyro position: ", gyro.globalHeading);
+            if (gyro.globalHeading > degreeSet) {
+                motorSpeed = motorSpeed / 2;
+                degreeSet = degreeSet + 35;
+            }
+            else if (gyro.globalHeading > 90) {
                 current_state = States.STOP;
-                robot.setDriveMotors(0.0, 0.0, 0.0, 0.0);
+                robot.stopAllMotors();
                 telemetry.addData("Gyro position: ", gyro.globalHeading);
                 telemetry.update();
             }
-            if(!opModeIsActive()) return; // check termination in the innermost loop
+            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
+        telemetry.addData("State: ", "Scanning");
         robot.stopAllMotors();
         sleep(5000);
 
@@ -143,37 +152,37 @@ public class BasicAuto extends LinearOpMode {
                 robot.stopAllMotors();
                 current_state = States.GET_NEW_STONE;
             }
-            if(!opModeIsActive()) return; // check termination in the innermost loop
+            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
         robot.stopAllMotors();
         sleep(5000);
 
         while (current_state == States.GET_NEW_STONE) {
-            robot.setDriveMotors(0.5,0.5,0.5,0.5);
-            if (robot.DriveFrontLeft.getCurrentPosition() >1300) {
+            robot.setDriveMotors(0.5, 0.5, 0.5, 0.5);
+            if (robot.DriveFrontLeft.getCurrentPosition() > 1300) {
                 robot.stopAllMotors();
                 current_state = States.SCAN_STONES;
             }
-            if(!opModeIsActive()) return; // check termination in the innermost loop
+            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
         while (current_state == States.MOVE_BACK) {
-            robot.setDriveMotors(-0.5,-0.5,-0.5,-0.5);
+            robot.setDriveMotors(-0.5, -0.5, -0.5, -0.5);
             if (robot.DriveFrontLeft.getCurrentPosition() < 1300) {
                 current_state = States.MOVE_INTO_STONES;
                 robot.stopAllMotors();
             }
-            if(!opModeIsActive()) return; // check termination in the innermost loop
+            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
         while (current_state == States.MOVE_INTO_STONES) {
-            robot.setDriveMotors(0.5,-0.5,-0.5,0.5);
+            robot.setDriveMotors(0.5, -0.5, -0.5, 0.5);
             if (robot.DriveFrontLeft.getCurrentPosition() > 1300) {
                 current_state = States.STOP;
                 robot.stopAllMotors();
             }
-            if(!opModeIsActive()) return; // check termination in the innermost loop
+            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
         while (current_state == States.INTAKE_STONE) {
@@ -188,13 +197,15 @@ public class BasicAuto extends LinearOpMode {
                 robot.IntakeLeft.setPower(1.0);
                 robot.IntakeRight.setPower(1.0);
             }
-            if(!opModeIsActive()) return; // check termination in the innermost loop
+            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
         //telemetry.addData("Angle", gyro.globalHeading);
 
         while (current_state == States.STOP) {
             robot.stopAllMotors();
-            if(!opModeIsActive()) return; // check termination in the innermost loop
+            telemetry.addData("Gyro Position: ", gyro.globalHeading);
+            telemetry.update();
+            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
     }
 }
