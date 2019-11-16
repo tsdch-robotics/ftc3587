@@ -22,8 +22,8 @@ public class TankDriveTeleop extends OpMode {
     @Override
     public void init() {
         robot.init(hardwareMap);
-        //gyro = new Gyro(robot.hwMap, "imu"); // specifically initialize the gyro
-        //gyro.start();
+//        gyro = new Gyro(robot.hwMap, "imu"); // specifically initialize the gyro
+//        gyro.start();
         telemetry.addData("Status", "Ready!");
     }
 
@@ -35,8 +35,8 @@ public class TankDriveTeleop extends OpMode {
         float DriveRightCommand = -gamepad1.right_stick_y;
         boolean LeftStrafe = gamepad1.dpad_left;
         boolean RightStrafe = gamepad1.dpad_right;
-        boolean IntakeForward = gamepad1.right_trigger > 0.5;
-        boolean IntakeReverse = gamepad1.right_bumper;
+        boolean IntakeIn = gamepad1.right_trigger > 0.5;
+        boolean IntakeOut = gamepad1.right_bumper;
 
         // state variables for toggle controls
 
@@ -65,11 +65,11 @@ public class TankDriveTeleop extends OpMode {
             robot.DriveBackRight.setPower(DriveRightPower);
         }
 
-        if (IntakeForward) {
+        if (IntakeOut) {
             robot.IntakeLeft.setPower(1.0);
             robot.IntakeRight.setPower(1.0);
         }
-        else if (IntakeReverse) {
+        else if (IntakeIn) {
             robot.IntakeLeft.setPower(-1.0);
             robot.IntakeRight.setPower(-1.0);
         }
@@ -92,10 +92,8 @@ public class TankDriveTeleop extends OpMode {
 
         // driver data
         telemetry.addData("Left Right", String.format("%.2f", DriveLeftPower) + " " + String.format("%.2f", DriveRightPower));
-        telemetry.addData("DBR", DiscreteButtonReleased);
-        telemetry.addData("gamepad", gamepad1.y);
         telemetry.addData("Slow-mo", SlowMo);
-        telemetry.addData("Runtime", runtime);
+        telemetry.addData("Block in intake", robot.IntakeTouch.isPressed());
         //telemetry.addData("Heading", gyro.globalHeading);
     }
 }

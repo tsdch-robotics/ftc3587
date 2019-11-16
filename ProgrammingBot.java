@@ -95,7 +95,7 @@ public class ProgrammingBot {
         DriveBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public int inchesToEncoderCounts(int inches) {
+    public int inchesToEncoderCounts(float inches) {
         // CONSTANTS that only change when hardware changes are made to the robot
         final int countsPerShaftRotation = 560; // only change this if you change what motor you're using
         final int shaftToWheelRatio = 3; // 1 turn of the motor shaft results in X turns of the wheel

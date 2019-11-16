@@ -23,6 +23,7 @@ public class Gyro extends Thread {
      * Initialize the REV controller's builtin IMU.
      * @param hwMap: the robot's hardware map (usually robot.hwMap).
      * @param imuName: the name of the IMU in the robot configuration (usually "imu").
+     * @param opmode: will always be "this" in autonomous (needed so that the thread can tell when the opmode has exited)
      */
     public Gyro(HardwareMap hwMap, String imuName, LinearOpMode opmode) {
         // get the REV controller's builtin imu
@@ -81,7 +82,8 @@ public class Gyro extends Thread {
         try {
             lastAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
             globalHeading = 0;
-        } finally { headingLock.unlock(); }
+        }
+        finally { headingLock.unlock(); }
     }
 
     /**
