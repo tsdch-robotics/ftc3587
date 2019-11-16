@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.util.Log;
-
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 
 @TeleOp(name="Tank Drive", group="ProgrammingBot")
 public class TankDriveTeleop extends OpMode {
@@ -13,6 +10,10 @@ public class TankDriveTeleop extends OpMode {
     public ElapsedTime runtime = new ElapsedTime();
     Gyro gyro;
 
+    /*
+     * These state variables are placed in the class to prevent them from being reinitialized
+     * every time by loop() and wiping out the state we want to maintain.
+    */
     // robot state variables
     private boolean SlowMo = false;
 
@@ -22,8 +23,8 @@ public class TankDriveTeleop extends OpMode {
     @Override
     public void init() {
         robot.init(hardwareMap);
-//        gyro = new Gyro(robot.hwMap, "imu"); // specifically initialize the gyro
-//        gyro.start();
+        //  gyro = new Gyro(robot.hwMap, "imu"); // specifically initialize the gyro
+        //  gyro.start();
         telemetry.addData("Status", "Ready!");
     }
 
@@ -37,9 +38,6 @@ public class TankDriveTeleop extends OpMode {
         boolean RightStrafe = gamepad1.dpad_right;
         boolean IntakeIn = gamepad1.right_trigger > 0.5;
         boolean IntakeOut = gamepad1.right_bumper;
-
-        // state variables for toggle controls
-
 
         // apply scaling factor if slow-mo is enabled
         float DriveLeftPower = SlowMo ? (DriveLeftCommand / 3) : DriveLeftCommand;

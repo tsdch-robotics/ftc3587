@@ -48,20 +48,28 @@ public class ProgrammingBot {
         IntakeRight = hwMap.dcMotor.get("IntakeRight");
         IntakeRight.setDirection(DcMotor.Direction.REVERSE);
 
-        // don't initialize the gyro unless an op mode specifically requests it
-
         // initialize servos
         StupidStick = hwMap.servo.get("StupidStick");
+
+        // move all motors/servos to their starting position
+        initAllServos();
+        stopAllMotors();
 
         // initialize sensors
         RCS = hwMap.colorSensor.get("RCS");
         LCS = hwMap.colorSensor.get("LCS");
         IntakeTouch = hwMap.touchSensor.get("IntakeTouch");
-
-        initAllServos();
-        stopAllMotors();
+        // don't initialize the gyro unless an opmode specifically requests it!
     }
 
+    /**
+     * Sets the drive motors to the specified power.
+     * -1.0 moves the motor backwards; +1.0 moves the motor forwards
+     * @param FrontL
+     * @param FrontR
+     * @param BackL
+     * @param BackR
+     */
     public void setDriveMotors(double FrontL, double FrontR, double BackL, double BackR) {
         DriveFrontLeft.setPower(FrontL);
         DriveFrontRight.setPower(FrontR);
@@ -95,7 +103,7 @@ public class ProgrammingBot {
         DriveBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public int inchesToEncoderCounts(float inches) {
+    public int inchesToEncoderCounts(double inches) {
         // CONSTANTS that only change when hardware changes are made to the robot
         final int countsPerShaftRotation = 560; // only change this if you change what motor you're using
         final int shaftToWheelRatio = 3; // 1 turn of the motor shaft results in X turns of the wheel
