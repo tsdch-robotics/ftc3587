@@ -88,7 +88,7 @@ public class Gyro extends Thread {
      * Gyro update thread. Continuously update the heading every 50 ms unless an exit has been requested.
      */
     public void run() {
-        while(!opMode.opModeIsActive()) {
+        while(opMode.opModeIsActive()) {
             getHeading();
             try { Thread.sleep(50); } catch(InterruptedException ex) { } // silently swallow exception
         }
