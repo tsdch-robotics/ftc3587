@@ -1,13 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
-import org.firstinspires.ftc.robotcontroller.external.samples.SensorDigitalTouch;
 
 /*
  * This is NOT an opmode. This file defines all the hardware on the robot
@@ -22,9 +20,9 @@ public class ProgrammingBot {
     public DcMotor IntakeLeft;
     public DcMotor IntakeRight;
     public Servo StupidStick;
-    //public SensorColor RCS;
-    //public SensorColor LCS;
-    //public SensorDigitalTouch IntakeTouch;
+    public ColorSensor RCS;
+    public ColorSensor LCS;
+    public TouchSensor IntakeTouch;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -52,8 +50,13 @@ public class ProgrammingBot {
 
         // don't initialize the gyro unless an op mode specifically requests it
 
-        //initialize servos
+        // initialize servos
         StupidStick = hwMap.servo.get("StupidStick");
+
+        // initialize sensors
+        RCS = hwMap.colorSensor.get("RCS");
+        LCS = hwMap.colorSensor.get("LCS");
+        IntakeTouch = hwMap.touchSensor.get("IntakeTouch");
 
         initAllServos();
         stopAllMotors();

@@ -29,18 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.view.View;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.util.RobotLog;
 
 @Autonomous(name="Basic", group="BBot")
 public class BasicAuto extends LinearOpMode {
@@ -53,40 +43,47 @@ public class BasicAuto extends LinearOpMode {
 
     public void runOpMode() {
         States current_state = States.MOVE_2_STONES;
+
+        // force print the initialize message before the long gyro init
         telemetry.addData("Status", "Initializing...");
-        robot.init(hardwareMap);
+        telemetry.update();
 
         // gyro init
-        gyro = new Gyro(robot.hwMap, "imu", this); // special initialization for gyro
+        robot.init(hardwareMap);
+        gyro = new Gyro(robot.hwMap, "imu 1", this); // special initialization for gyro
         gyro.start();
 
-        //touch sensor init
-        DigitalChannel digitalTouch;
-        digitalTouch = hardwareMap.get(DigitalChannel.class, "sensor_digital");
-        digitalTouch.setMode(DigitalChannel.Mode.INPUT);
-
-        //color sensor
-        ColorSensor RCS;
-        // hsvValues is an array that will hold the hue, saturation, and value information.
-        float hsvValues[] = {0F, 0F, 0F};
-
-        // values is a reference to the hsvValues array.
-        final float values[] = hsvValues;
-
-        // get a reference to the RelativeLayout so we can change the background
-        // color of the Robot Controller app to match the hue detected by the RGB sensor.
-        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
         // bPrevState and bCurrState represent the previous and current state of the button.
         boolean bPrevState = false;
         boolean bCurrState = false;
-        // bLedOn represents the state of the LED.
-        boolean bLedOn = true;
-        // get a reference to our ColorSensor object.
-        RCS = hardwareMap.get(ColorSensor.class, "RCS");
-        // Set the LED in the beginning
-        RCS.enableLed(bLedOn);
 
+        // Set the LED in the beginning
+        robot.RCS.enableLed(true);
+
+        // Select red or blue starting position
+        boolean redSelected = false; // start off with blue selected
+        boolean DiscreteButtonReleased = true;
+        while(true) {
+            telemetry.addData("Alliance", redSelected ? "Red" : "Blue");
+            telemetry.addLine("Press DPad Up/Down to change selection, A to confirm");
+            if((gamepad1.dpad_down || gamepad1.dpad_up) && DiscreteButtonReleased) {
+                redSelected = !redSelected;
+                DiscreteButtonReleased = false; // ignore future presses until button is released
+            }
+            else if(gamepad1.a) { // selection confirmed, break out of input loop and wait for auto to start
+                DiscreteButtonReleased = true;
+                telemetry.clearAll();
+                break;
+            }
+
+            if(!gamepad1.dpad_up && !gamepad1.dpad_down) // start listening to button presses if button has been released
+                DiscreteButtonReleased = true;
+
+            telemetry.update();
+            if (!opModeIsActive()) return; // check termination in the innermost loop
+        }
+
+        telemetry.addData("Alliance set to", redSelected ? "red" : "blue");
         telemetry.addData("Status", "Ready!");
         telemetry.update();
 
@@ -97,14 +94,12 @@ public class BasicAuto extends LinearOpMode {
         telemetry.addData("Status", "Running");
         telemetry.addData("State", "Moving to stones");
         telemetry.update();
-        telemetry.addData("Motor position: ", robot.DriveFrontLeft.getCurrentPosition());
 
         robot.resetAllEncoders();
         gyro.resetHeading();
 
         while (current_state == States.MOVE_2_STONES) {
             // move from wall to stones
-            // FAKE NEWS! actually run the robot forward a little bit.
             robot.setDriveMotors(0.5, 0.5, 0.5, 0.5);
             telemetry.update();
             if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(34)) {
@@ -121,14 +116,20 @@ public class BasicAuto extends LinearOpMode {
         telemetry.update();
 
         gyro.resetHeading();
+        telemetry.addData("Gyro position: ", gyro.globalHeading);
 
+        // Set motor speed as a proportion of angle to go
+        // This should prevent the turn from overshooting
         double motorSpeed = 0.5;
         int degreeSet = 30;
+        sleep(100);
+
         while (current_state == States.TURN_2_SCAN) {
             robot.setDriveMotors(-motorSpeed, motorSpeed, -motorSpeed, motorSpeed);
             telemetry.addData("Gyro position: ", gyro.globalHeading);
-            if (gyro.globalHeading > degreeSet) {
-                motorSpeed = motorSpeed / 2;
+            telemetry.update();
+            if (gyro.globalHeading > degreeSet && gyro.globalHeading < 90) {
+                motorSpeed = motorSpeed / 1.2;
                 degreeSet = degreeSet + 35;
             }
             else if (gyro.globalHeading > 90) {
@@ -145,7 +146,7 @@ public class BasicAuto extends LinearOpMode {
         sleep(5000);
 
         while (current_state == States.SCAN_STONES) {
-            if (RCS.alpha() > 150) {    //skystone
+            if (robot.RCS.alpha() > 150) {    //skystone
                 robot.stopAllMotors();
                 current_state = States.MOVE_BACK;
             } else {
@@ -186,13 +187,12 @@ public class BasicAuto extends LinearOpMode {
         }
 
         while (current_state == States.INTAKE_STONE) {
-            if (digitalTouch.getState() == false) {
-                // button is pressed.
+            if (robot.IntakeTouch.isPressed()) { // button is pressed.
                 telemetry.addData("Button", "PRESSED");
                 robot.IntakeLeft.setPower(0.0);
                 robot.IntakeRight.setPower(0.0);
-            } else {
-                // button is not pressed.
+            }
+            else { // button is not pressed.
                 telemetry.addData("Button", "NOT PRESSED");
                 robot.IntakeLeft.setPower(1.0);
                 robot.IntakeRight.setPower(1.0);
@@ -203,8 +203,6 @@ public class BasicAuto extends LinearOpMode {
 
         while (current_state == States.STOP) {
             robot.stopAllMotors();
-            telemetry.addData("Gyro Position: ", gyro.globalHeading);
-            telemetry.update();
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
     }
