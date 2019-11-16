@@ -76,7 +76,7 @@ public class TankDriveTeleop extends OpMode {
             robot.IntakeRight.setPower(0.0);
         }
 
-        if (gamepad1.b) gyro.resetHeading();
+        //if (gamepad1.b) gyro.resetHeading();
 
         // control slow-mo
         if (gamepad1.y && DiscreteButtonReleased) { // only listen to the first time the button is pressed

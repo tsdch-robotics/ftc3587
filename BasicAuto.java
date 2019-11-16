@@ -9,7 +9,7 @@ public class BasicAuto extends LinearOpMode {
     Gyro gyro;
 
     private enum States { // states for the autonomous FSM
-        MOVE_2_STONES, TURN_2_SCAN, SCAN_STONES, GET_NEW_STONE, MOVE_BACK, MOVE_INTO_STONES, INTAKE_STONE, STOP;
+        MOVE_2_STONES, TURN_2_SCAN, FIND_STONE, MOVE_BACK, STRAFE_AWAY, TURN_2_STONES, MOVE_AND_INTAKE_INTO_STONES, STOP;
     }
 
     public void runOpMode() {
@@ -21,7 +21,7 @@ public class BasicAuto extends LinearOpMode {
 
         // gyro init
         robot.init(hardwareMap);
-        gyro = new Gyro(robot.hwMap, "imu 1", this); // special initialization for gyro
+        gyro = new Gyro(robot.hwMap, "imu"); // special initialization for gyro
         gyro.start();
 
         // Set the LED in the beginning
@@ -32,12 +32,12 @@ public class BasicAuto extends LinearOpMode {
         boolean DiscreteButtonReleased = true;
         while(true) {
             telemetry.addData("Alliance", redSelected ? "Red" : "Blue");
-            telemetry.addLine("Press DPad Up/Down to change selection, A to confirm");
+            telemetry.addLine("Press DPad Up/Down to change selection, Y to confirm");
             if((gamepad1.dpad_down || gamepad1.dpad_up) && DiscreteButtonReleased) {
                 redSelected = !redSelected;
                 DiscreteButtonReleased = false; // ignore future presses until button is released
             }
-            else if(gamepad1.a) { // selection confirmed, break out of input loop and wait for auto to start
+            else if(gamepad1.y) { // selection confirmed, break out of input loop and wait for auto to start
                 DiscreteButtonReleased = true;
                 telemetry.clearAll();
                 break;
@@ -47,7 +47,6 @@ public class BasicAuto extends LinearOpMode {
                 DiscreteButtonReleased = true;
 
             telemetry.update();
-            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
         telemetry.addData("Alliance set to", redSelected ? "red" : "blue");
@@ -83,7 +82,6 @@ public class BasicAuto extends LinearOpMode {
         telemetry.update();
 
         gyro.resetHeading();
-        telemetry.addData("Gyro position: ", gyro.globalHeading);
 
         // Set motor speed as a proportion of angle to go
         // This should prevent the turn from overshooting
@@ -93,56 +91,79 @@ public class BasicAuto extends LinearOpMode {
 
         while (current_state == States.TURN_2_SCAN) {
             robot.setDriveMotors(-motorSpeed, motorSpeed, -motorSpeed, motorSpeed);
-            telemetry.addData("Gyro position: ", gyro.globalHeading);
+            telemetry.addData("Gyro position", gyro.globalHeading);
             telemetry.update();
             if (gyro.globalHeading > degreeSet && gyro.globalHeading < 90) {
                 motorSpeed = motorSpeed / 1.2;
                 degreeSet = degreeSet + 35;
             }
             else if (gyro.globalHeading > 90) {
-                current_state = States.STOP;
+                current_state = States.FIND_STONE;
                 robot.stopAllMotors();
-                telemetry.addData("Gyro position: ", gyro.globalHeading);
+            }
+            if (!opModeIsActive()) return; // check termination in the innermost loop
+        }
+
+        // TURN -> SCAN transition
+        telemetry.addData("State", "Finding stone");
+        telemetry.update();
+        robot.resetAllEncoders();
+        sleep(3000);
+
+        int blocksScanned = 0;
+        while (current_state == States.FIND_STONE && blocksScanned < 4) {
+            telemetry.addData("Color sensor", robot.RCS.alpha());
+            telemetry.update();
+            if (robot.RCS.alpha() < 90) { // found a stone!
+                telemetry.addData("State: ", "Found stone!");
                 telemetry.update();
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-
-        telemetry.addData("State: ", "Scanning");
-        robot.stopAllMotors();
-        sleep(5000);
-
-        while (current_state == States.SCAN_STONES) {
-            if (robot.RCS.alpha() > 150) {    //skystone
-                robot.stopAllMotors();
                 current_state = States.MOVE_BACK;
-            } else {
-                robot.stopAllMotors();
-                current_state = States.GET_NEW_STONE;
             }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
+            else { // advance to the next stone
+                blocksScanned++;
+                robot.resetAllEncoders();
+                while (robot.DriveFrontLeft.getCurrentPosition() < robot.inchesToEncoderCounts(10)) {
+                    robot.setDriveMotors(0.4, 0.4, 0.4, 0.4);
+                    if (!opModeIsActive()) return;
+                }
+                robot.stopAllMotors();
+                sleep(1000);
+            }
+            if (!opModeIsActive()) return;
         }
 
-        robot.stopAllMotors();
-        sleep(5000);
-
-        while (current_state == States.GET_NEW_STONE) {
-            robot.setDriveMotors(0.5, 0.5, 0.5, 0.5);
-            if (robot.DriveFrontLeft.getCurrentPosition() > 1300) {
-                robot.stopAllMotors();
-                current_state = States.SCAN_STONES;
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
+        telemetry.addData("State", "Moving back");
+        telemetry.update();
+        robot.resetAllEncoders();
+        sleep(3000);
 
         while (current_state == States.MOVE_BACK) {
-            robot.setDriveMotors(-0.5, -0.5, -0.5, -0.5);
-            if (robot.DriveFrontLeft.getCurrentPosition() < 1300) {
-                current_state = States.MOVE_INTO_STONES;
+            robot.setDriveMotors(-0.4, -0.4, -0.4, -0.4);
+            if (robot.DriveFrontLeft.getCurrentPosition() < robot.inchesToEncoderCounts(-12)) {
                 robot.stopAllMotors();
+                current_state = States.STRAFE_AWAY;
             }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
+            if (!opModeIsActive()) return;
         }
+
+        telemetry.addData("State", "Strafing away");
+        telemetry.update();
+        robot.resetAllEncoders();
+        sleep(3000);
+
+        while (current_state == States.STRAFE_AWAY) {
+            robot.setDriveMotors(-1, 1, 1, -1);
+            if(robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(8)) {
+                robot.stopAllMotors();
+                current_state = States.STOP;
+            }
+            if (!opModeIsActive()) return;
+        }
+
+        /*
+        // block detection loop
+
+
 
         while (current_state == States.MOVE_INTO_STONES) {
             robot.setDriveMotors(0.5, -0.5, -0.5, 0.5);
@@ -167,7 +188,9 @@ public class BasicAuto extends LinearOpMode {
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
         //telemetry.addData("Angle", gyro.globalHeading);
-
+         */
+        telemetry.addData("Status", "Done");
+        telemetry.update();
         while (current_state == States.STOP) {
             robot.stopAllMotors();
             if (!opModeIsActive()) return; // check termination in the innermost loop

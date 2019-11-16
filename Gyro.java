@@ -17,20 +17,16 @@ public class Gyro extends Thread {
 
     private final ReentrantLock headingLock = new ReentrantLock();
 
-    private LinearOpMode opMode;
+    public boolean exit = false;
 
     /**
      * Initialize the REV controller's builtin IMU.
      * @param hwMap: the robot's hardware map (usually robot.hwMap).
      * @param imuName: the name of the IMU in the robot configuration (usually "imu").
-     * @param opmode: will always be "this" in autonomous (needed so that the thread can tell when the opmode has exited)
      */
-    public Gyro(HardwareMap hwMap, String imuName, LinearOpMode opmode) {
+    public Gyro(HardwareMap hwMap, String imuName) {
         // get the REV controller's builtin imu
         imu = hwMap.get(BNO055IMU.class, imuName);
-
-        // save a reference to the robot's opmode so we can detect opmode termination
-        opMode = opmode;
 
         // set up parameters
         BNO055IMU.Parameters params = new BNO055IMU.Parameters();
@@ -90,7 +86,7 @@ public class Gyro extends Thread {
      * Gyro update thread. Continuously update the heading every 50 ms unless an exit has been requested.
      */
     public void run() {
-        while(opMode.opModeIsActive()) {
+        while(!exit) {
             getHeading();
             try { Thread.sleep(50); } catch(InterruptedException ex) { } // silently swallow exception
         }
