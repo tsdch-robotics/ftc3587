@@ -1,130 +1,64 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
  * This is NOT an opmode. This file defines all the hardware on the robot
  * and some common helper functions (stop motors, reset encoders, etc.)
-*/
-public class BBot {
+ */
+public class ChampBot {
     // class variables for all hardware
     public DcMotor DriveFrontLeft;
     public DcMotor DriveFrontRight;
     public DcMotor DriveBackLeft;
     public DcMotor DriveBackRight;
 
-    // game element manipulation
-    public DcMotor Lift;
-    public DcMotor ArmUpDownR;
-    public DcMotor ArmUpDownL;
-    public DcMotor ArmExtend;
-    public Servo StupidStick; //Idol servo
-    //public CRServo ArmServo; //In out servo
-
-    // Intake
-    public CRServo Brotation; //Intake
-    public Servo PhatServo; //Store or active intake
-   // public CRServo Raise; // continuous servo to raise arm
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
     private ElapsedTime period = new ElapsedTime();
 
-    // constant encoder counts
-    public final double REVCoreHexEncoder = 288.0;
-    public final double REVHD401Encoder = 1120.0;
-
-    public BBot() { }
+    public ChampBot() { }
 
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
         hwMap = ahwMap; // reference to hardware map
 
-        // initialize motors
+        // initialize drivetrain
         DriveFrontLeft = hwMap.dcMotor.get("DriveFrontLeft");
         DriveBackLeft = hwMap.dcMotor.get("DriveBackLeft");
         DriveFrontRight = hwMap.dcMotor.get("DriveFrontRight");
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
+        // reverse one side of the drivetrain so that directions are more natural
         DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
         DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
-        ArmExtend = hwMap.dcMotor.get("ArmExtend");
 
-        Lift = hwMap.dcMotor.get("Lift");
-        Lift.setDirection(DcMotor.Direction.REVERSE);
-
-        ArmUpDownR = hwMap.dcMotor.get("ArmUpDownR");
-        ArmUpDownL = hwMap.dcMotor.get("ArmUpDownL");
-
-
+        // initialize intake
 
         // initialize servos
-        StupidStick = hwMap.servo.get("StupidStick");
-        Brotation = hwMap.crservo.get("Brotation");
-        PhatServo = hwMap.servo.get("PhatServo");
-       // Raise = hwMap.crservo.get("Raise");
-        //ArmServo = hwMap.crservo.get("ArmServo");
+
+        // move all motors/servos to their starting position
+        initAllServos();
+        stopAllMotors();
 
         // initialize sensors
-        //GyroCenter = hwMap.gyroSensor.get("GyroCenter");
-        //JewelCS = hwMap.colorSensor.get("JewelCS");
 
-        stopAllMotors();
-        initServos();
+        // don't initialize the gyro unless an opmode specifically requests it!
     }
 
-//    public void turn(double degreesToTurn) {
-//        double targetHeading = 0;
-//
-//        // stop robot
-//        DriveFrontLeft.setPower(0.0);
-//        DriveFrontRight.setPower(0.0);
-//        DriveBackLeft.setPower(0.0);
-//        DriveBackRight.setPower(0.0);
-//
-        // reset heading
-        //GyroCenter.calibrate();
-        //while(GyroCenter.isCalibrating()); // wait to finish calibrating
-
-        // determine which direction to turn
-//        if (degreesToTurn > 0){
-//            targetHeading = degreesToTurn;
-//        }
-//        if (degreesToTurn < 0) {
-//            targetHeading = 360.0 + degreesToTurn;
-//        }
-
-
-        // execute turn
-//         if (targetHeading > 180) {
-//             DriveFrontLeft.setPower(1.0);
-//             DriveFrontRight.setPower(1.0);
-//             DriveBackLeft.setPower(1.0);
-//             DriveBackRight.setPower(1.0);
-//             while (GyroCenter.getHeading() > targetHeading); // wait until robot reaches heading
-//             DriveFrontLeft.setPower(0.0);
-//             DriveFrontRight.setPower(0.0);
-//             DriveBackLeft.setPower(0.0);
-//             DriveBackRight.setPower(0.0);
-//         }
-//
-//         else {
-//             DriveFrontLeft.setPower(-1.0);
-//             DriveFrontRight.setPower(-1.0);
-//             DriveBackLeft.setPower(-1.0);
-//             DriveBackRight.setPower(-1.0);
-//             while (GyroCenter.getHeading() < targetHeading); // wait until robot reaches heading
-//             DriveFrontLeft.setPower(0.0);
-//             DriveFrontRight.setPower(0.0);
-//             DriveBackLeft.setPower(0.0);
-//             DriveBackRight.setPower(0.0);
-//         }
-//    }
-
+    /**
+     * Sets the drive motors to the specified power.
+     * -1.0 moves the motor backwards; +1.0 moves the motor forwards
+     * @param FrontL
+     * @param FrontR
+     * @param BackL
+     * @param BackR
+     */
     public void setDriveMotors(double FrontL, double FrontR, double BackL, double BackR) {
         DriveFrontLeft.setPower(FrontL);
         DriveFrontRight.setPower(FrontR);
@@ -132,27 +66,16 @@ public class BBot {
         DriveBackRight.setPower(BackR);
     }
 
-    public void setArmUpDownMotors(double ArmUpDown) {
-        ArmUpDownR.setPower(ArmUpDown);
-        ArmUpDownL.setPower(ArmUpDown);
-    }
-
     public void stopAllMotors() {
         DriveFrontLeft.setPower(0.0);
         DriveFrontRight.setPower(0.0);
         DriveBackLeft.setPower(0.0);
         DriveBackRight.setPower(0.0);
-        Lift.setPower(0.0);
-        ArmUpDownR.setPower(0.0);
-        ArmUpDownL.setPower(0.0);
     }
 
-    public void initServos() {
-        StupidStick.setPosition(0.75);
-      //  Brotation.setPower(0.5);
-        PhatServo.setPosition(1);
-        //ArmServo.setPower(0.0);
+    public void initAllServos() {
     }
+
     public void resetAllEncoders() {
         // reset drive encoders
         DriveFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -163,15 +86,20 @@ public class BBot {
         DriveFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         DriveBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         DriveBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 
-        // extra encoders
-        Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    public int inchesToEncoderCounts(double inches) {
+        // CONSTANTS that only change when hardware changes are made to the robot
+        final int countsPerShaftRotation = 560; // only change this if you change what motor you're using
+        final int shaftToWheelRatio = 3; // 1 turn of the motor shaft results in X turns of the wheel
+        final int wheelDiameter = 4; // diameter of the wheel in inches
 
-        ArmUpDownR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        ArmUpDownR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        ArmUpDownL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        ArmUpDownL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        // CALCULATIONS - don't change these!
+        double wheelCircumference = Math.PI * wheelDiameter; // inches
+        double countsPerWheelRotation = ((double) countsPerShaftRotation) / ((double) shaftToWheelRatio);
+        double countsPerInch = countsPerWheelRotation / wheelCircumference;
+
+        return (int)(countsPerInch * inches);
     }
 
     /*
@@ -223,4 +151,3 @@ public class BBot {
         period.reset();
     }
 }
-

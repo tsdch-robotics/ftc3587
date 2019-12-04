@@ -39,18 +39,18 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
-@Autonomous(name="Basic", group="BBot")
+@Autonomous(name="Basic", group="ChampBot")
 public class BasicAuto extends LinearOpMode {
-    BBot robot = new BBot();   // Use robot's hardware
+    ChampBot robot = new ChampBot();   // Use robot's hardware
 
     private enum States { // states for the autonomous FSM
-        LOWER, MOVE_AWAY_HANGER, TURN1, MOVE_INTO_CRATER, STOP;
+        STOP;
     }
 
     public void runOpMode() {
         robot.init(hardwareMap);
 
-        States current_state = States.LOWER;
+        States current_state = States.STOP;
 
         // send telemetry message to signify robot waiting
         telemetry.addData("Status", "Snoozing");
@@ -60,48 +60,6 @@ public class BasicAuto extends LinearOpMode {
         waitForStart();
 
         // State machine for robot
-        telemetry.addData("Status", "Running");
-        telemetry.addData("State", "Lowering");
-        telemetry.update();
-        while (current_state == States.LOWER) {
-            // lower the robot off the hanger
-            // FAKE NEWS! actually run the robot forward a little bit.
-            robot.setDriveMotors(1,1,1,1);
-
-            if(robot.DriveFrontRight.getCurrentPosition() > 100) {
-                current_state = States.MOVE_AWAY_HANGER;
-            }
-        }
-
-        telemetry.addData("State", "Moving away from hanger");
-        telemetry.update();
-        while (current_state == States.MOVE_AWAY_HANGER) {
-            robot.setDriveMotors(0,0,0,0);
-            // this will stay stuck here for testing purposes
-        }
-            // lower the robot off the hanger
-
-            //if(arm is lowered) {
-            // current_state = States.MOVE_AWAY_HANGER;
-
-        telemetry.addData("State", "Turn towards crater");
-        telemetry.update();
-        while (current_state == States.TURN1) {
-            // lower the robot off the hanger
-
-            //if(arm is lowered) {
-            // current_state = States.MOVE_AWAY_HANGER;
-
-        }
-
-        telemetry.addData("State", "Moving into crater");
-        telemetry.update();
-        while (current_state == States.MOVE_INTO_CRATER) {
-            // lower the robot off the hanger
-
-            //if(arm is lowered) {
-            // current_state = States.MOVE_AWAY_HANGER;
-        }
 
         telemetry.addData("Status", "Finished");
         telemetry.addData("State", "Stop");
