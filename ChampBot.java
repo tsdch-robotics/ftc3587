@@ -35,7 +35,7 @@ public class ChampBot {
         DriveFrontRight = hwMap.dcMotor.get("DriveFrontRight");
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
         // reverse one side of the drivetrain so that directions are more natural
-        DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
+        //DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
         DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
 
         // initialize intake
