@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -19,7 +20,10 @@ public class ProgrammingBot {
     public DcMotor DriveBackRight;
     public DcMotor IntakeLeft;
     public DcMotor IntakeRight;
-    public Servo StupidStick;
+    public DcMotor LiftArm;
+    //public Servo StupidStick;
+    public Servo SpinningServo;
+    public CRServo GrabServo;
     public ColorSensor RCS;
     public ColorSensor LCS;
     public TouchSensor IntakeTouch;
@@ -48,8 +52,10 @@ public class ProgrammingBot {
         IntakeRight = hwMap.dcMotor.get("IntakeRight");
         IntakeRight.setDirection(DcMotor.Direction.REVERSE);
 
-        // initialize servos
-        StupidStick = hwMap.servo.get("StupidStick");
+        // initialize arm servos + motor
+        LiftArm = hwMap.dcMotor.get("ArmMotor");
+        SpinningServo = hwMap.servo.get("SpinningServo");
+        GrabServo = hwMap.crservo.get("GrabServo");
 
         // move all motors/servos to their starting position
         initAllServos();
@@ -88,7 +94,8 @@ public class ProgrammingBot {
     }
 
     public void initAllServos() {
-        StupidStick.setPosition(0.0);
+        GrabServo.setPower(0);
+        SpinningServo.setPosition(0.0);
     }
 
     public void resetAllEncoders() {

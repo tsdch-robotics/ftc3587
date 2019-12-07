@@ -20,6 +20,10 @@ public class TankDriveTeleop extends OpMode {
     // control state variables
     private boolean DiscreteButtonReleased = true;
 
+    // arm variables
+    private double GrabberPower = 0.0;
+    private double TurnerPosition = 0.0;
+
     @Override
     public void init() {
         robot.init(hardwareMap);
@@ -38,6 +42,7 @@ public class TankDriveTeleop extends OpMode {
         boolean RightStrafe = gamepad1.dpad_right;
         boolean IntakeIn = gamepad1.right_trigger > 0.5;
         boolean IntakeOut = gamepad1.right_bumper;
+
 
         // apply scaling factor if slow-mo is enabled
         float DriveLeftPower = SlowMo ? (DriveLeftCommand / 3) : DriveLeftCommand;
@@ -76,6 +81,33 @@ public class TankDriveTeleop extends OpMode {
             robot.IntakeRight.setPower(0.0);
         }
 
+        //arm
+        if (gamepad2.right_trigger > 0.5) {
+            robot.LiftArm.setPower(-0.5);
+        } else if (gamepad2.right_bumper) {
+            robot.LiftArm.setPower(0.5);
+        } else {
+            robot.LiftArm.setPower(0.0);
+        }
+
+        if (gamepad2.a) {
+            GrabberPower = -1.0;
+        } else if (gamepad2.b) {
+            GrabberPower = 1.0;
+        } else {
+            GrabberPower = 0.0;
+        }
+
+        if (gamepad2.x) {
+            TurnerPosition = 0.0;
+        } else if(gamepad2.y) {
+            TurnerPosition = 1.0;
+        }
+
+        robot.GrabServo.setPower(GrabberPower);
+        robot.SpinningServo.setPosition(TurnerPosition);
+
+
         //if (gamepad1.b) gyro.resetHeading();
 
         // control slow-mo
@@ -88,7 +120,7 @@ public class TankDriveTeleop extends OpMode {
             DiscreteButtonReleased = true;
         }
 
-        // driver data
+        // driver dat
         telemetry.addData("Left Right", String.format("%.2f", DriveLeftPower) + " " + String.format("%.2f", DriveRightPower));
         telemetry.addData("Slow-mo", SlowMo);
         telemetry.addData("Block in intake", robot.IntakeTouch.isPressed());
