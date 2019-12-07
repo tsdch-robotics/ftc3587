@@ -59,10 +59,10 @@ public class TradOP extends OpMode {
         }
 
         if (gamepad1.y) {
-            robot.StupidStick.setPosition(0.0);
+            //robot.StupidStick.setPosition(0.0);
         }
         else if (gamepad1.b){
-            robot.StupidStick.setPosition(0.8);
+            //robot.StupidStick.setPosition(0.8);
         }
         //if(gamepad1.b) gyro.resetHeading();
 
