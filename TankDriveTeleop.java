@@ -42,7 +42,7 @@ public class TankDriveTeleop extends OpMode {
         boolean RightStrafe = gamepad1.dpad_right;
         boolean IntakeIn = gamepad1.right_trigger > 0.5;
         boolean IntakeOut = gamepad1.right_bumper;
-
+        boolean SpinServoOut = false;
 
         // apply scaling factor if slow-mo is enabled
         float DriveLeftPower = SlowMo ? (DriveLeftCommand / 3) : DriveLeftCommand;
@@ -90,11 +90,11 @@ public class TankDriveTeleop extends OpMode {
             robot.LiftArm.setPower(0.0);
         }
 
-        if (gamepad2.a) {
-            GrabberPos = -0.75;
-        } else if (gamepad2.b) {
-            GrabberPos = 0.75;
-        }
+        if(gamepad2.a && !SpinServoOut) {
+            if(GrabberPos == 0) GrabberPos = 1;
+            else GrabberPos = 0;
+            SpinServoOut = true;
+        } else if(!gamepad2.a) SpinServoOut = false;
 
         if (gamepad2.x) {
             TurnerPosition = 0.3;
