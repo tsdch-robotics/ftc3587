@@ -90,16 +90,16 @@ public class TankDriveTeleop extends OpMode {
             robot.LiftArm.setPower(0.0);
         }
 
-        if(gamepad2.a && !SpinServoOut) {
+        if(gamepad2.a &&! SpinServoOut) {
             if(GrabberPos == 0) GrabberPos = 1;
             else GrabberPos = 0;
             SpinServoOut = true;
-        } else if(!gamepad2.a) SpinServoOut = false;
+        } else if(! gamepad2.a) SpinServoOut = false;
 
         if (gamepad2.x) {
-            TurnerPosition = 0.3;
+            TurnerPosition = 0;
         } else if(gamepad2.y) {
-            TurnerPosition = 1.0;
+            TurnerPosition = 1;
         }
 
         robot.GrabServo.setPower(GrabberPos);
