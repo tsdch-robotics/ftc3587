@@ -21,7 +21,7 @@ public class TankDriveTeleop extends OpMode {
     private boolean DiscreteButtonReleased = true;
 
     // arm variables
-    private double GrabberPos = 0.0;
+    private double GrabberPower = 0.0;
     private double TurnerPosition = 0.0;
 
     @Override
@@ -91,18 +91,20 @@ public class TankDriveTeleop extends OpMode {
         }
 
         if (gamepad2.a) {
-            GrabberPos = -0.75;
+            GrabberPower = -1.0;
         } else if (gamepad2.b) {
-            GrabberPos = 0.75;
+            GrabberPower = 1.0;
+        } else {
+            GrabberPower = 0.0;
         }
 
         if (gamepad2.x) {
-            TurnerPosition = 0.3;
+            TurnerPosition = 0.0;
         } else if(gamepad2.y) {
             TurnerPosition = 1.0;
         }
 
-        robot.GrabServo.setPower(GrabberPos);
+        robot.GrabServo.setPower(GrabberPower);
         robot.SpinningServo.setPosition(TurnerPosition);
 
 
