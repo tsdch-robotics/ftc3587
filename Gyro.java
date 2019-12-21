@@ -88,7 +88,12 @@ public class Gyro extends Thread {
     public void run() {
         while(!exit) {
             getHeading();
-            try { Thread.sleep(50); } catch(InterruptedException ex) { } // silently swallow exception
+            try {
+                Thread.sleep(50);
+            }
+            catch(InterruptedException ex) {
+                exit = true;
+            }
         }
     }
 }
