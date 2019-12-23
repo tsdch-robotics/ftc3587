@@ -2,12 +2,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Tank Drive", group="ProgrammingBot")
 public class TankDriveTeleop extends OpMode {
     ProgrammingBot robot = new ProgrammingBot();   // Use robot's hardware
-    public ElapsedTime runtime = new ElapsedTime();
     Gyro gyro;
 
     /*
@@ -90,7 +88,7 @@ public class TankDriveTeleop extends OpMode {
             robot.LiftArm.setPower(0.0);
         }
 
-        if(gamepad2.a &&! SpinServoOut) {
+        if(gamepad2.a && !SpinServoOut) {
             if(GrabberPos == 0) GrabberPos = 1;
             else GrabberPos = 0;
             SpinServoOut = true;
