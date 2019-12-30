@@ -36,7 +36,9 @@ public class ChampBot {
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
         // reverse one side of the drivetrain so that directions are more natural
         //DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
-        DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
+        DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
+        DriveFrontLeft.setDirection(DcMotor.Direction.REVERSE);
+        DriveBackLeft.setDirection(DcMotor.Direction.REVERSE);
 
         // initialize intake
 
@@ -90,13 +92,13 @@ public class ChampBot {
 
     public int inchesToEncoderCounts(double inches) {
         // CONSTANTS that only change when hardware changes are made to the robot
-        final int countsPerShaftRotation = 560; // only change this if you change what motor you're using
-        final int shaftToWheelRatio = 3; // 1 turn of the motor shaft results in X turns of the wheel
-        final int wheelDiameter = 4; // diameter of the wheel in inches
+        final double countsPerShaftRotation = 1425.2; // only change this if you change what motor you're using
+        final double shaftToWheelRatio = 24.0 / 16.0; // 1 turn of the motor shaft results in X turns of the wheel
+        final double wheelDiameter = 4.0; // diameter of the wheel in inches
 
         // CALCULATIONS - don't change these!
         double wheelCircumference = Math.PI * wheelDiameter; // inches
-        double countsPerWheelRotation = ((double) countsPerShaftRotation) / ((double) shaftToWheelRatio);
+        double countsPerWheelRotation = countsPerShaftRotation / shaftToWheelRatio;
         double countsPerInch = countsPerWheelRotation / wheelCircumference;
 
         return (int)(countsPerInch * inches);

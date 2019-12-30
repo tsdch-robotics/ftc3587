@@ -44,13 +44,13 @@ public class BasicAuto extends LinearOpMode {
     ChampBot robot = new ChampBot();   // Use robot's hardware
 
     private enum States { // states for the autonomous FSM
-        STOP;
+        MOVE_2_SS, SCAN_4_SS, LOCATE_SS, STOP;
     }
 
     public void runOpMode() {
         robot.init(hardwareMap);
 
-        States current_state = States.STOP;
+        States current_state = States.MOVE_2_SS;
 
         // send telemetry message to signify robot waiting
         telemetry.addData("Status", "Snoozing");
@@ -59,6 +59,21 @@ public class BasicAuto extends LinearOpMode {
         // wait for the start button to be pressed.
         waitForStart();
 
+        robot.resetAllEncoders();
+        telemetry.addData("Encodervalue", robot.DriveFrontLeft.getCurrentPosition());
+        telemetry.update();
+
+        while (current_state == States.MOVE_2_SS) {
+            robot.setDriveMotors(0.2,0.2,0.2,0.2);
+            telemetry.addData("Encodervalue", robot.DriveFrontLeft.getCurrentPosition());
+            telemetry.addData("Inchestoencoder", robot.inchesToEncoderCounts(26.0));
+            telemetry.update();
+            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(26.0)) {
+                robot.setDriveMotors(0,0,0,0);
+                current_state = States.STOP;
+            }
+            if (!opModeIsActive()) return; // check termination in the innermost loop
+        }
         // State machine for robot
 
         telemetry.addData("Status", "Finished");
@@ -66,7 +81,11 @@ public class BasicAuto extends LinearOpMode {
         telemetry.update();
         while (current_state == States.STOP) {
             // stop all motors
+            telemetry.addData("Encodervalue", robot.DriveFrontLeft.getCurrentPosition());
+            telemetry.addData("Inchestoencoder", robot.inchesToEncoderCounts(27.0));
+            telemetry.update();
             robot.stopAllMotors();
+            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
     }
 }
