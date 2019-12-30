@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Path;
+
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -46,25 +49,26 @@ public class ProgrammingBot {
         // reverse one side of the drivetrain so that directions are more natural
         DriveFrontLeft.setDirection(DcMotor.Direction.REVERSE);
         DriveBackLeft.setDirection(DcMotor.Direction.REVERSE);
+        DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
 
-        // initialize intake
-        IntakeLeft = hwMap.dcMotor.get("IntakeLeft");
-        IntakeRight = hwMap.dcMotor.get("IntakeRight");
-        IntakeRight.setDirection(DcMotor.Direction.REVERSE);
-
-        // initialize arm servos + motor
-        LiftArm = hwMap.dcMotor.get("ArmMotor");
-        SpinningServo = hwMap.servo.get("SpinningServo");
-        GrabServo = hwMap.crservo.get("GrabServo");
+//        // initialize intake
+//        IntakeLeft = hwMap.dcMotor.get("IntakeLeft");
+//        IntakeRight = hwMap.dcMotor.get("IntakeRight");
+//        IntakeRight.setDirection(DcMotor.Direction.REVERSE);
+//
+//        // initialize arm servos + motor
+//        LiftArm = hwMap.dcMotor.get("ArmMotor");
+//        SpinningServo = hwMap.servo.get("SpinningServo");
+//        GrabServo = hwMap.crservo.get("GrabServo");
 
         // move all motors/servos to their starting position
-        initAllServos();
+//        initAllServos();
         stopAllMotors();
 
         // initialize sensors
-        RCS = hwMap.colorSensor.get("RCS");
+//        RCS = hwMap.colorSensor.get("RCS");
         LCS = hwMap.colorSensor.get("LCS");
-        IntakeTouch = hwMap.touchSensor.get("IntakeTouch");
+//        IntakeTouch = hwMap.touchSensor.get("IntakeTouch");
         // don't initialize the gyro unless an opmode specifically requests it!
     }
 
@@ -83,20 +87,36 @@ public class ProgrammingBot {
         DriveBackRight.setPower(BackR);
     }
 
+    public void strafeLeft(double power) {
+        // to left strafe, left motors towards each other, right motors away from each other
+        DriveFrontLeft.setPower(-power);
+        DriveFrontRight.setPower(power);
+        DriveBackLeft.setPower(power);
+        DriveBackRight.setPower(-power);
+    }
+
+    public void strafeRight(double power) {
+        // to right strafe, right motors towards each other, left motors away from each other
+        DriveFrontLeft.setPower(power);
+        DriveFrontRight.setPower(-power);
+        DriveBackLeft.setPower(-power);
+        DriveBackRight.setPower(power);
+    }
+
     public void stopAllMotors() {
         DriveFrontLeft.setPower(0.0);
         DriveFrontRight.setPower(0.0);
         DriveBackLeft.setPower(0.0);
         DriveBackRight.setPower(0.0);
 
-        IntakeLeft.setPower(0.0);
-        IntakeRight.setPower(0.0);
+//        IntakeLeft.setPower(0.0);
+//        IntakeRight.setPower(0.0);
     }
 
-    public void initAllServos() {
-        GrabServo.setPower(0);
-        SpinningServo.setPosition(0.0);
-    }
+//    public void initAllServos() {
+//        GrabServo.setPower(0);
+//        SpinningServo.setPosition(0.0);
+//    }
 
     public void resetAllEncoders() {
         // reset drive encoders
@@ -112,13 +132,13 @@ public class ProgrammingBot {
 
     public int inchesToEncoderCounts(double inches) {
         // CONSTANTS that only change when hardware changes are made to the robot
-        final int countsPerShaftRotation = 560; // only change this if you change what motor you're using
-        final int shaftToWheelRatio = 3; // 1 turn of the motor shaft results in X turns of the wheel
-        final int wheelDiameter = 4; // diameter of the wheel in inches
+        final double countsPerShaftRotation = 1425.2; // only change this if you change what motor you're using
+        final double shaftToWheelRatio = 24.0 / 16.0; // 1 turn of the motor shaft results in X turns of the wheel
+        final double wheelDiameter = 4.0; // diameter of the wheel in inches
 
         // CALCULATIONS - don't change these!
         double wheelCircumference = Math.PI * wheelDiameter; // inches
-        double countsPerWheelRotation = ((double) countsPerShaftRotation) / ((double) shaftToWheelRatio);
+        double countsPerWheelRotation = countsPerShaftRotation / shaftToWheelRatio;
         double countsPerInch = countsPerWheelRotation / wheelCircumference;
 
         return (int)(countsPerInch * inches);

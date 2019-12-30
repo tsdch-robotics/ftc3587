@@ -46,62 +46,52 @@ public class TankDriveTeleop extends OpMode {
         float DriveLeftPower = SlowMo ? (DriveLeftCommand / 3) : DriveLeftCommand;
         float DriveRightPower = SlowMo ? (DriveRightCommand / 3) : DriveRightCommand;
 
-        if (RightStrafe) {
-            // to right strafe, right motors towards each other, left motors away from each other
-            robot.DriveFrontLeft.setPower(1);
-            robot.DriveFrontRight.setPower(-1);
-            robot.DriveBackLeft.setPower(-1);
-            robot.DriveBackRight.setPower(1);
-        } else if (LeftStrafe) {
-            // opposite of right strafe
-            robot.DriveFrontLeft.setPower(-1);
-            robot.DriveFrontRight.setPower(1);
-            robot.DriveBackLeft.setPower(1);
-            robot.DriveBackRight.setPower(-1);
-        } else {
-            // write the values to the motors
+        if (RightStrafe) robot.strafeRight(1);
+        else if (LeftStrafe) robot.strafeLeft(1);
+        else {
+            // if not strafing, write the values to the motors
             robot.DriveBackLeft.setPower(DriveLeftPower);
             robot.DriveFrontLeft.setPower(DriveLeftPower);
             robot.DriveFrontRight.setPower(DriveRightPower);
             robot.DriveBackRight.setPower(DriveRightPower);
         }
 
-        if (IntakeOut) {
-            robot.IntakeLeft.setPower(1.0);
-            robot.IntakeRight.setPower(1.0);
-        }
-        else if (IntakeIn) {
-            robot.IntakeLeft.setPower(-1.0);
-            robot.IntakeRight.setPower(-1.0);
-        }
-        else {
-            robot.IntakeLeft.setPower(0.0);
-            robot.IntakeRight.setPower(0.0);
-        }
-
-        //arm
-        if (gamepad2.right_trigger > 0.5) {
-            robot.LiftArm.setPower(-0.5);
-        } else if (gamepad2.right_bumper) {
-            robot.LiftArm.setPower(0.5);
-        } else {
-            robot.LiftArm.setPower(0.0);
-        }
-
-        if(gamepad2.a && !SpinServoOut) {
-            if(GrabberPos == 0) GrabberPos = 1;
-            else GrabberPos = 0;
-            SpinServoOut = true;
-        } else if(! gamepad2.a) SpinServoOut = false;
-
-        if (gamepad2.x) {
-            TurnerPosition = 0;
-        } else if(gamepad2.y) {
-            TurnerPosition = 1;
-        }
-
-        robot.GrabServo.setPower(GrabberPos);
-        robot.SpinningServo.setPosition(TurnerPosition);
+//        if (IntakeOut) {
+//            robot.IntakeLeft.setPower(1.0);
+//            robot.IntakeRight.setPower(1.0);
+//        }
+//        else if (IntakeIn) {
+//            robot.IntakeLeft.setPower(-1.0);
+//            robot.IntakeRight.setPower(-1.0);
+//        }
+//        else {
+//            robot.IntakeLeft.setPower(0.0);
+//            robot.IntakeRight.setPower(0.0);
+//        }
+//
+//        //arm
+//        if (gamepad2.right_trigger > 0.5) {
+//            robot.LiftArm.setPower(-0.5);
+//        } else if (gamepad2.right_bumper) {
+//            robot.LiftArm.setPower(0.5);
+//        } else {
+//            robot.LiftArm.setPower(0.0);
+//        }
+//
+//        if(gamepad2.a && !SpinServoOut) {
+//            if(GrabberPos == 0) GrabberPos = 1;
+//            else GrabberPos = 0;
+//            SpinServoOut = true;
+//        } else if(! gamepad2.a) SpinServoOut = false;
+//
+//        if (gamepad2.x) {
+//            TurnerPosition = 0;
+//        } else if(gamepad2.y) {
+//            TurnerPosition = 1;
+//        }
+//
+//        robot.GrabServo.setPower(GrabberPos);
+//        robot.SpinningServo.setPosition(TurnerPosition);
 
 
         //if (gamepad1.b) gyro.resetHeading();
@@ -119,7 +109,7 @@ public class TankDriveTeleop extends OpMode {
         // driver dat
         telemetry.addData("Left Right", String.format("%.2f", DriveLeftPower) + " " + String.format("%.2f", DriveRightPower));
         telemetry.addData("Slow-mo", SlowMo);
-        telemetry.addData("Block in intake", robot.IntakeTouch.isPressed());
+//        telemetry.addData("Block in intake", robot.IntakeTouch.isPressed());
         //telemetry.addData("Heading", gyro.globalHeading);
     }
 }
