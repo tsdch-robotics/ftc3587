@@ -48,26 +48,33 @@ public class TradOP extends OpMode {
         boolean Up = gamepad2.right_bumper;
         boolean Down = (gamepad2.right_trigger > 0.1);
 
+        String WristStatus = "";
+
         if(Up) { // if right bumper is held arm elevator is set to 1
             robot.Wrist1.setPosition(1.0);
             robot.Wrist2.setPosition(1.0);
-            //WristStatus = "moving up";
+            WristStatus = "moving up";
         }
         else if(Down) { // if right trigger is pressed elevator is set to -1
             robot.Wrist1.setPosition(0.0);
             robot.Wrist2.setPosition(0.0);
-            //WristStatus = "moving down";
+            WristStatus = "moving down";
         }
+
+        //Claw
+        String ClawStatus = "";
 
         if (gamepad2.a) {
             robot.Claw.setPosition(0.3);
-            //ClawStatus = "closed";
+            ClawStatus = "closed";
         }
         else if (gamepad2.b) {
             robot.Claw.setPosition(1.0);
-            //ClawStatus = "open";
+            ClawStatus = "open";
         }
 
-
+        telemetry.addData("Wrist: ", WristStatus);
+        telemetry.addData("Claw: ", ClawStatus);
+        telemetry.update();
     }
 }

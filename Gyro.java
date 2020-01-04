@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
@@ -15,7 +16,8 @@ public class Gyro extends Thread {
     public double globalHeading; // allow access without going through other methods
 
     private final ReentrantLock headingLock = new ReentrantLock();
-    public volatile boolean exit = false;
+
+    public boolean exit = false;
 
     /**
      * Initialize the REV controller's builtin IMU.
@@ -76,7 +78,8 @@ public class Gyro extends Thread {
         try {
             lastAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
             globalHeading = 0;
-        } finally { headingLock.unlock(); }
+        }
+        finally { headingLock.unlock(); }
     }
 
     /**
@@ -85,7 +88,12 @@ public class Gyro extends Thread {
     public void run() {
         while(!exit) {
             getHeading();
-            try { Thread.sleep(50); } catch(InterruptedException ex) { } // silently swallow exception
+            try {
+                Thread.sleep(50);
+            }
+            catch(InterruptedException ex) {
+                exit = true;
+            }
         }
     }
 }

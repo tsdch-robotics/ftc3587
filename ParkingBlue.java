@@ -29,63 +29,78 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.view.View;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.
 
-@Autonomous(name="BasicAuto", group="ChampBot")
-public class BasicAuto extends LinearOpMode {
+@Autonomous(name="ParkingBlue", group="ChampBot")
+public class ParkingBlue extends LinearOpMode {
     ChampBot robot = new ChampBot();   // Use robot's hardware
 
     private enum States { // states for the autonomous FSM
-        MOVE_2_SS, SCAN_4_SS, LOCATE_SS, STOP;
+        DRIVE_OUT, TURN_2_BRIDGE, DRIVE_2_BRIDGE , STOP;
     }
 
     public void runOpMode() {
         robot.init(hardwareMap);
+        Gyro gyro;
 
-        States current_state = States.MOVE_2_SS;
+        States current_state = States.DRIVE_OUT;
 
         // send telemetry message to signify robot waiting
-        telemetry.addData("Status", "Snoozing");
+        telemetry.addData("Status: ", "Snoozing");
         telemetry.update();
+
+        // gyro init
+        gyro = new Gyro(robot.hwMap, "imu"); // special initialization for gyro
+        gyro.start();
 
 
         // wait for the start button to be pressed.
         waitForStart();
 
         robot.resetAllEncoders();
-        telemetry.addData("Encodervalue", robot.DriveFrontLeft.getCurrentPosition());
+        telemetry.addData("Status", current_state);
         telemetry.update();
 
-        while (current_state == States.MOVE_2_SS) {
-            robot.setDriveMotors(0.2,0.2,0.2,0.2);
-            telemetry.addData("Encodervalue", robot.DriveFrontLeft.getCurrentPosition());
-            telemetry.addData("Inchestoencoder", robot.inchesToEncoderCounts(26.0));
-            telemetry.update();
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(26.0)) {
-                robot.setDriveMotors(0,0,0,0);
-                current_state = States.STOP;
+        while (current_state == States.DRIVE_OUT) {
+            robot.setDriveMotors(0.2,0.2,0.2,0.2); //drive forwards
+            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(6.0)) {
+                robot.stopAllMotors();
+                current_state = States.TURN_2_BRIDGE;
             }
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
-        // State machine for robot
 
-        telemetry.addData("Status", "Finished");
-        telemetry.addData("State", "Stop");
+        robot.resetAllEncoders();
+        telemetry.addData("Status", current_state);
         telemetry.update();
+
+        while (current_state == States.TURN_2_BRIDGE) {
+            robot.setDriveMotors(-0.2,0.2,-0.2,0.2); //turn left in place
+            if (gyro.globalHeading > 90) {
+                robot.stopAllMotors();
+                current_state = States.DRIVE_2_BRIDGE;
+            }
+        }
+
+        robot.resetAllEncoders();
+        telemetry.addData("Status", current_state);
+        telemetry.update();
+
+        while (current_state == States.DRIVE_2_BRIDGE) {
+            robot.setDriveMotors(0.2,0.2,0.2,0.2);
+            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(24.0)) {
+                robot.stopAllMotors();
+                current_state = States.STOP;
+            }
+        }
+
+        robot.resetAllEncoders();
+        telemetry.addData("Status", current_state);
+        telemetry.update();
+
         while (current_state == States.STOP) {
             // stop all motors
-            telemetry.addData("Encodervalue", robot.DriveFrontLeft.getCurrentPosition());
-            telemetry.addData("Inchestoencoder", robot.inchesToEncoderCounts(27.0));
-            telemetry.update();
             robot.stopAllMotors();
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
