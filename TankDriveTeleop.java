@@ -78,28 +78,44 @@ public class TankDriveTeleop extends OpMode {
             robot.DriveBackLeft.setPower(1);
             robot.DriveBackRight.setPower(-1);
         }
-        /*
-        // elevator
-        boolean Lift_up = gamepad1.right_bumper;
-        boolean Lift_down = (gamepad1.right_trigger > 0.1);
 
-        if(Lift_up) { // if right bumper is held arm elevator is set to 1
-            robot.Lift.setPower(1);
-            LiftStatus = "moving up";
+        // Arm
+        robot.Arm.setPower(-gamepad2.left_stick_y / 2);
+
+        //Wrist
+        boolean Up = gamepad2.right_bumper;
+        boolean Down = (gamepad2.right_trigger > 0.1);
+
+        String WristStatus = "";
+        String ClawStatus = "";
+
+        if(Up) {
+            robot.Wrist1.setPosition(0.0);
+            robot.Wrist2.setPosition(0.0);
+            WristStatus = "moving up";
         }
-        else if(Lift_down) { // if right trigger is pressed elevator is set to -1
-            robot.Lift.setPower(-1);
-            LiftStatus = "moving down";
+        else if(Down) {
+            robot.Wrist1.setPosition(0.7);
+            robot.Wrist2.setPosition(0.7);
+            WristStatus = "moving down";
         }
-        else { // if neither are pressed elevator is set to 0
-            robot.Lift.setPower(0);
-            LiftStatus = "idle";
+
+        if (gamepad2.a) {
+            robot.Claw.setPosition(0.3);
+            ClawStatus = "closed";
         }
-         */
+        else if (gamepad2.b) {
+            robot.Claw.setPosition(1.0);
+            ClawStatus = "open";
+        }
+
         robot.DriveBackLeft.setPower(DriveLeftPower);
         robot.DriveFrontLeft.setPower(DriveLeftPower);
         robot.DriveFrontRight.setPower(DriveRightPower);
         robot.DriveBackRight.setPower(DriveRightPower);
-        }
 
+        telemetry.addData("Wrist: ", WristStatus);
+        telemetry.addData("Claw: ", ClawStatus);
+        telemetry.update();
+        }
     }

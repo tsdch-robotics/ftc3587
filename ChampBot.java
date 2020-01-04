@@ -18,6 +18,11 @@ public class ChampBot {
     public DcMotor DriveBackLeft;
     public DcMotor DriveBackRight;
 
+    public DcMotor Arm;
+
+    public Servo Wrist1;
+    public Servo Wrist2;
+    public Servo Claw;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -35,14 +40,18 @@ public class ChampBot {
         DriveFrontRight = hwMap.dcMotor.get("DriveFrontRight");
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
         // reverse one side of the drivetrain so that directions are more natural
-        //DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
         DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
         DriveFrontLeft.setDirection(DcMotor.Direction.REVERSE);
         DriveBackLeft.setDirection(DcMotor.Direction.REVERSE);
 
-        // initialize intake
+        // initialize arm
+        Arm = hwMap.dcMotor.get("Arm");
+        Arm.setDirection(DcMotor.Direction.REVERSE);
 
         // initialize servos
+        Wrist1 = hwMap.servo.get("Wrist1");
+        Wrist2 = hwMap.servo.get("Wrist2");
+        Claw = hwMap.servo.get("Claw");
 
         // move all motors/servos to their starting position
         initAllServos();
@@ -73,9 +82,14 @@ public class ChampBot {
         DriveFrontRight.setPower(0.0);
         DriveBackLeft.setPower(0.0);
         DriveBackRight.setPower(0.0);
+
+        Arm.setPower(0.0);
     }
 
     public void initAllServos() {
+        Wrist1.setPosition(0.7);
+        Wrist2.setPosition(0.7);
+        Claw.setPosition(0.0);
     }
 
     public void resetAllEncoders() {
@@ -88,6 +102,9 @@ public class ChampBot {
         DriveFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         DriveBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         DriveBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        Arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public int inchesToEncoderCounts(double inches) {
