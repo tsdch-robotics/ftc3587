@@ -63,8 +63,8 @@ public class ParkingBlue extends LinearOpMode {
         telemetry.update();
 
         while (current_state == States.DRIVE_OUT) {
-            robot.setDriveMotors(0.2,0.2,0.2,0.2); //drive forwards
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(6.0)) {
+            robot.setDriveMotors(0.4,0.4,0.4,0.4); //drive forwards
+            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(20.0)) {
                 robot.stopAllMotors();
                 current_state = States.TURN_2_BRIDGE;
             }
@@ -76,11 +76,12 @@ public class ParkingBlue extends LinearOpMode {
         telemetry.update();
 
         while (current_state == States.TURN_2_BRIDGE) {
-            robot.setDriveMotors(-0.2,0.2,-0.2,0.2); //turn left in place
-            if (gyro.globalHeading > 90) {
+            robot.setDriveMotors(-0.4,0.4,-0.4,0.4); //turn left in place
+            if (gyro.globalHeading > 85) {
                 robot.stopAllMotors();
                 current_state = States.DRIVE_2_BRIDGE;
             }
+            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
         robot.resetAllEncoders();
@@ -88,11 +89,12 @@ public class ParkingBlue extends LinearOpMode {
         telemetry.update();
 
         while (current_state == States.DRIVE_2_BRIDGE) {
-            robot.setDriveMotors(0.2,0.2,0.2,0.2);
+            robot.setDriveMotors(0.4,0.4,0.4,0.4);
             if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(24.0)) {
                 robot.stopAllMotors();
                 current_state = States.STOP;
             }
+            if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
         robot.resetAllEncoders();

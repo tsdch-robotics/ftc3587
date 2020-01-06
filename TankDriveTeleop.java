@@ -109,6 +109,12 @@ public class TankDriveTeleop extends OpMode {
             ClawStatus = "open";
         }
 
+        //slow-mo
+        if (gamepad1.right_bumper) {
+            DriveLeftPower = DriveLeftPower / 2;
+            DriveRightPower = DriveRightPower / 2;
+        }
+
         robot.DriveBackLeft.setPower(DriveLeftPower);
         robot.DriveFrontLeft.setPower(DriveLeftPower);
         robot.DriveFrontRight.setPower(DriveRightPower);
