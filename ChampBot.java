@@ -24,6 +24,9 @@ public class ChampBot {
     public Servo Wrist2;
     public Servo Claw;
 
+    public Servo PlatformServo;
+    public Servo LockServo;
+
     /* local OpMode members. */
     HardwareMap hwMap = null;
     private ElapsedTime period = new ElapsedTime();
@@ -52,6 +55,9 @@ public class ChampBot {
         Wrist1 = hwMap.servo.get("Wrist1");
         Wrist2 = hwMap.servo.get("Wrist2");
         Claw = hwMap.servo.get("Claw");
+
+        PlatformServo = hwMap.servo.get("PlatformServo");
+        LockServo = hwMap.servo.get("LockServo");
 
         // move all motors/servos to their starting position
         initAllServos();
@@ -90,6 +96,8 @@ public class ChampBot {
         Wrist1.setPosition(0.7);
         Wrist2.setPosition(0.7);
         Claw.setPosition(0.0);
+        PlatformServo.setPosition(0.0);
+        LockServo.setPosition(0.0);
     }
 
     public void resetAllEncoders() {

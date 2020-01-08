@@ -37,7 +37,7 @@ public class ParkingRed extends LinearOpMode {
     ChampBot robot = new ChampBot();   // Use robot's hardware
 
     private enum States { // states for the autonomous FSM
-        DRIVE_OUT, TURN_2_BRIDGE, DRIVE_2_BRIDGE , STOP;
+        DRIVE_OUT, TURN_2_BRIDGE, TURN_2_BRIDGE_FIX, DRIVE_2_BRIDGE , STOP;
     }
 
     public void runOpMode() {
@@ -76,8 +76,17 @@ public class ParkingRed extends LinearOpMode {
         telemetry.update();
 
         while (current_state == States.TURN_2_BRIDGE) {
-            robot.setDriveMotors(0.4,-0.4,0.4,-0.4); //turn right in place
-            if (gyro.globalHeading < -85) {
+            robot.setDriveMotors(0.4,-0.4,0.4,-0.4); //turn RIGHT in place
+            if (gyro.globalHeading <= -90) {
+                robot.stopAllMotors();
+                current_state = States.TURN_2_BRIDGE_FIX;
+            }
+            if (!opModeIsActive()) return; // check termination in the innermost loop
+        }
+        sleep(100);
+        while (current_state == States.TURN_2_BRIDGE_FIX) {
+            robot.setDriveMotors(-0.1,0.1,-0.1,0.1); //turn LEFT in place to fix
+            if (gyro.globalHeading >= -90) {
                 robot.stopAllMotors();
                 current_state = States.DRIVE_2_BRIDGE;
             }
