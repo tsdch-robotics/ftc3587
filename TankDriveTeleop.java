@@ -91,12 +91,10 @@ public class TankDriveTeleop extends OpMode {
 
         if(Up) {
             robot.Wrist1.setPosition(0.0);
-            robot.Wrist2.setPosition(0.0);
             WristStatus = "moving up";
         }
         else if(Down) {
-            robot.Wrist1.setPosition(0.7);
-            robot.Wrist2.setPosition(0.7);
+            robot.Wrist1.setPosition(1.0);
             WristStatus = "moving down";
         }
 

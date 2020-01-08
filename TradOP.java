@@ -51,13 +51,11 @@ public class TradOP extends OpMode {
         String WristStatus = "";
 
         if(Up) { // if right bumper is held arm elevator is set to 1
-            robot.Wrist1.setPosition(1.0);
-            robot.Wrist2.setPosition(1.0);
+            robot.Wrist1.setPosition(0.0);
             WristStatus = "moving up";
         }
         else if(Down) { // if right trigger is pressed elevator is set to -1
-            robot.Wrist1.setPosition(0.0);
-            robot.Wrist2.setPosition(0.0);
+            robot.Wrist1.setPosition(1.0);
             WristStatus = "moving down";
         }
 

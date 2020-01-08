@@ -21,7 +21,6 @@ public class ChampBot {
     public DcMotor Arm;
 
     public Servo Wrist1;
-    public Servo Wrist2;
     public Servo Claw;
 
     public Servo PlatformServo;
@@ -53,7 +52,6 @@ public class ChampBot {
 
         // initialize servos
         Wrist1 = hwMap.servo.get("Wrist1");
-        Wrist2 = hwMap.servo.get("Wrist2");
         Claw = hwMap.servo.get("Claw");
 
         PlatformServo = hwMap.servo.get("PlatformServo");
@@ -93,8 +91,7 @@ public class ChampBot {
     }
 
     public void initAllServos() {
-        Wrist1.setPosition(0.7);
-        Wrist2.setPosition(0.7);
+        Wrist1.setPosition(0.0);
         Claw.setPosition(0.0);
         PlatformServo.setPosition(0.0);
         LockServo.setPosition(0.0);
