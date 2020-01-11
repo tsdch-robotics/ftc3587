@@ -29,18 +29,11 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.view.View;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 
-@Autonomous(name="BasicAuto", group="ChampBot")
-public class BasicAuto extends LinearOpMode {
+@Autonomous(name="BasicAutoRed", group="ChampBot")
+public class BasicAutoRed extends LinearOpMode {
     ChampBot robot = new ChampBot();   // Use robot's hardware
 
     private enum States { // states for the autonomous FSM
@@ -61,8 +54,9 @@ public class BasicAuto extends LinearOpMode {
         waitForStart();
 
         robot.resetAllEncoders();
-        telemetry.addData("Encodervalue", robot.DriveFrontLeft.getCurrentPosition());
+        telemetry.addData("Status", current_state);
         telemetry.update();
+        sleep(100);
 
         while (current_state == States.MOVE_2_SS) {
             robot.setDriveMotors(0.2,0.2,0.2,0.2);
@@ -75,17 +69,22 @@ public class BasicAuto extends LinearOpMode {
             }
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
-        // State machine for robot
 
-        telemetry.addData("Status", "Finished");
-        telemetry.addData("State", "Stop");
+        robot.resetAllEncoders();
+        telemetry.addData("Status", current_state);
         telemetry.update();
+        sleep(100);
+
+
+        robot.resetAllEncoders();
+        telemetry.addData("Status", current_state);
+        telemetry.update();
+
         while (current_state == States.STOP) {
             // stop all motors
-            telemetry.addData("Encodervalue", robot.DriveFrontLeft.getCurrentPosition());
-            telemetry.addData("Inchestoencoder", robot.inchesToEncoderCounts(27.0));
-            telemetry.update();
             robot.stopAllMotors();
+            telemetry.addData("Status", current_state);
+            telemetry.update();
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
     }

@@ -26,6 +26,9 @@ public class ChampBot {
     public Servo PlatformServo;
     public Servo LockServo;
 
+    public ColorSensor RCS;
+    public ColorSensor LCS;
+
     /* local OpMode members. */
     HardwareMap hwMap = null;
     private ElapsedTime period = new ElapsedTime();
@@ -56,6 +59,10 @@ public class ChampBot {
 
         PlatformServo = hwMap.servo.get("PlatformServo");
         LockServo = hwMap.servo.get("LockServo");
+
+        // initialize sensors
+        RCS = hwMap.colorSensor.get("RCS");
+        LCS = hwMap.colorSensor.get("LCS");
 
         // move all motors/servos to their starting position
         initAllServos();
@@ -91,7 +98,7 @@ public class ChampBot {
     }
 
     public void initAllServos() {
-        Wrist1.setPosition(0.0);
+        Wrist1.setPosition(1.0);
         Claw.setPosition(0.0);
         PlatformServo.setPosition(0.0);
         LockServo.setPosition(0.0);

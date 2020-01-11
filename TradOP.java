@@ -42,25 +42,23 @@ public class TradOP extends OpMode {
         robot.DriveBackRight.setPower(v4);
 
         // Arm
-        robot.Arm.setPower(-gamepad2.left_stick_y);
+        robot.Arm.setPower(-gamepad2.left_stick_y / 2);
 
         //Wrist
         boolean Up = gamepad2.right_bumper;
         boolean Down = (gamepad2.right_trigger > 0.1);
 
         String WristStatus = "";
+        String ClawStatus = "";
 
-        if(Up) { // if right bumper is held arm elevator is set to 1
+        if(Up) {
             robot.Wrist1.setPosition(0.0);
             WristStatus = "moving up";
         }
-        else if(Down) { // if right trigger is pressed elevator is set to -1
+        else if(Down) {
             robot.Wrist1.setPosition(1.0);
             WristStatus = "moving down";
         }
-
-        //Claw
-        String ClawStatus = "";
 
         if (gamepad2.a) {
             robot.Claw.setPosition(0.3);
@@ -69,6 +67,29 @@ public class TradOP extends OpMode {
         else if (gamepad2.b) {
             robot.Claw.setPosition(1.0);
             ClawStatus = "open";
+        }
+
+        //platform
+        if (gamepad1.b) { //up
+            robot.PlatformServo.setPosition(0.0);
+        }
+        else if (gamepad1.a) { //down
+            robot.PlatformServo.setPosition(1.0);
+        }
+
+        if (gamepad1.x) { //lock
+            robot.LockServo.setPosition(1.0);
+        }
+        else if (gamepad1.y) {
+            robot.LockServo.setPosition(0.0);
+        }
+
+        //slow-mo
+        if (gamepad1.right_bumper) {
+            robot.DriveFrontLeft.setPower(v1/2);
+            robot.DriveFrontRight.setPower(v2/2);
+            robot.DriveBackLeft.setPower(v3/2);
+            robot.DriveBackRight.setPower(v4/2);
         }
 
         telemetry.addData("Wrist: ", WristStatus);
