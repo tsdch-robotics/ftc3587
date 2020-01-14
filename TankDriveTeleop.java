@@ -83,17 +83,17 @@ public class TankDriveTeleop extends OpMode {
         robot.Arm.setPower(-gamepad2.left_stick_y / 2);
 
         //Wrist
-        boolean Up = gamepad2.right_bumper;
-        boolean Down = (gamepad2.right_trigger > 0.1);
+        //boolean Up = gamepad2.right_bumper;
+        //boolean Down = (gamepad2.right_trigger > 0.1);
 
         String WristStatus = "";
         String ClawStatus = "";
 
-        if(Up) {
+        if(gamepad2.right_trigger > 0.1) {
             robot.Wrist1.setPosition(0.0);
             WristStatus = "moving up";
         }
-        else if(Down) {
+        else if(gamepad2.right_bumper || gamepad1.left_bumper) {
             robot.Wrist1.setPosition(1.0);
             WristStatus = "moving down";
         }

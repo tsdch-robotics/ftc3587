@@ -37,7 +37,7 @@ public class ParkingRed extends LinearOpMode {
     ChampBot robot = new ChampBot();   // Use robot's hardware
 
     private enum States { // states for the autonomous FSM
-        DRIVE_OUT, TURN_2_BRIDGE, TURN_2_BRIDGE_FIX, DRIVE_2_BRIDGE , STOP;
+        DRIVE_OUT, TURN_2_BRIDGE, TURN_2_BRIDGE_FIX, DRIVE_2_BRIDGE, STOP;
     }
 
     public void runOpMode() {
@@ -61,10 +61,11 @@ public class ParkingRed extends LinearOpMode {
         robot.resetAllEncoders();
         telemetry.addData("Status", current_state);
         telemetry.update();
+        sleep(100);
 
         while (current_state == States.DRIVE_OUT) {
-            robot.setDriveMotors(0.4,0.4,0.4,0.4); //drive forwards
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(20.0)) {
+            robot.setDriveMotors(0.4, 0.4, 0.4, 0.4); //drive forwards
+            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(6.0)) {
                 robot.stopAllMotors();
                 current_state = States.TURN_2_BRIDGE;
             }
@@ -74,46 +75,47 @@ public class ParkingRed extends LinearOpMode {
         robot.resetAllEncoders();
         telemetry.addData("Status", current_state);
         telemetry.update();
+        sleep(100);
 
         while (current_state == States.TURN_2_BRIDGE) {
-            robot.setDriveMotors(0.4,-0.4,0.4,-0.4); //turn RIGHT in place
+            robot.setDriveMotors(0.4, -0.4, 0.4, -0.4); //turn RIGHT in place
             if (gyro.globalHeading <= -90) {
-                robot.stopAllMotors();
-                current_state = States.TURN_2_BRIDGE_FIX;
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-        sleep(100);
-        while (current_state == States.TURN_2_BRIDGE_FIX) {
-            robot.setDriveMotors(-0.1,0.1,-0.1,0.1); //turn LEFT in place to fix
-            if (gyro.globalHeading >= -90) {
                 robot.stopAllMotors();
                 current_state = States.DRIVE_2_BRIDGE;
             }
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
-
-        robot.resetAllEncoders();
-        telemetry.addData("Status", current_state);
-        telemetry.update();
-
-        while (current_state == States.DRIVE_2_BRIDGE) {
-            robot.setDriveMotors(0.4,0.4,0.4,0.4);
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(24.0)) {
+        sleep(100);
+        /*while (current_state == States.TURN_2_BRIDGE_FIX) {
+            robot.setDriveMotors(0.1, -0.1, 0.1, -0.1); //turn RIGHT in place to fix
+            if (gyro.globalHeading <= 90) {
                 robot.stopAllMotors();
-                current_state = States.STOP;
+                current_state = States.DRIVE_2_BRIDGE;
+            }*/
+
+            robot.resetAllEncoders();
+            telemetry.addData("Status", current_state);
+            telemetry.update();
+            sleep(100);
+
+            while (current_state == States.DRIVE_2_BRIDGE) {
+                robot.setDriveMotors(0.4, 0.4, 0.4, 0.4);
+                if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(24.0)) {
+                    robot.stopAllMotors();
+                    current_state = States.STOP;
+                }
+                if (!opModeIsActive()) return; // check termination in the innermost loop
             }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
 
-        robot.resetAllEncoders();
-        telemetry.addData("Status", current_state);
-        telemetry.update();
+            robot.resetAllEncoders();
+            telemetry.addData("Status", current_state);
+            telemetry.update();
+            sleep(100);
 
-        while (current_state == States.STOP) {
-            // stop all motors
-            robot.stopAllMotors();
-            if (!opModeIsActive()) return; // check termination in the innermost loop
+            while (current_state == States.STOP) {
+                // stop all motors
+                robot.stopAllMotors();
+                if (!opModeIsActive()) return; // check termination in the innermost loop
+            }
         }
     }
-}

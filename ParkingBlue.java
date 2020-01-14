@@ -65,7 +65,7 @@ public class ParkingBlue extends LinearOpMode {
 
         while (current_state == States.DRIVE_OUT) {
             robot.setDriveMotors(0.4, 0.4, 0.4, 0.4); //drive forwards
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(20.0)) {
+            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(6.0)) {
                 robot.stopAllMotors();
                 current_state = States.TURN_2_BRIDGE;
             }
@@ -81,17 +81,17 @@ public class ParkingBlue extends LinearOpMode {
             robot.setDriveMotors(-0.4, 0.4, -0.4, 0.4); //turn LEFT in place
             if (gyro.globalHeading >= 90) {
                 robot.stopAllMotors();
-                current_state = States.TURN_2_BRIDGE_FIX;
+                current_state = States.DRIVE_2_BRIDGE;
             }
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
         sleep(100);
-        while (current_state == States.TURN_2_BRIDGE_FIX) {
+        /*while (current_state == States.TURN_2_BRIDGE_FIX) {
             robot.setDriveMotors(0.1, -0.1, 0.1, -0.1); //turn RIGHT in place to fix
             if (gyro.globalHeading <= 90) {
                 robot.stopAllMotors();
                 current_state = States.DRIVE_2_BRIDGE;
-            }
+            }*/
 
             robot.resetAllEncoders();
             telemetry.addData("Status", current_state);
@@ -119,4 +119,3 @@ public class ParkingBlue extends LinearOpMode {
             }
         }
     }
-}

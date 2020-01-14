@@ -98,10 +98,10 @@ public class ChampBot {
     }
 
     public void initAllServos() {
-        Wrist1.setPosition(1.0);
-        Claw.setPosition(0.0);
-        PlatformServo.setPosition(0.0);
-        LockServo.setPosition(0.0);
+        Wrist1.setPosition(1.0); //down
+        Claw.setPosition(0.0); // close
+        PlatformServo.setPosition(0.0); //up
+        LockServo.setPosition(1.0); //un-locked
     }
 
     public void resetAllEncoders() {
