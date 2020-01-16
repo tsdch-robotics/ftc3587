@@ -31,6 +31,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import org.firstinspires.ftc.teamcode.*;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.teamcode.VuforiaStuff;
 
 @Autonomous(name="Basic", group="BBot")
 public class BasicAuto extends LinearOpMode {
@@ -38,43 +41,41 @@ public class BasicAuto extends LinearOpMode {
     Gyro gyro;
 
     private enum States { // states for the autonomous FSM
-        LOWER, MOVE_AWAY_HANGER, TURN1, MOVE_INTO_CRATER, STOP;
+        STOP;
     }
 
     public void runOpMode() {
-        States current_state = States.LOWER;
-        telemetry.addData("Status", "Initializing...");
+        States current_state = States.STOP;
+
         robot.init(hardwareMap);
         gyro = new Gyro(robot.hwMap, "imu"); // special initialization for gyro
         gyro.start();
-        telemetry.addData("Status", "Ready!");
+
+        VuforiaStuff.skystonePos pos;
+
+        telemetry.addData("Status", current_state);
         telemetry.update();
 
         // wait for the start button to be pressed.
         waitForStart();
 
-        // State machine for robot
-        telemetry.addData("Status", "Running");
-        telemetry.addData("State", "Lowering");
-        telemetry.update();
-        while (current_state == States.LOWER) {
-            // lower the robot off the hanger
-            // FAKE NEWS! actually run the robot forward a little bit.
-            gyro.resetHeading();
-            while(gyro.globalHeading > -90) {
-                telemetry.addData("Angle", gyro.globalHeading);
-                robot.setDriveMotors(0.5,-0.5,0.5,-0.5);
-                telemetry.update();
-                if(!opModeIsActive()) return; // check termination in the innermost loop
-            }
-            robot.stopAllMotors();
-            sleep(5000);
+        pos = vuforiaStuff.vuforiascan(false, true);
+        //liftSystem.hLift.setPower(-.3);
+        switch (pos) {
+            case RIGHT:
+                break;
+            case CENTER:
+                break;
+            case LEFT:
+                break;
         }
+        // State machine for robot
 
-        telemetry.addData("State", "Moving away from hanger");
+        telemetry.addData("State", current_state);
         telemetry.update();
-        while (current_state == States.MOVE_AWAY_HANGER) {
-            robot.setDriveMotors(0,0,0,0);
+
+        while (current_state == States.STOP) {
+            robot.stopAllMotors();
             // this will stay stuck here for testing purposes
         }
 

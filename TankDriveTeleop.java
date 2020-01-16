@@ -56,5 +56,6 @@ public class TankDriveTeleop extends OpMode {
         // driver data
         telemetry.addData("Left Right", String.format("%.2f", DriveLeftPower) + " " + String.format("%.2f", DriveRightPower));
         telemetry.addData("Heading", gyro.globalHeading);
+        telemetry.update();
     }
 }
