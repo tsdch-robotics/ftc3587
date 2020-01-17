@@ -59,7 +59,7 @@ public class BasicAuto extends LinearOpMode {
         // wait for the start button to be pressed.
         waitForStart();
 
-        pos = vuforiaStuff.vuforiascan(false, true);
+        pos = robot.vuforiaStuff.vuforiascan(false, true);
         //liftSystem.hLift.setPower(-.3);
         switch (pos) {
             case RIGHT:
@@ -76,6 +76,9 @@ public class BasicAuto extends LinearOpMode {
 
         while (current_state == States.STOP) {
             robot.stopAllMotors();
+            telemetry.addData("Case", pos);
+            telemetry.update();
+            if (!opModeIsActive()) return; // check termination in the innermost loop
             // this will stay stuck here for testing purposes
         }
 
