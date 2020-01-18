@@ -57,7 +57,6 @@ public class MiniProgrammingBot {
 
         int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        ((VuforiaTrackableDefaultListener)redTarget.getListener()).setCameraLocationOnRobot(parameters.cameraName, robotFromCamera);
         parameters.cameraName = webcamName;
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
