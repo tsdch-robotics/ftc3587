@@ -18,8 +18,8 @@ public class TradOP extends OpMode {
          * configured your robot and created the configuration file.
          */
         robot.init(hardwareMap);
-        //gyro = new Gyro(robot.hwMap, "imu"); // specifically initialize the gyro
-        //gyro.start();
+        gyro = new Gyro(robot.hwMap, "imu"); // specifically initialize the gyro
+        gyro.start();
         telemetry.addData("Status", "Ready!");
     }
 

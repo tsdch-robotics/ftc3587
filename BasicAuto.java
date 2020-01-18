@@ -32,8 +32,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.*;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.teamcode.VuforiaStuff;
 
 @Autonomous(name="Basic", group="BBot")
 public class BasicAuto extends LinearOpMode {
@@ -51,7 +49,6 @@ public class BasicAuto extends LinearOpMode {
         gyro = new Gyro(robot.hwMap, "imu"); // special initialization for gyro
         gyro.start();
 
-        VuforiaStuff.skystonePos pos;
 
         telemetry.addData("Status", current_state);
         telemetry.update();
@@ -59,16 +56,6 @@ public class BasicAuto extends LinearOpMode {
         // wait for the start button to be pressed.
         waitForStart();
 
-        pos = robot.vuforiaStuff.vuforiascan(false, true);
-        //liftSystem.hLift.setPower(-.3);
-        switch (pos) {
-            case RIGHT:
-                break;
-            case CENTER:
-                break;
-            case LEFT:
-                break;
-        }
         // State machine for robot
 
         telemetry.addData("State", current_state);
@@ -76,7 +63,6 @@ public class BasicAuto extends LinearOpMode {
 
         while (current_state == States.STOP) {
             robot.stopAllMotors();
-            telemetry.addData("Case", pos);
             telemetry.update();
             if (!opModeIsActive()) return; // check termination in the innermost loop
             // this will stay stuck here for testing purposes

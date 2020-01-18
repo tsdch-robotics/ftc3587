@@ -4,13 +4,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.teamcode.VuforiaStuff;
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.teamcode.VuforiaStuff;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 /*
  * This is NOT an opmode. This file defines all the hardware on the robot
@@ -22,10 +15,6 @@ public class MiniProgrammingBot {
     public DcMotor DriveFrontRight;
     public DcMotor DriveBackLeft;
     public DcMotor DriveBackRight;
-    public VuforiaStuff vuforiaStuff;
-
-    private VuforiaLocalizer vuforia;
-    private static final String VUFORIA_KEY = "AYuwB/n/////AAABmc2iWLR8g0iipnUkJKVfgAYw+QI3BcT5KMR/SavKNiO/7h1HrtK20ekoQerKKc0YoamY11r9MOZzcgz6ku69rBwqrrl08VUqzKn+d49/pW3Gi6SseQMgb5piXwASgO9XHeqCFgmD+NkR52ta3MGEI8X6FGAt3uATqM20EPbIugPpnNjsdCgCav51jMCUI5kvgG4AjO4MIN/kPE4PlJ3ZUI7/lTSDZ8nImPoRuJQ9VWJrjOJzY6/ylE9V5j5r5nkixzVwLJ1GzA0vYsvFc+62J11ZuhiAoc1zxzpe8VK4ibSxwCP1lFRSg+6T8jiX4OXYnzovD4ghLc+0KXtF+hl9niNSkiBY7oaRYGwQW1MlgzJ9";
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -44,29 +33,13 @@ public class MiniProgrammingBot {
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
 
         // reverse one side of the drivetrain so that directions are more natural
-        DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
-        DriveBackRight.setDirection(DcMotor.Direction.REVERSE);
+        DriveFrontLeft.setDirection(DcMotor.Direction.REVERSE);
+        DriveBackLeft .setDirection(DcMotor.Direction.REVERSE);
 
         // initialize servos
 
         // don't initialize the gyro unless an op mode specifically requests it
         stopAllMotors();
-
-        WebcamName webcamName;
-        webcamName = hwMap.get(WebcamName.class, "Webcam 1");
-
-        int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        parameters.cameraName = webcamName;
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        //parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        vuforiaStuff = new VuforiaStuff(vuforia);
-
     }
 
     public void setDriveMotors(double FrontL, double FrontR, double BackL, double BackR) {
