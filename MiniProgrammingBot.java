@@ -54,11 +54,11 @@ public class MiniProgrammingBot {
 
         WebcamName webcamName;
         webcamName = hwMap.get(WebcamName.class, "Webcam 1");
-        parameters.cameraName = webcamName;
-        ((VuforiaTrackableDefaultListener)redTarget.getListener()).setCameraLocationOnRobot(parameters.cameraName, robotFromCamera);
 
         int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        ((VuforiaTrackableDefaultListener)redTarget.getListener()).setCameraLocationOnRobot(parameters.cameraName, robotFromCamera);
+        parameters.cameraName = webcamName;
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         //parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
