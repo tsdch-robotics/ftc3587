@@ -1,11 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+// Vision imports
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.teamcode.Vision.VuforiaStuff;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
 
 /*
  * This is NOT an opmode. This file defines all the hardware on the robot
@@ -26,8 +31,9 @@ public class ChampBot {
     public Servo PlatformServo;
     public Servo LockServo;
 
-    public ColorSensor RCS;
-    public ColorSensor LCS;
+    private VuforiaLocalizer vuforia;
+    private static final String VUFORIA_KEY = "AYuwB/n/////AAABmc2iWLR8g0iipnUkJKVfgAYw+QI3BcT5KMR/SavKNiO/7h1HrtK20ekoQerKKc0YoamY11r9MOZzcgz6ku69rBwqrrl08VUqzKn+d49/pW3Gi6SseQMgb5piXwASgO9XHeqCFgmD+NkR52ta3MGEI8X6FGAt3uATqM20EPbIugPpnNjsdCgCav51jMCUI5kvgG4AjO4MIN/kPE4PlJ3ZUI7/lTSDZ8nImPoRuJQ9VWJrjOJzY6/ylE9V5j5r5nkixzVwLJ1GzA0vYsvFc+62J11ZuhiAoc1zxzpe8VK4ibSxwCP1lFRSg+6T8jiX4OXYnzovD4ghLc+0KXtF+hl9niNSkiBY7oaRYGwQW1MlgzJ9";
+    public VuforiaStuff vuforiaStuff;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -44,6 +50,7 @@ public class ChampBot {
         DriveBackLeft = hwMap.dcMotor.get("DriveBackLeft");
         DriveFrontRight = hwMap.dcMotor.get("DriveFrontRight");
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
+
         // reverse one side of the drivetrain so that directions are more natural
         DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
         DriveFrontLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -56,21 +63,29 @@ public class ChampBot {
         // initialize servos
         Wrist1 = hwMap.servo.get("Wrist1");
         Claw = hwMap.servo.get("Claw");
-
         PlatformServo = hwMap.servo.get("PlatformServo");
         LockServo = hwMap.servo.get("LockServo");
-
-        // initialize sensors
-        RCS = hwMap.colorSensor.get("RCS");
-        LCS = hwMap.colorSensor.get("LCS");
 
         // move all motors/servos to their starting position
         initAllServos();
         stopAllMotors();
 
-        // initialize sensors
+        // don't initialize gyro or vision unless an opmode specifically requests it!
+    }
 
-        // don't initialize the gyro unless an opmode specifically requests it!
+    public void visionInit() {
+        WebcamName webcamName;
+        webcamName = hwMap.get(WebcamName.class, "Webcam 1");
+
+        int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        parameters.cameraName = webcamName;
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        // Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        // Initialize our block detection logic
+        vuforiaStuff = new VuforiaStuff(vuforia);
     }
 
     /**
