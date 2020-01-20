@@ -23,9 +23,9 @@ public class ChampBot {
     public DcMotor DriveBackLeft;
     public DcMotor DriveBackRight;
 
-    public DcMotor Arm;
+    public DcMotor Lift;
 
-    public Servo Wrist1;
+    public Servo Arm;
     public Servo Claw;
 
     public Servo PlatformServo;
@@ -56,13 +56,14 @@ public class ChampBot {
         DriveFrontLeft.setDirection(DcMotor.Direction.REVERSE);
         DriveBackLeft.setDirection(DcMotor.Direction.REVERSE);
 
-        // initialize arm
-        Arm = hwMap.dcMotor.get("Arm");
-        Arm.setDirection(DcMotor.Direction.REVERSE);
+        // initialize lift and arm
+        Lift = hwMap.dcMotor.get("Lift");
+        Lift.setDirection(DcMotor.Direction.REVERSE);
 
         // initialize servos
-        Wrist1 = hwMap.servo.get("Wrist1");
+        Arm = hwMap.servo.get("Arm");
         Claw = hwMap.servo.get("Claw");
+
         PlatformServo = hwMap.servo.get("PlatformServo");
         LockServo = hwMap.servo.get("LockServo");
 
@@ -109,11 +110,11 @@ public class ChampBot {
         DriveBackLeft.setPower(0.0);
         DriveBackRight.setPower(0.0);
 
-        Arm.setPower(0.0);
+        Lift.setPower(0.0);
     }
 
     public void initAllServos() {
-        Wrist1.setPosition(1.0); //down
+        Arm.setPosition(1.0); //down
         Claw.setPosition(0.0); // close
         PlatformServo.setPosition(0.0); //up
         LockServo.setPosition(1.0); //un-locked
@@ -130,8 +131,8 @@ public class ChampBot {
         DriveBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         DriveBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        Arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public int inchesToEncoderCounts(double inches) {

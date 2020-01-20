@@ -43,27 +43,25 @@ public class TradOP extends OpMode {
         robot.DriveBackLeft.setPower(v3);
         robot.DriveBackRight.setPower(v4);
 
-        // Arm
-        robot.Arm.setPower(-gamepad2.left_stick_y / 2);
+        // Lift
+        robot.Lift.setPower(-gamepad2.left_stick_y / 2);
 
-        //Wrist
-        boolean Up = gamepad2.right_bumper;
-        boolean Down = (gamepad2.right_trigger > 0.1);
+        // Arm
 
         String WristStatus = "";
         String ClawStatus = "";
 
-        if(Up) {
-            robot.Wrist1.setPosition(0.0);
-            WristStatus = "moving up";
+        if(gamepad2.right_bumper) {
+            robot.Arm.setPosition(1.0); // in
+            WristStatus = "moving in";
         }
-        else if(Down) {
-            robot.Wrist1.setPosition(1.0);
-            WristStatus = "moving down";
+        else if(gamepad2.right_trigger > 0.1) {
+            robot.Arm.setPosition(0.0); // out
+            WristStatus = "moving out";
         }
 
         if (gamepad2.a) {
-            robot.Claw.setPosition(0.3);
+            robot.Claw.setPosition(0.0);
             ClawStatus = "closed";
         }
         else if (gamepad2.b) {
