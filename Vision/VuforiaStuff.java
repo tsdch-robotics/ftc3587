@@ -241,12 +241,14 @@ public class VuforiaStuff {
             pos = skystonePos.RIGHT;
         }
 */
+        // flipped left and right since cam is upside down
+
         if (blackYellowRatioL > blackYellowRatioC && blackYellowRatioL > blackYellowRatioR) {
-            pos = skystonePos.LEFT;
+            pos = skystonePos.RIGHT;
         } else if (blackYellowRatioC > blackYellowRatioL && blackYellowRatioC > blackYellowRatioR) {
             pos = skystonePos.CENTER;
         } else {
-            pos = skystonePos.RIGHT;
+            pos = skystonePos.LEFT;
         }
 
         DbgLog.msg("black/yellow L: " + blackCountL + "/" + yellowCountL);

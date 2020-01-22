@@ -35,12 +35,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.Vision.VuforiaStuff;
 
 
-@Autonomous(name="BasicAutoRed", group="ChampBot")
-public class VisionAutoRed extends LinearOpMode {
+@Autonomous(name="BasicAutoBlue", group="ChampBot")
+public class VisionAutoBlue extends LinearOpMode {
     ChampBot robot = new ChampBot();   // Use robot's hardware
 
     private enum States { // states for the autonomous FSM
-        STRAFE_2_RIGHT, STRAFE_2_CENTER, STRAFE_2_LEFT, NAV_2_BLOCKS, AWAY_FROM_BLOCKS, TURN_AWAY_FROM_BLOCKS, FAR_2_BRIDGE, MID_2_BRIDGE, CLOSE_2_BRIDGE, STOP;
+        STRAFE_2_RIGHT, STRAFE_2_LEFT, NAV_2_BLOCKS, AWAY_FROM_BLOCKS, TURN_AWAY_FROM_BLOCKS, FAR_2_BRIDGE, MID_2_BRIDGE, CLOSE_2_BRIDGE, STOP;
     }
 
     public void runOpMode() {
@@ -60,14 +60,14 @@ public class VisionAutoRed extends LinearOpMode {
         // wait for the start button to be pressed
         waitForStart();
 
-        pos = robot.vuforiaStuff.vuforiascan(false, true);
+        pos = robot.vuforiaStuff.vuforiascan(false, false);
 
         switch (pos) {
             case RIGHT:
                 current_state = States.STRAFE_2_RIGHT; // to right block
                 break;
             case CENTER:
-                current_state = States.STRAFE_2_CENTER;
+                current_state = States.NAV_2_BLOCKS;
                 break;
             case LEFT:
                 current_state = States.STRAFE_2_LEFT; // to left block
@@ -83,17 +83,8 @@ public class VisionAutoRed extends LinearOpMode {
         sleep(500);
 
         while (current_state == States.STRAFE_2_RIGHT) {
-            robot.setDriveMotors(-0.3, 0.3, 0.3, -0.3); // right strafe (since robot backwards)
-            if (robot.DriveFrontLeft.getCurrentPosition() <= -robot.inchesToEncoderCounts(10.0)) {
-                robot.stopAllMotors();
-                current_state = States.NAV_2_BLOCKS;
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-
-        while (current_state == States.STRAFE_2_CENTER) {
-            robot.setDriveMotors(0.3, -0.3, -0.3, 0.3); // left strafe (since robot backwards)
-            if (robot.DriveFrontLeft.getCurrentPosition() >= robot.inchesToEncoderCounts(3.0)) {
+            robot.setDriveMotors(-0.3, 0.3, 0.3, -0.3); // left strafe (since robot backwards)
+            if (robot.DriveFrontLeft.getCurrentPosition() < -robot.inchesToEncoderCounts(12.0)) {
                 robot.stopAllMotors();
                 current_state = States.NAV_2_BLOCKS;
             }
@@ -101,8 +92,8 @@ public class VisionAutoRed extends LinearOpMode {
         }
 
         while (current_state == States.STRAFE_2_LEFT) {
-            robot.setDriveMotors(0.3, -0.3, -0.3, 0.3); // left strafe (since robot backwards)
-            if (robot.DriveFrontLeft.getCurrentPosition() >= robot.inchesToEncoderCounts(5.0)) {
+            robot.setDriveMotors(0.3, -0.3, -0.3, 0.3); // right strafe (since robot backwards)
+            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(12.0)) {
                 robot.stopAllMotors();
                 current_state = States.NAV_2_BLOCKS;
             }
@@ -117,7 +108,7 @@ public class VisionAutoRed extends LinearOpMode {
 
         while (current_state == States.NAV_2_BLOCKS) {
             robot.setDriveMotors(-0.3, -0.3, -0.3, -0.3); // right strafe (since robot backwards)
-            if (robot.DriveFrontLeft.getCurrentPosition() <= -robot.inchesToEncoderCounts(27.0)) {
+            if (robot.DriveFrontLeft.getCurrentPosition() < -robot.inchesToEncoderCounts(27.0)) {
                 robot.stopAllMotors();
                 robot.PlatformServo.setPosition(1.0); // closed on block
                 current_state = States.AWAY_FROM_BLOCKS;
@@ -133,7 +124,7 @@ public class VisionAutoRed extends LinearOpMode {
 
         while (current_state == States.AWAY_FROM_BLOCKS) {
             robot.setDriveMotors(0.3, 0.3, 0.3, 0.3); // moves away from blocks
-            if (robot.DriveFrontLeft.getCurrentPosition() >= robot.inchesToEncoderCounts(5.0)) {
+            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(3.0)) {
                 robot.stopAllMotors();
                 current_state = States.TURN_AWAY_FROM_BLOCKS;
             }
@@ -148,7 +139,7 @@ public class VisionAutoRed extends LinearOpMode {
 
         while (current_state == States.TURN_AWAY_FROM_BLOCKS) {
             robot.setDriveMotors(0.3, -0.3, 0.3, -0.3); // Turns right
-            if (gyro.getHeading() <= -87.0 ) {
+            if (gyro.getHeading() <= -90.0 ) {
                 robot.stopAllMotors();
                 current_state = States.STOP;
             }
@@ -177,7 +168,7 @@ public class VisionAutoRed extends LinearOpMode {
 
         while (current_state == States.CLOSE_2_BRIDGE) {
             robot.setDriveMotors(-0.3, -0.3, -0.3, -0.3); // right strafe (since robot backwards)
-            if (robot.DriveFrontLeft.getCurrentPosition() <= -robot.inchesToEncoderCounts(74.0)) {
+            if (robot.DriveFrontLeft.getCurrentPosition() < -robot.inchesToEncoderCounts(74.0)) {
                 robot.stopAllMotors();
                 current_state = States.STOP;
             }
@@ -186,7 +177,7 @@ public class VisionAutoRed extends LinearOpMode {
 
         while (current_state == States.MID_2_BRIDGE) {
             robot.setDriveMotors(-0.3, -0.3, -0.3, -0.3); // right strafe (since robot backwards)
-            if (robot.DriveFrontLeft.getCurrentPosition() <= -robot.inchesToEncoderCounts(80.0)) {
+            if (robot.DriveFrontLeft.getCurrentPosition() < -robot.inchesToEncoderCounts(80.0)) {
                 robot.stopAllMotors();
                 current_state = States.STOP;
             }
@@ -195,7 +186,7 @@ public class VisionAutoRed extends LinearOpMode {
 
         while (current_state == States.FAR_2_BRIDGE) {
             robot.setDriveMotors(-0.3, -0.3, -0.3, -0.3); // right strafe (since robot backwards)
-            if (robot.DriveFrontLeft.getCurrentPosition() <= -robot.inchesToEncoderCounts(86.0)) {
+            if (robot.DriveFrontLeft.getCurrentPosition() < -robot.inchesToEncoderCounts(86.0)) {
                 robot.stopAllMotors();
                 current_state = States.STOP;
             }
