@@ -32,9 +32,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.ChampBot;
-import org.firstinspires.ftc.teamcode.Gyro;
-
 @Autonomous(name="ParkingBlue", group="ChampBot")
 public class ParkingBlue extends LinearOpMode {
     ChampBot robot = new ChampBot();   // Use robot's hardware
