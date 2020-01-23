@@ -33,37 +33,47 @@ public class TradOP extends OpMode {
         double r = Math.hypot(gamepad1.left_stick_x, -gamepad1.left_stick_y);
         double robotAngle = Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
         double rightX = -gamepad1.right_stick_x;
-        final double v1 = r * Math.cos(robotAngle) - rightX;
-        final double v2 = r * Math.sin(robotAngle) + rightX;
-        final double v3 = r * Math.sin(robotAngle) - rightX;
-        final double v4 = r * Math.cos(robotAngle) + rightX;
+        double v1 = r * Math.cos(robotAngle) - rightX; // readd final
+        double v2 = r * Math.sin(robotAngle) + rightX;
+        double v3 = r * Math.sin(robotAngle) - rightX;
+        double v4 = r * Math.cos(robotAngle) + rightX;
+
+        //slow-mo
+        if (gamepad1.right_bumper) {
+            v1 = v1 / 2;
+            v2 = v2 / 2;
+            v3 = v3 / 2;
+            v4 = v4 / 2;
+        }
 
         robot.DriveFrontLeft.setPower(v1);
         robot.DriveFrontRight.setPower(v2);
         robot.DriveBackLeft.setPower(v3);
         robot.DriveBackRight.setPower(v4);
 
+
+
         // Arm
-        robot.Arm.setPower(-gamepad2.left_stick_y / 2);
+        robot.Lift.setPower(-gamepad2.left_stick_y);
 
         //Wrist
-        boolean Up = gamepad2.right_bumper;
-        boolean Down = (gamepad2.right_trigger > 0.1);
+        //boolean Up = gamepad2.right_bumper;
+        //boolean Down = (gamepad2.right_trigger > 0.1);
 
-        String WristStatus = "";
+        String ArmStatus = "";
         String ClawStatus = "";
 
-        if(Up) {
-            robot.Wrist1.setPosition(0.0);
-            WristStatus = "moving up";
+        if(gamepad2.right_bumper) {
+            robot.Arm.setPosition(0.0);
+            ArmStatus = "moving up";
         }
-        else if(Down) {
-            robot.Wrist1.setPosition(1.0);
-            WristStatus = "moving down";
+        else if(gamepad2.right_trigger > 0.1) {
+            robot.Arm.setPosition(1.0);
+            ArmStatus = "moving down";
         }
 
         if (gamepad2.a) {
-            robot.Claw.setPosition(0.3);
+            robot.Claw.setPosition(0.0);
             ClawStatus = "closed";
         }
         else if (gamepad2.b) {
@@ -72,10 +82,10 @@ public class TradOP extends OpMode {
         }
 
         //platform
-        if (gamepad1.b) { //up
+        if (gamepad1.left_bumper) { //up
             robot.PlatformServo.setPosition(0.0);
         }
-        else if (gamepad1.a) { //down
+        else if (gamepad1.left_trigger > 0.1) { //down
             robot.PlatformServo.setPosition(1.0);
         }
 
@@ -86,15 +96,7 @@ public class TradOP extends OpMode {
             robot.LockServo.setPosition(0.0);
         }
 
-        //slow-mo
-        if (gamepad1.right_bumper) {
-            robot.DriveFrontLeft.setPower(v1/2);
-            robot.DriveFrontRight.setPower(v2/2);
-            robot.DriveBackLeft.setPower(v3/2);
-            robot.DriveBackRight.setPower(v4/2);
-        }
-
-        telemetry.addData("Wrist: ", WristStatus);
+        telemetry.addData("Wrist: ", ArmStatus);
         telemetry.addData("Claw: ", ClawStatus);
         telemetry.update();
     }
