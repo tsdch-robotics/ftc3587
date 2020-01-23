@@ -1,87 +1,94 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 
 /*
  * This is NOT an opmode. This file defines all the hardware on the robot
  * and some common helper functions (stop motors, reset encoders, etc.)
  */
-public class BillBot {
+public class ChampBot {
     // class variables for all hardware
-    public DcMotor Motor1;
 
-    public Servo Servo6;
 
-    public Servo Servo1;
+    public DcMotor Lift;
 
-    public CRServo CRServo1;
+    public Servo Arm;
+    public Servo Claw;
 
-    public Servo Servo2;
-
-    public Servo Servo3;
-
-    public Servo Servo5;
-    }
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
     private ElapsedTime period = new ElapsedTime();
 
-    // constant encoder counts
-    public final double REVCoreHexEncoder = 288.0;
-    public final double REVHD401Encoder = 1120.0;
-
-    public BillBot() { }
+    public ChampBot() { }
 
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
         hwMap = ahwMap; // reference to hardware map
 
-        // initialize motors
-        Motor1 = hwMap.dcMotor.get("Stalin");
+        // initialize drivetrain
+
+        // reverse one side of the drivetrain so that directions are more natural
+
+        // initialize arm
+        Lift = hwMap.dcMotor.get("Lift");
+        Lift.setDirection(DcMotor.Direction.REVERSE);
 
         // initialize servos
-        Servo1 = hwMap.servo.get("bro");
+        Arm = hwMap.servo.get("Arm");
+        Claw = hwMap.servo.get("Claw");
 
-        Servo2 = hwMap.servo.get("Agaard");
-
-        Servo3 = hwMap.servo.get("YOLO");
-        
-        Servo5 = hwMap.servo.get("Jarrett");
-        Servo6 = hwMap.servo.get("RJ");
-
-        CRServo1 = hwMap.crservo.get("Jesus");
-
-
-        // initialize sensors
-
-
+        // move all motors/servos to their starting position
+        initAllServos();
         stopAllMotors();
-        initServos();
+
+        // don't initialize gyro or vision unless an opmode specifically requests it!
     }
 
+
+    /**
+     * Sets the drive motors to the specified power.
+     * -1.0 moves the motor backwards; +1.0 moves the motor forwards
+     * @param FrontL
+     * @param FrontR
+     * @param BackL
+     * @param BackR
+     */
     public void setDriveMotors(double FrontL, double FrontR, double BackL, double BackR) {
 
     }
 
-    public void setArmUpDownMotors(double ArmUpDown) {
-
-    }
-
     public void stopAllMotors() {
-
+        Lift.setPower(0.0);
     }
 
-    public void initServos() {
-
+    public void initAllServos() {
+        Arm.setPosition(1.0); //in
+        Claw.setPosition(0.0); // close
     }
+
     public void resetAllEncoders() {
+        // reset drive encoders
+        Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 
+    public int inchesToEncoderCounts(double inches) {
+        // CONSTANTS that only change when hardware changes are made to the robot
+        final double countsPerShaftRotation = 1425.2; // only change this if you change what motor you're using
+        final double shaftToWheelRatio = 24.0 / 16.0; // 1 turn of the motor shaft results in X turns of the wheel
+        final double wheelDiameter = 4.0; // diameter of the wheel in inches
+
+        // CALCULATIONS - don't change these!
+        double wheelCircumference = Math.PI * wheelDiameter; // inches
+        double countsPerWheelRotation = countsPerShaftRotation / shaftToWheelRatio;
+        double countsPerInch = countsPerWheelRotation / wheelCircumference;
+
+        return (int)(countsPerInch * inches);
     }
 
     /*
