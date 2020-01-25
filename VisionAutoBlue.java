@@ -60,138 +60,18 @@ public class VisionAutoBlue extends LinearOpMode {
         // wait for the start button to be pressed
         waitForStart();
 
-        pos = robot.vuforiaStuff.vuforiascan(false, false);
+        pos = robot.vuforiaStuff.vuforiascan(false, true);
 
         switch (pos) {
             case RIGHT:
-                current_state = States.STRAFE_2_RIGHT; // to right block
                 break;
             case CENTER:
-                current_state = States.NAV_2_BLOCKS;
                 break;
             case LEFT:
-                current_state = States.STRAFE_2_LEFT; // to left block
                 break;
         }
 
         // State machine for robot
-
-        gyro.resetHeading();
-        robot.resetAllEncoders();
-        telemetry.addData("State: ", current_state);
-        telemetry.update();
-        sleep(500);
-
-        while (current_state == States.STRAFE_2_RIGHT) {
-            robot.setDriveMotors(-0.3, 0.3, 0.3, -0.3); // left strafe (since robot backwards)
-            if (robot.DriveFrontLeft.getCurrentPosition() < -robot.inchesToEncoderCounts(12.0)) {
-                robot.stopAllMotors();
-                current_state = States.NAV_2_BLOCKS;
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-
-        while (current_state == States.STRAFE_2_LEFT) {
-            robot.setDriveMotors(0.3, -0.3, -0.3, 0.3); // right strafe (since robot backwards)
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(12.0)) {
-                robot.stopAllMotors();
-                current_state = States.NAV_2_BLOCKS;
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-
-        gyro.resetHeading();
-        robot.resetAllEncoders();
-        telemetry.addData("State: ", current_state);
-        telemetry.update();
-        sleep(500);
-
-        while (current_state == States.NAV_2_BLOCKS) {
-            robot.setDriveMotors(-0.3, -0.3, -0.3, -0.3); // right strafe (since robot backwards)
-            if (robot.DriveFrontLeft.getCurrentPosition() < -robot.inchesToEncoderCounts(27.0)) {
-                robot.stopAllMotors();
-                robot.PlatformServo.setPosition(1.0); // closed on block
-                current_state = States.AWAY_FROM_BLOCKS;
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-
-        gyro.resetHeading();
-        robot.resetAllEncoders();
-        telemetry.addData("State: ", current_state);
-        telemetry.update();
-        sleep(500);
-
-        while (current_state == States.AWAY_FROM_BLOCKS) {
-            robot.setDriveMotors(0.3, 0.3, 0.3, 0.3); // moves away from blocks
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(3.0)) {
-                robot.stopAllMotors();
-                current_state = States.TURN_AWAY_FROM_BLOCKS;
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-
-        gyro.resetHeading();
-        robot.resetAllEncoders();
-        telemetry.addData("State: ", current_state);
-        telemetry.update();
-        sleep(500);
-
-        while (current_state == States.TURN_AWAY_FROM_BLOCKS) {
-            robot.setDriveMotors(0.3, -0.3, 0.3, -0.3); // Turns right
-            if (gyro.getHeading() <= -90.0 ) {
-                robot.stopAllMotors();
-                current_state = States.STOP;
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-
-        sleep(100);
-
-        switch (pos) {
-            case RIGHT:
-                current_state = States.CLOSE_2_BRIDGE;
-                break;
-            case CENTER:
-                current_state = States.MID_2_BRIDGE; // 80
-                break;
-            case LEFT:
-                current_state = States.FAR_2_BRIDGE;
-                break;
-        }
-
-        gyro.resetHeading();
-        robot.resetAllEncoders();
-        telemetry.addData("State: ", current_state);
-        telemetry.update();
-        sleep(500);
-
-        while (current_state == States.CLOSE_2_BRIDGE) {
-            robot.setDriveMotors(-0.3, -0.3, -0.3, -0.3); // right strafe (since robot backwards)
-            if (robot.DriveFrontLeft.getCurrentPosition() < -robot.inchesToEncoderCounts(74.0)) {
-                robot.stopAllMotors();
-                current_state = States.STOP;
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-
-        while (current_state == States.MID_2_BRIDGE) {
-            robot.setDriveMotors(-0.3, -0.3, -0.3, -0.3); // right strafe (since robot backwards)
-            if (robot.DriveFrontLeft.getCurrentPosition() < -robot.inchesToEncoderCounts(80.0)) {
-                robot.stopAllMotors();
-                current_state = States.STOP;
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-
-        while (current_state == States.FAR_2_BRIDGE) {
-            robot.setDriveMotors(-0.3, -0.3, -0.3, -0.3); // right strafe (since robot backwards)
-            if (robot.DriveFrontLeft.getCurrentPosition() < -robot.inchesToEncoderCounts(86.0)) {
-                robot.stopAllMotors();
-                current_state = States.STOP;
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
 
         gyro.resetHeading();
         robot.resetAllEncoders();
