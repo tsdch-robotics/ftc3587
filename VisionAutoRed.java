@@ -40,7 +40,7 @@ public class VisionAutoRed extends LinearOpMode {
     ChampBot robot = new ChampBot();   // Use robot's hardware
 
     private enum States { // states for the autonomous FSM
-        STRAFE_2_RIGHT, STRAFE_2_CENTER, STRAFE_2_LEFT, NAV_2_BLOCKS, AWAY_FROM_BLOCKS, TURN_AWAY_FROM_BLOCKS, FAR_2_BRIDGE, MID_2_BRIDGE, CLOSE_2_BRIDGE, STOP;
+        STRAFE_2_RIGHT, STRAFE_2_CENTER, STRAFE_2_LEFT, NAV_2_BLOCKS, AWAY_FROM_BLOCKS, TURN_AWAY_FROM_BLOCKS, TURN_AWAY_FROM_BLOCKS_FIX, FAR_2_BRIDGE, MID_2_BRIDGE, CLOSE_2_BRIDGE, STOP;
     }
 
     public void runOpMode() {
@@ -101,7 +101,7 @@ public class VisionAutoRed extends LinearOpMode {
         }*/
 
         while (current_state == States.STRAFE_2_LEFT) {
-            robot.setDriveMotors(0.3, -0.3, -0.3, 0.3); // left strafe (since robot backwards)
+            robot.setDriveMotors(0.3, -0.3, -0.3, 0.3); // right strafe (since robot backwards)
             if (robot.DriveFrontLeft.getCurrentPosition() >= robot.inchesToEncoderCounts(16.0)) {
                 robot.stopAllMotors();
                 current_state = States.NAV_2_BLOCKS;
@@ -116,7 +116,7 @@ public class VisionAutoRed extends LinearOpMode {
         sleep(500);
 
         while (current_state == States.NAV_2_BLOCKS) {
-            robot.setDriveMotors(-0.3, -0.3, -0.3, -0.3); // right strafe (since robot backwards)
+            robot.setDriveMotors(-0.3, -0.3, -0.3, -0.3); // left strafe (since robot backwards)
             if (robot.DriveFrontLeft.getCurrentPosition() <= -robot.inchesToEncoderCounts(27.0)) {
                 robot.stopAllMotors();
                 robot.PlatformServo.setPosition(1.0); // closed on block
@@ -148,7 +148,15 @@ public class VisionAutoRed extends LinearOpMode {
 
         while (current_state == States.TURN_AWAY_FROM_BLOCKS) {
             robot.setDriveMotors(0.3, -0.3, 0.3, -0.3); // Turns right
-            if (gyro.getHeading() <= -88.0 ) {
+            if (gyro.getHeading() <= -90.0 ) {
+                robot.stopAllMotors();
+                current_state = States.TURN_AWAY_FROM_BLOCKS_FIX;
+            }
+            if (!opModeIsActive()) return; // check termination in the innermost loop
+        }
+        while (current_state == States.TURN_AWAY_FROM_BLOCKS_FIX) {
+            robot.setDriveMotors(-0.05, 0.05, -0.05, 0.05); // Turns left correct
+            if (gyro.getHeading() >= -89.7 ) {
                 robot.stopAllMotors();
                 current_state = States.STOP;
             }
@@ -177,7 +185,7 @@ public class VisionAutoRed extends LinearOpMode {
 
         while (current_state == States.CLOSE_2_BRIDGE) {
             robot.setDriveMotors(-0.3, -0.3, -0.3, -0.3); // right strafe (since robot backwards)
-            if (robot.DriveFrontLeft.getCurrentPosition() <= -robot.inchesToEncoderCounts(74.0)) {
+            if (robot.DriveFrontLeft.getCurrentPosition() <= -robot.inchesToEncoderCounts(72.0)) {
                 robot.stopAllMotors();
                 current_state = States.STOP;
             }
@@ -195,7 +203,7 @@ public class VisionAutoRed extends LinearOpMode {
 
         while (current_state == States.FAR_2_BRIDGE) {
             robot.setDriveMotors(-0.3, -0.3, -0.3, -0.3); // right strafe (since robot backwards)
-            if (robot.DriveFrontLeft.getCurrentPosition() <= -robot.inchesToEncoderCounts(86.0)) {
+            if (robot.DriveFrontLeft.getCurrentPosition() <= -robot.inchesToEncoderCounts(88.0)) {
                 robot.stopAllMotors();
                 current_state = States.STOP;
             }

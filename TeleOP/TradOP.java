@@ -33,25 +33,23 @@ public class TradOP extends OpMode {
         double r = Math.hypot(gamepad1.left_stick_x, -gamepad1.left_stick_y);
         double robotAngle = Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
         double rightX = -gamepad1.right_stick_x;
-        double v1 = r * Math.cos(robotAngle) - rightX; // readd final
-        double v2 = r * Math.sin(robotAngle) + rightX;
-        double v3 = r * Math.sin(robotAngle) - rightX;
-        double v4 = r * Math.cos(robotAngle) + rightX;
+        double FL = r * Math.cos(robotAngle) - rightX; // readd final
+        double FR = r * Math.sin(robotAngle) + rightX;
+        double BL = r * Math.sin(robotAngle) - rightX;
+        double BR = r * Math.cos(robotAngle) + rightX;
 
         //slow-mo
         if (gamepad1.right_bumper) {
-            v1 = v1 / 2;
-            v2 = v2 / 2;
-            v3 = v3 / 2;
-            v4 = v4 / 2;
+            FL = FL / 2;
+            FR = FR / 2;
+            BL = BL / 2;
+            BR = BR / 2;
         }
 
-        robot.DriveFrontLeft.setPower(v1);
-        robot.DriveFrontRight.setPower(v2);
-        robot.DriveBackLeft.setPower(v3);
-        robot.DriveBackRight.setPower(v4);
-
-
+        robot.DriveFrontLeft.setPower(FL);
+        robot.DriveFrontRight.setPower(FR);
+        robot.DriveBackLeft.setPower(BL);
+        robot.DriveBackRight.setPower(BR);
 
         // Arm
         robot.Lift.setPower(-gamepad2.left_stick_y);
