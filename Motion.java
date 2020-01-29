@@ -12,11 +12,12 @@ public class Motion {
 
     public Gyro gyro;
 
-    // gyro init
-    Gyro gyro;
-    gyro = new Gyro(robot.hwMap, "imu"); // special initialization for gyro
-    gyro.start();
-
+    public void gyroInit() {
+        // gyro init
+        Gyro gyro;
+        gyro = new Gyro(robot.hwMap, "imu"); // special initialization for gyro
+        gyro.start();
+    }
 
     public void turnToHeading(double target_heading, double speedModifier) {
         boolean goRight;
