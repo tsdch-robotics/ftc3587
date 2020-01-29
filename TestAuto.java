@@ -65,7 +65,7 @@ public class TestAuto extends LinearOpMode {
 
         // State machine for robot
 
-        gyro.resetHeading();
+        motion.resetHeading();
         robot.resetAllEncoders();
         telemetry.addData("State: ", current_state);
         telemetry.update();
@@ -76,7 +76,6 @@ public class TestAuto extends LinearOpMode {
         while (current_state == States.STOP) {
             // stop all motors
             robot.stopAllMotors();
-            telemetry.addData("Heading", gyro.getHeading());
             telemetry.update();
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }

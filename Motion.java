@@ -39,7 +39,7 @@ public class Motion {
 
         timeoutTimer.reset();
         prevHeading = currentHeading;
-        while (degreesToTurn > .5 /*&& opModeIsActive()*/ && timeoutTimer.seconds() < 2) {
+        while (degreesToTurn > .5 && /*opModeIsActive() &&*/ timeoutTimer.seconds() < 2) {
 
             if (speedModifier < 0) {
                 wheelPower = (Math.pow((degreesToTurn + 25) / -speedModifier, 3) + 15) / 100;
@@ -76,5 +76,9 @@ public class Motion {
         }
 
         robot.setDriveMotors(0, 0, 0, 0);
+    }
+
+    public void resetHeading() {
+        gyro.resetHeading();
     }
 }
