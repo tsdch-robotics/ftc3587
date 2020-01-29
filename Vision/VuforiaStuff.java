@@ -113,7 +113,7 @@ public class VuforiaStuff {
             int cropWidth;
             int cropHeight;
 
-            if (red) {
+            if (!red) {                                                         // ! red since camera upside down
                 cropStartX = (int) ((140.0 / 720.0) * bitmap.getWidth());
                 cropStartY = (int) ((100.0 / 480.0) * bitmap.getHeight());
                 cropWidth = (int) ((550.0 / 720.0) * bitmap.getWidth());
@@ -125,7 +125,7 @@ public class VuforiaStuff {
                 cropHeight = (int) ((125.0 / 720.0) * bitmap.getHeight());
             }
 
-            DbgLog.msg("10435 vuforiascan"
+            DbgLog.msg("vuforiascan"
                     + " cropStartX: " + cropStartX
                     + " cropStartY: " + cropStartY
                     + " cropWidth: " + cropWidth
@@ -241,12 +241,12 @@ public class VuforiaStuff {
             pos = skystonePos.RIGHT;
         }
 */
-        if (blackYellowRatioL > blackYellowRatioC && blackYellowRatioL > blackYellowRatioR) {
-            pos = skystonePos.LEFT;
+        if (blackYellowRatioL > blackYellowRatioC && blackYellowRatioL > blackYellowRatioR) { // since webcam upside down flipped right and left
+            pos = skystonePos.RIGHT;
         } else if (blackYellowRatioC > blackYellowRatioL && blackYellowRatioC > blackYellowRatioR) {
             pos = skystonePos.CENTER;
         } else {
-            pos = skystonePos.RIGHT;
+            pos = skystonePos.LEFT;
         }
 
         DbgLog.msg("black/yellow L: " + blackCountL + "/" + yellowCountL);
