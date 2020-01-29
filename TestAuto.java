@@ -49,8 +49,8 @@ public class TestAuto extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap);
 
-        motion.gyroInit();
-        Gyro gyro;
+        motion.gyroInit(hardwareMap);
+        //Gyro gyro;
 
         // vision init
         robot.visionInit();
