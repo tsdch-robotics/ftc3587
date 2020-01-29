@@ -18,7 +18,6 @@ public class Gyro extends Thread {
     public double globalHeading; // allow access without going through other methods
 
     private final ReentrantLock headingLock = new ReentrantLock();
-    ChampBot robot = new ChampBot();   // Use robot's hardware
 
     public boolean exit = false;
 

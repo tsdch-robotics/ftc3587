@@ -1,21 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.ChampBot;
 import org.firstinspires.ftc.teamcode.Gyro;
 
 public class Motion {
     Motion motion;
 
-    ChampBot robot = new ChampBot();   // Use robot's hardware
-
 
     public Gyro gyro;
 
-    public void gyroInit() {
+    public void gyroInit(HardwareMap hwMap) {
         // gyro init
-        Gyro gyro;
-        gyro = new Gyro(robot.hwMap, "imu"); // special initialization for gyro
+        gyro = new Gyro(hwMap, "imu"); // special initialization for gyro
         gyro.start();
     }
 
@@ -39,7 +37,7 @@ public class Motion {
 
         timeoutTimer.reset();
         prevHeading = currentHeading;
-        while (degreesToTurn > .5 && /*opModeIsActive() &&*/ timeoutTimer.seconds() < 2) {
+        while (degreesToTurn > .5 && /*opModeIsActive()*/ && timeoutTimer.seconds() < 2) {
 
             if (speedModifier < 0) {
                 wheelPower = (Math.pow((degreesToTurn + 25) / -speedModifier, 3) + 15) / 100;
