@@ -147,21 +147,21 @@ public class VisionAutoRed extends LinearOpMode {
         sleep(500);
 
         while (current_state == States.TURN_AWAY_FROM_BLOCKS) {
-            robot.setDriveMotors(0.3, -0.3, 0.3, -0.3); // Turns right
+            robot.setDriveMotors(0.2, -0.2, 0.2, -0.2); // Turns right
             if (gyro.getHeading() <= -90.0 ) {
                 robot.stopAllMotors();
                 current_state = States.TURN_AWAY_FROM_BLOCKS_FIX;
             }
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
-        while (current_state == States.TURN_AWAY_FROM_BLOCKS_FIX) {
+        /*while (current_state == States.TURN_AWAY_FROM_BLOCKS_FIX) {
             robot.setDriveMotors(-0.05, 0.05, -0.05, 0.05); // Turns left correct
             if (gyro.getHeading() >= -89.7 ) {
                 robot.stopAllMotors();
                 current_state = States.STOP;
             }
             if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
+        }*/
 
         sleep(100);
 

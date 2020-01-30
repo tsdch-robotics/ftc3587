@@ -52,7 +52,7 @@ public class TradOP extends OpMode {
         robot.DriveBackRight.setPower(BR);
 
         // Arm
-        robot.Arm.setPower(-gamepad2.left_stick_y);
+        robot.Arm.setPower(-gamepad2.left_stick_y / 2);
 
         //Wrist
         //boolean Up = gamepad2.right_bumper;

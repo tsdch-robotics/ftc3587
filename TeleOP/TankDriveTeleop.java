@@ -81,8 +81,10 @@ public class TankDriveTeleop extends OpMode {
             robot.DriveBackRight.setPower(-1);
         }
 
+        robot.setDriveMotors(DriveLeftPower, DriveRightPower, DriveLeftPower, DriveRightPower);
+
         // Arm
-        robot.Arm.setPower(-gamepad2.left_stick_y);
+        robot.Arm.setPower(-gamepad2.left_stick_y / 2);
 
         //Wrist
         //boolean Up = gamepad2.right_bumper;
