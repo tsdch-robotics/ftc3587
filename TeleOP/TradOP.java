@@ -39,7 +39,7 @@ public class TradOP extends OpMode {
         double BR = r * Math.cos(robotAngle) + rightX;
 
         //slow-mo
-        if (gamepad1.right_bumper) {
+        if (gamepad1.left_bumper) {
             FL = FL / 2;
             FR = FR / 2;
             BL = BL / 2;
@@ -80,10 +80,10 @@ public class TradOP extends OpMode {
         }
 
         //platform
-        if (gamepad1.left_bumper) { //up
+        if (gamepad1.right_bumper) { //up
             robot.PlatformServo.setPosition(0.0);
         }
-        else if (gamepad1.left_trigger > 0.1) { //down
+        else if (gamepad1.right_trigger > 0.1) { //down
             robot.PlatformServo.setPosition(1.0);
         }
 

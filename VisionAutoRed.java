@@ -177,6 +177,7 @@ public class VisionAutoRed extends LinearOpMode {
                 break;
         }
 
+        robot.Wrist.setPosition(0.0); // down
         gyro.resetHeading();
         robot.resetAllEncoders();
         telemetry.addData("State: ", current_state);
