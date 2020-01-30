@@ -60,7 +60,7 @@ public class VisionAutoBlue extends LinearOpMode {
         // wait for the start button to be pressed
         waitForStart();
 
-        pos = robot.vuforiaStuff.vuforiascan(false, true);
+        pos = robot.vuforiaStuff.vuforiascan(false, false);
 
         switch (pos) {
             case RIGHT:

@@ -60,7 +60,7 @@ public class VisionAutoRed extends LinearOpMode {
         // wait for the start button to be pressed
         waitForStart();
 
-        pos = robot.vuforiaStuff.vuforiascan(false, true);
+        pos = robot.vuforiaStuff.vuforiascan(false, true); 
 
         switch (pos) {
             case RIGHT:
@@ -150,6 +150,10 @@ public class VisionAutoRed extends LinearOpMode {
             robot.setDriveMotors(0.2, -0.2, 0.2, -0.2); // Turns right
             if (gyro.getHeading() <= -90.0 ) {
                 robot.stopAllMotors();
+                while (-90 - gyro.getHeading() >= 1) { // if 1 degree off fix
+                    robot.setDriveMotors(-0.1, 0.1, -0.1, 0.1);  // Left turn
+                    if (!opModeIsActive()) return; // check termination in the innermost loop
+                }
                 current_state = States.TURN_AWAY_FROM_BLOCKS_FIX;
             }
             if (!opModeIsActive()) return; // check termination in the innermost loop
