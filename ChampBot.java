@@ -120,7 +120,7 @@ public class ChampBot {
         Wrist.setPosition(1.0); //in
         Claw.setPosition(0.0); // close
         PlatformServo.setPosition(0.0); //up
-        LockServo.setPosition(1.0); //un-locked
+        LockServo.setPosition(0.0); //un-locked
     }
 
     public void resetAllEncoders() {

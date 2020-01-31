@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Vision.VuforiaStuff;
+import org.firstinspires.ftc.teamcode.Gyro;
 
 
 @Autonomous(name="TestAuto", group="ChampBot")
@@ -55,8 +56,10 @@ public class TestAuto extends LinearOpMode {
         robot.visionInit();
         VuforiaStuff.skystonePos pos;
 
-        States current_state = States.TURN;
+        States current_state = States.STOP;
 
+
+        pos = robot.vuforiaStuff.vuforiascan(false, false); // since camera upside down
 
         int TurnCheck;
         TurnCheck = 0;
@@ -70,7 +73,7 @@ public class TestAuto extends LinearOpMode {
         sleep(500);
 
 
-        robot.setDriveMotors(0.4, -0.4, 0.4, -0.4); // Right turn
+        /* robot.setDriveMotors(0.4, -0.4, 0.4, -0.4); // Right turn
         while (current_state == States.TURN) {
             // stop all motors
             if (-90 - gyro.getHeading() <= -0.5 && TurnCheck < 2) { // if -, then Right
@@ -83,7 +86,7 @@ public class TestAuto extends LinearOpMode {
                 current_state = States.STOP;
             }
             if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
+        } */
 
         telemetry.addData("State: ", current_state);
         telemetry.update();
@@ -92,7 +95,7 @@ public class TestAuto extends LinearOpMode {
         while (current_state == States.STOP) {
             // stop all motors
             robot.stopAllMotors();
-            telemetry.addData("Gyro", gyro.getHeading());
+            telemetry.addData("case", pos);
             telemetry.update();
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }

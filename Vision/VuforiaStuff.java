@@ -9,7 +9,6 @@ import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.teamcode.Vision.DbgLog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -113,7 +112,7 @@ public class VuforiaStuff {
             int cropWidth;
             int cropHeight;
 
-            if (!red) {                                                         // ! red since camera upside down
+            if (red) {
                 cropStartX = (int) ((140.0 / 720.0) * bitmap.getWidth());
                 cropStartY = (int) ((100.0 / 480.0) * bitmap.getHeight());
                 cropWidth = (int) ((550.0 / 720.0) * bitmap.getWidth());
@@ -125,7 +124,7 @@ public class VuforiaStuff {
                 cropHeight = (int) ((125.0 / 720.0) * bitmap.getHeight());
             }
 
-            DbgLog.msg("vuforiascan"
+            DbgLog.msg("10435 vuforiascan"
                     + " cropStartX: " + cropStartX
                     + " cropStartY: " + cropStartY
                     + " cropWidth: " + cropWidth
@@ -241,12 +240,12 @@ public class VuforiaStuff {
             pos = skystonePos.RIGHT;
         }
 */
-        if (blackYellowRatioL > blackYellowRatioC && blackYellowRatioL > blackYellowRatioR) { // since webcam upside down flipped right and left
-            pos = skystonePos.RIGHT;
+        if (blackYellowRatioL > blackYellowRatioC && blackYellowRatioL > blackYellowRatioR) {
+            pos = skystonePos.LEFT;
         } else if (blackYellowRatioC > blackYellowRatioL && blackYellowRatioC > blackYellowRatioR) {
             pos = skystonePos.CENTER;
         } else {
-            pos = skystonePos.LEFT;
+            pos = skystonePos.RIGHT;
         }
 
         DbgLog.msg("black/yellow L: " + blackCountL + "/" + yellowCountL);
