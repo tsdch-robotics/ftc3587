@@ -60,7 +60,7 @@ public class VisionAutoRed extends LinearOpMode {
         // wait for the start button to be pressed
         waitForStart();
 
-        pos = robot.vuforiaStuff.vuforiascan(false, true); // since camera upside down
+        pos = robot.vuforiaStuff.vuforiascan(false, false); // since camera upside down
 
         switch (pos) {
             case RIGHT:
@@ -230,6 +230,11 @@ public class VisionAutoRed extends LinearOpMode {
             }
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
+
+        robot.Wrist.setPosition(1.0); //in
+        robot.Claw.setPosition(0.0); // close
+        robot.PlatformServo.setPosition(0.0); //up
+        robot.LockServo.setPosition(0.0); //un-locked
 
         while (current_state == States.STOP) {
             // stop all motors
