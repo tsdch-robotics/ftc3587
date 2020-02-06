@@ -219,13 +219,18 @@ public class VisionAutoBlue extends LinearOpMode {
         sleep(500);
 
         while (current_state == States.PARK_UNDER_BRIDGE) {
-            robot.setDriveMotors(0.35, 0.35, 0.35, 0.35); // right strafe (since robot backwards)
+            robot.setDriveMotors(0.35, 0.35, 0.35, 0.35);
             if (robot.DriveFrontLeft.getCurrentPosition() >= robot.inchesToEncoderCounts(12)) {
                 robot.stopAllMotors();
                 current_state = States.STOP;
             }
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
+
+        robot.Wrist.setPosition(1.0); //in
+        robot.Claw.setPosition(0.0); // close
+        robot.PlatformServo.setPosition(0.0); //up
+        robot.LockServo.setPosition(0.0); //un-locked
 
         while (current_state == States.STOP) {
             // stop all motors

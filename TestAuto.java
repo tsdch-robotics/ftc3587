@@ -59,7 +59,7 @@ public class TestAuto extends LinearOpMode {
         States current_state = States.STOP;
 
 
-        pos = robot.vuforiaStuff.vuforiascan(false, false); // since camera upside down
+        pos = robot.vuforiaStuff.vuforiascan(false, true); // since camera upside down
 
         int TurnCheck;
         TurnCheck = 0;
@@ -91,6 +91,8 @@ public class TestAuto extends LinearOpMode {
         telemetry.addData("State: ", current_state);
         telemetry.update();
         sleep(500);
+
+
 
         while (current_state == States.STOP) {
             // stop all motors

@@ -32,7 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Autonomous(name="ParkingRed", group="ChampBot")
+@Autonomous(name="ParkingRight", group="ChampBot")
 public class ParkingRed extends LinearOpMode {
     ChampBot robot = new ChampBot();   // Use robot's hardware
 
@@ -111,6 +111,11 @@ public class ParkingRed extends LinearOpMode {
             telemetry.addData("Status", current_state);
             telemetry.update();
             sleep(100);
+
+        robot.Wrist.setPosition(1.0); //in
+        robot.Claw.setPosition(0.0); // close
+        robot.PlatformServo.setPosition(0.0); //up
+        robot.LockServo.setPosition(0.0); //un-locked
 
             while (current_state == States.STOP) {
                 // stop all motors
