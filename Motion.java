@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Vision.VuforiaStuff;
 
-
+/* (RR: commented out, error Class 'Motion' must either be declared abstract or implement abstract method 'runOpMode()' in 'linearOpMode')
 @Autonomous(name="Motion", group="ChampBot")
 public class Motion extends LinearOpMode {
     ChampBot robot = new ChampBot();   // Use robot's hardware
@@ -23,6 +23,7 @@ public class Motion extends LinearOpMode {
     }
 
     public void Turn(double motorPower, double angle, boolean right) {
-        
+
     }
 }
+*/
