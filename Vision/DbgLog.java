@@ -9,6 +9,7 @@ public class DbgLog {
 
     /**
      * Tag used by logcat
+     * RJ was here
      */
     public static final String TAG = "FIRST";
 
