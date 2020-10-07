@@ -98,7 +98,7 @@ public class TankDriveTeleop extends OpMode {
         String ArmStatus = "";
         String ClawStatus = "";
 
-        if(gamepad2.right_bumper) {
+        /*if(gamepad2.right_bumper) {
             robot.Wrist.setPosition(0.0);
             ArmStatus = "moving up";
         }
