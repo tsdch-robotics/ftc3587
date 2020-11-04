@@ -89,50 +89,50 @@ public class TankDriveTeleop extends OpMode {
         robot.setDriveMotors(DriveLeftPower, DriveRightPower, DriveLeftPower, DriveRightPower);
 
         // Arm
-        robot.Arm.setPower(-gamepad2.left_stick_y / 2);
+        //robot.Arm.setPower(-gamepad2.left_stick_y / 2);
 
         //Wrist
         //boolean Up = gamepad2.right_bumper;
         //boolean Down = (gamepad2.right_trigger > 0.1);
 
-        String ArmStatus = "";
-        String ClawStatus = "";
+       // String ArmStatus = "";
+        //String ClawStatus = "";
 
-        if(gamepad2.right_bumper) {
-            robot.Wrist.setPosition(0.0);
-            ArmStatus = "moving up";
-        }
-        else if(gamepad2.right_trigger > 0.1) {
-            robot.Wrist.setPosition(1.0);
-            ArmStatus = "moving down";
-        }
+        //if(gamepad2.right_bumper) {
+            //robot.Wrist.setPosition(0.0);
+           // ArmStatus = "moving up";
+        //}
+        //else if(gamepad2.right_trigger > 0.1) {
+           // robot.Wrist.setPosition(1.0);
+            //ArmStatus = "moving down";
+       // }
 
-        if (gamepad2.a) {
-            robot.Claw.setPosition(0.0);
-            ClawStatus = "closed";
-        }
-        else if (gamepad2.b) {
-            robot.Claw.setPosition(1.0);
-            ClawStatus = "open";
-        }
+        //if (gamepad2.a) {
+           // robot.Claw.setPosition(0.0);
+           // ClawStatus = "closed";
+       // }
+       // else if (gamepad2.b) {
+           // robot.Claw.setPosition(1.0);
+           // ClawStatus = "open";
+        //}
 
         //platform
         if (gamepad1.left_bumper) { //up
-            robot.PlatformServo.setPosition(0.0);
+            //robot.PlatformServo.setPosition(0.0);
         }
         else if (gamepad1.left_trigger > 0.1) { //down
-            robot.PlatformServo.setPosition(1.0);
+            //robot.PlatformServo.setPosition(1.0);
         }
 
         if (gamepad1.x) { //lock
-            robot.LockServo.setPosition(1.0);
+           // robot.LockServo.setPosition(1.0);
         }
         else if (gamepad1.y) {
-            robot.LockServo.setPosition(0.0);
+           // robot.LockServo.setPosition(0.0);
         }
 
-        telemetry.addData("Wrist: ", ArmStatus);
-        telemetry.addData("Claw: ", ClawStatus);
-        telemetry.update();
+       // telemetry.addData("Wrist: ", ArmStatus);
+       // telemetry.addData("Claw: ", ClawStatus);
+        //telemetry.update();
         }
     }
