@@ -56,7 +56,7 @@ public class GrabBlockRed extends LinearOpMode {
 
 
         // State machine for robot
-
+/*
         robot.Wrist.setPosition(0.0); // out
         robot.Claw.setPosition(1.0); // open
         gyro.resetHeading();
@@ -150,5 +150,7 @@ public class GrabBlockRed extends LinearOpMode {
             robot.stopAllMotors();
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
+
+ */
     }
 }
