@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.ChampBot;
 import org.firstinspires.ftc.teamcode.Gyro;
 import org.firstinspires.ftc.teamcode.ParkingBlue;
 
-@Autonomous(name="ParkingLeft", group="ChampBot")
+@Autonomous(name="WobbleBlue", group="ChampBot")
 public class WobbleBlue extends LinearOpMode {
     ChampBot robot = new ChampBot();   // Use robot's hardware
 
