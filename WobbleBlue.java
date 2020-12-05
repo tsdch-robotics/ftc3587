@@ -15,19 +15,24 @@ public class WobbleBlue extends LinearOpMode {
         DRIVE_OUT1, TURN_RIGHT1, TURN_RIGHT2, DRIVE_OUT2, DRIVE_OUT3, DRIVE_OUT4, DRIVE_OUT5, TURN_LEFT1, TURN_LEFT2, DRIVE_BACK2, DRIVE_BACK1, STOP;
     }
 
-    public void runOpMode() {
+    public void runOpMode(){
         robot.init(hardwareMap);
+
         Gyro gyro;
-
         States current_state = States.DRIVE_OUT1;
-
-        // send telemetry message to signify robot waiting
         telemetry.addData("Status: ", "Snoozing");
         telemetry.update();
+        gyro = new Gyro(robot.hwMap, "imu"); // special initialization for gyro
+        gyro.start();
+
+
+
+        // send telemetry message to signify robot waiting
 
 
         // wait for the start button to be pressed.
         waitForStart();
+
 
         robot.resetAllEncoders();
         telemetry.addData("Status", current_state);
@@ -35,20 +40,22 @@ public class WobbleBlue extends LinearOpMode {
         sleep(100);
 
         while (current_state == States.DRIVE_OUT1) {
-            robot.setDriveMotors(0.4, 0.4, 0.4, 0.4); //drive forwards
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(5.0)) {
-                robot.stopAllMotors();
-                current_state = States.TURN_RIGHT1;
-
+            robot.setDriveMotors(0.4, 0.4, 0.4, 0.4); //drive forward
+            try {
+                robot.wait(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-        robot.resetAllEncoders();
-        telemetry.addData("Status", current_state);
-        telemetry.update();
-        sleep(100);
+            robot.stopAllMotors();
+           current_state = States.TURN_RIGHT1;
 
-        while (current_state == States.TURN_RIGHT1) {
+        }
+            if (!opModeIsActive()) return; // check termination in the innermost loop
+            sleep(100);
+    }
+}
+
+        /*while (current_state == States.TURN_RIGHT1) {
             robot.setDriveMotors(0.4,  -0.4, 0.4, -0.4); //turn right
             if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(19.21)) {
                 robot.stopAllMotors();
@@ -194,4 +201,6 @@ public class WobbleBlue extends LinearOpMode {
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
     }
-}
+
+
+        */
