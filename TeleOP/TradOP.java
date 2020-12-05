@@ -39,7 +39,7 @@ public class TradOP extends OpMode {
         double BR = r * Math.cos(robotAngle) + rightX;
 
         //slow-mo
-        if (gamepad1.right_bumper) {
+        if (gamepad1.left_bumper) {
             FL = FL / 2;
             FR = FR / 2;
             BL = BL / 2;
@@ -52,12 +52,12 @@ public class TradOP extends OpMode {
         robot.DriveBackRight.setPower(BR);
 
         // Arm
-        robot.Arm.setPower(-gamepad2.left_stick_y);
+        //robot.Arm.setPower(-gamepad2.left_stick_y / 2);
 
         //Wrist
         //boolean Up = gamepad2.right_bumper;
         //boolean Down = (gamepad2.right_trigger > 0.1);
-
+/*
         String ArmStatus = "";
         String ClawStatus = "";
 
@@ -80,10 +80,10 @@ public class TradOP extends OpMode {
         }
 
         //platform
-        if (gamepad1.left_bumper) { //up
+        if (gamepad1.right_bumper) { //up
             robot.PlatformServo.setPosition(0.0);
         }
-        else if (gamepad1.left_trigger > 0.1) { //down
+        else if (gamepad1.right_trigger > 0.1) { //down
             robot.PlatformServo.setPosition(1.0);
         }
 
@@ -97,5 +97,7 @@ public class TradOP extends OpMode {
         telemetry.addData("Wrist: ", ArmStatus);
         telemetry.addData("Claw: ", ClawStatus);
         telemetry.update();
+
+ */
     }
 }
