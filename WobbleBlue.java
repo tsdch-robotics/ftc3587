@@ -2,205 +2,171 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 
-import org.firstinspires.ftc.teamcode.ChampBot;
-import org.firstinspires.ftc.teamcode.Gyro;
-import org.firstinspires.ftc.teamcode.ParkingBlue;
 
 @Autonomous(name="WobbleBlue", group="ChampBot")
+//@Disabled
+
+
 public class WobbleBlue extends LinearOpMode {
-    ChampBot robot = new ChampBot();   // Use robot's hardware
 
-    private enum States { // states for the autonomous FSM
-        DRIVE_OUT1, TURN_RIGHT1, TURN_RIGHT2, DRIVE_OUT2, DRIVE_OUT3, DRIVE_OUT4, DRIVE_OUT5, TURN_LEFT1, TURN_LEFT2, DRIVE_BACK2, DRIVE_BACK1, STOP;
-    }
-
-    public void runOpMode(){
+    ChampBot robot = new ChampBot() {
+    };
+    @Override
+    public void runOpMode() {
         robot.init(hardwareMap);
 
-        Gyro gyro;
-        States current_state = States.DRIVE_OUT1;
-        telemetry.addData("Status: ", "Snoozing");
-        telemetry.update();
-        gyro = new Gyro(robot.hwMap, "imu"); // special initialization for gyro
-        gyro.start();
-
-
-
-        // send telemetry message to signify robot waiting
-
-
-        // wait for the start button to be pressed.
         waitForStart();
+//forward for 5 inches
+        robot.DriveFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.DriveFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.DriveBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.DriveBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        double circumference = 3.14 * 3.94;
+        double rotationsNeeded = 5 / circumference;
+        int encoderDrivingTarget = (int) (rotationsNeeded * 1140);
+        robot.DriveFrontLeft.setTargetPosition(encoderDrivingTarget);
+        robot.DriveBackLeft.setTargetPosition(encoderDrivingTarget);
+        robot.DriveFrontRight.setTargetPosition(encoderDrivingTarget);
+        robot.DriveBackRight.setTargetPosition(encoderDrivingTarget);
 
-        robot.resetAllEncoders();
-        telemetry.addData("Status", current_state);
-        telemetry.update();
-        sleep(100);
+        robot.DriveFrontLeft.setPower(0.5);
+        robot.DriveFrontRight.setPower(0.5);
+        robot.DriveBackLeft.setPower(0.5);
+        robot.DriveBackRight.setPower(0.5);
 
-        while (current_state == States.DRIVE_OUT1) {
-            robot.setDriveMotors(0.4, 0.4, 0.4, 0.4); //drive forward
-            try {
-                robot.wait(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            robot.stopAllMotors();
-           current_state = States.TURN_RIGHT1;
+        robot.DriveFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.DriveBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.DriveFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.DriveBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        while (robot.DriveBackLeft.isBusy()) {
+            telemetry.addData("Path", "forward for 5 inches");
+            telemetry.update();
         }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-            sleep(100);
+
+        robot.DriveFrontLeft.setPower(0);
+        robot.DriveFrontRight.setPower(0);
+        robot.DriveBackLeft.setPower(0);
+        robot.DriveBackRight.setPower(0);
+
+        telemetry.addData("Path", "Complete");
+        telemetry.update();
+        sleep(1000);
+
+
+// turn right
+        robot.DriveFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.DriveFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.DriveBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.DriveBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        rotationsNeeded = 19.21 / circumference;
+        encoderDrivingTarget = (int) (rotationsNeeded * 1140);
+        robot.DriveFrontLeft.setTargetPosition(encoderDrivingTarget);
+        robot.DriveBackLeft.setTargetPosition(encoderDrivingTarget);
+        robot.DriveFrontRight.setTargetPosition(encoderDrivingTarget);
+        robot.DriveBackRight.setTargetPosition(encoderDrivingTarget);
+
+        robot.DriveFrontLeft.setPower(0.5);
+        robot.DriveFrontRight.setPower(-.5);
+        robot.DriveBackLeft.setPower(0.5);
+        robot.DriveBackRight.setPower(-.5);
+
+        robot.DriveFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.DriveBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.DriveFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.DriveBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        while (robot.DriveBackLeft.isBusy()) {
+            telemetry.addData("Path", "turn right");
+            telemetry.update();
+        }
+
+        robot.DriveFrontLeft.setPower(0);
+        robot.DriveFrontRight.setPower(0);
+        robot.DriveBackLeft.setPower(0);
+        robot.DriveBackRight.setPower(0);
+
+        telemetry.addData("Path", "Complete");
+        telemetry.update();
+        sleep(1000);
+
+//forward for 52 inches
+        robot.DriveFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.DriveFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.DriveBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.DriveBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        rotationsNeeded = 52 / circumference;
+        encoderDrivingTarget = (int) (rotationsNeeded * 1140);
+        robot.DriveFrontLeft.setTargetPosition(encoderDrivingTarget);
+        robot.DriveBackLeft.setTargetPosition(encoderDrivingTarget);
+        robot.DriveFrontRight.setTargetPosition(encoderDrivingTarget);
+        robot.DriveBackRight.setTargetPosition(encoderDrivingTarget);
+
+        robot.DriveFrontLeft.setPower(0.5);
+        robot.DriveFrontRight.setPower(0.5);
+        robot.DriveBackLeft.setPower(0.5);
+        robot.DriveBackRight.setPower(0.5);
+
+        robot.DriveFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.DriveBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.DriveFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.DriveBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        while (robot.DriveBackLeft.isBusy()) {
+            telemetry.addData("Path", "forward for 52 inches");
+            telemetry.update();
+        }
+
+        robot.DriveFrontLeft.setPower(0);
+        robot.DriveFrontRight.setPower(0);
+        robot.DriveBackLeft.setPower(0);
+        robot.DriveBackRight.setPower(0);
+
+        telemetry.addData("Path", "Complete");
+        telemetry.update();
+        sleep(1000);
+
+//back for 45 inches
+        robot.DriveFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.DriveFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.DriveBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.DriveBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        rotationsNeeded = 45 / circumference;
+        encoderDrivingTarget = (int) (rotationsNeeded * 1140);
+        robot.DriveFrontLeft.setTargetPosition(encoderDrivingTarget);
+        robot.DriveBackLeft.setTargetPosition(encoderDrivingTarget);
+        robot.DriveFrontRight.setTargetPosition(encoderDrivingTarget);
+        robot.DriveBackRight.setTargetPosition(encoderDrivingTarget);
+
+        robot.DriveFrontLeft.setPower(-0.5);
+        robot.DriveFrontRight.setPower(-0.5);
+        robot.DriveBackLeft.setPower(-0.5);
+        robot.DriveBackRight.setPower(-0.5);
+
+        robot.DriveFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.DriveBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.DriveFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.DriveBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        while (robot.DriveBackLeft.isBusy()) {
+            telemetry.addData("Path", "back for 45 inches");
+            telemetry.update();
+        }
+
+        robot.DriveFrontLeft.setPower(0);
+        robot.DriveFrontRight.setPower(0);
+        robot.DriveBackLeft.setPower(0);
+        robot.DriveBackRight.setPower(0);
+
+        telemetry.addData("Path", "Complete");
+        telemetry.update();
+        sleep(1000);
     }
 }
-
-        /*while (current_state == States.TURN_RIGHT1) {
-            robot.setDriveMotors(0.4,  -0.4, 0.4, -0.4); //turn right
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(19.21)) {
-                robot.stopAllMotors();
-                current_state = States.DRIVE_OUT2;
-
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-        robot.resetAllEncoders();
-        telemetry.addData("Status", current_state);
-        telemetry.update();
-        sleep(100);
-
-        while (current_state == States.DRIVE_OUT2) {
-            robot.setDriveMotors(0.4, 0.4, 0.4, 0.4); //drive forwards
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(52.0)) {
-                robot.stopAllMotors();
-                current_state = States.DRIVE_BACK1;
-
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-        robot.resetAllEncoders();
-        telemetry.addData("Status", current_state);
-        telemetry.update();
-        sleep(100);
-
-        while (current_state == States.DRIVE_BACK1) {
-            robot.setDriveMotors(-0.4, -0.4, -0.4, -0.4); //drive forwards
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(45.0)) {
-                robot.stopAllMotors();
-                current_state = States.TURN_RIGHT2;
-
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-        robot.resetAllEncoders();
-        telemetry.addData("Status", current_state);
-        telemetry.update();
-        sleep(100);
-
-        while (current_state == States.TURN_RIGHT2) {
-            robot.setDriveMotors(0.4, -0.4, 0.4, -0.4); //turn right
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(19.21)) {
-                robot.stopAllMotors();
-                current_state = States.DRIVE_OUT3;
-
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-        robot.resetAllEncoders();
-        telemetry.addData("Status", current_state);
-        telemetry.update();
-        sleep(100);
-
-        while (current_state == States.DRIVE_OUT3) {
-            robot.setDriveMotors(0.4, 0.4, 0.4, 0.4); //drive forwards
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(33.0)) {
-                robot.stopAllMotors();
-                current_state = States.TURN_LEFT1;
-
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-        robot.resetAllEncoders();
-        telemetry.addData("Status", current_state);
-        telemetry.update();
-        sleep(100);
-
-        while (current_state == States.TURN_LEFT1) {
-            robot.setDriveMotors(-0.4, 0.4, -0.4, 0.4);//turn left
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(19.21)) {
-                robot.stopAllMotors();
-                current_state = States.DRIVE_OUT4;
-
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-        robot.resetAllEncoders();
-        telemetry.addData("Status", current_state);
-        telemetry.update();
-        sleep(100);
-
-        while (current_state == States.DRIVE_OUT4) {
-            robot.setDriveMotors(0.4, 0.4, 0.4, 0.4); //drive forwards
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(45.0)) {
-                robot.stopAllMotors();
-                current_state = States.TURN_LEFT2;
-
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-        robot.resetAllEncoders();
-        telemetry.addData("Status", current_state);
-        telemetry.update();
-        sleep(100);
-
-        while (current_state == States.TURN_LEFT2) {
-            robot.setDriveMotors(-0.4, 0.4, -0.4, 0.4); //turn left
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(19.21)) {
-                robot.stopAllMotors();
-                current_state = States.DRIVE_OUT5;
-
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-        robot.resetAllEncoders();
-        telemetry.addData("Status", current_state);
-        telemetry.update();
-        sleep(100);
-
-        while (current_state == States.DRIVE_OUT5) {
-            robot.setDriveMotors(0.4, 0.4, 0.4, 0.4); //drive forwards
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(33.0)) {
-                robot.stopAllMotors();
-                current_state = States.DRIVE_BACK2;
-
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-        robot.resetAllEncoders();
-        telemetry.addData("Status", current_state);
-        telemetry.update();
-        sleep(100);
-
-        while (current_state == States.DRIVE_BACK2) {
-            robot.setDriveMotors(-0.4, -0.4, -0.4, -0.4); //drive forwards
-            if (robot.DriveFrontLeft.getCurrentPosition() > robot.inchesToEncoderCounts(10.0)) {
-                robot.stopAllMotors();
-                current_state = States.STOP;
-
-            }
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-        robot.resetAllEncoders();
-        telemetry.addData("Status", current_state);
-        telemetry.update();
-        sleep(100);
-
-        while (current_state == States.STOP) {
-            // stop all motors
-            robot.stopAllMotors();
-            if (!opModeIsActive()) return; // check termination in the innermost loop
-        }
-    }
-
-
-        */
