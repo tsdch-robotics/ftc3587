@@ -53,7 +53,7 @@ public class test1 extends LinearOpMode {
         robot.DriveFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.DriveBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        while (robot.DriveFrontLeft.isBusy()) {
+        while (robot.DriveBackLeft.isBusy()) {
             telemetry.addData("Path", "Driving 18 inches");
             telemetry.update();
         }
