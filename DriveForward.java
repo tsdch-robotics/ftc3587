@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 // below is the Annotation that registers this OpMode with the FtcRobotController app.
 // @Autonomous classifies the OpMode as autonomous, name is the OpMode title and the
@@ -22,8 +23,8 @@ public class DriveForward extends LinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-        leftMotor = hardwareMap.dcMotor.get("DriveFrontLeft");
-        rightMotor = hardwareMap.dcMotor.get("DriveFrontRight");
+        DcMotorSimple leftMotor = hardwareMap.dcMotor.get("DriveFrontLeft");
+        DcMotorSimple rightMotor = hardwareMap.dcMotor.get("DriveFrontRight");
 
         telemetry.addData("Mode", "waiting");
         telemetry.update();
