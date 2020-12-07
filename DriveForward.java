@@ -14,8 +14,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 //@Disabled
 public class DriveForward extends LinearOpMode
 {
-    DcMotor DrveFrontLeft;
-    DcMotor DriveFrontRight;
+    DcMotor leftMotor;
+    DcMotor rightMotor;
 
     // called when init button is  pressed.
 
