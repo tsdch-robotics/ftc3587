@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 
 
-@Autonomous(name="test2", group="ChampBot")
+@Autonomous(name="test1", group="ChampBot")
 //@Disabled
 
 
