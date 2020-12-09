@@ -11,21 +11,35 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 // optional group places the OpMode into the Exercises group.
 // uncomment the @Disable annotation to remove the OpMode from the OpMode list.
 
-@Autonomous(name="Drive Forward", group="Exercises")
+@Autonomous(name="Drive Forward", group="ChampBot")
 //@Disabled
-public class DriveForward extends LinearOpMode
-{
-    DcMotor leftMotor;
-    DcMotor rightMotor;
+public class DriveForward extends LinearOpMode {
+    DcMotor FrontLeftMotor;
+    DcMotor FrontRightMotor;
+    DcMotor BackLeftMotor;
+    DcMotor BackRightMotor;
+    int milliseconds = 0;
+    double LeftPower = 0;
+    double RightPower = 0;
+
+
 
     // called when init button is  pressed.
 
     @Override
-    public void runOpMode() throws InterruptedException
-    {
-        DcMotorSimple leftMotor = hardwareMap.dcMotor.get("DriveFrontLeft");
-        DcMotorSimple rightMotor = hardwareMap.dcMotor.get("DriveFrontRight");
+    public void runOpMode() throws InterruptedException {
+        FrontLeftMotor = hardwareMap.dcMotor.get("DriveFrontLeft");
+        FrontRightMotor = hardwareMap.dcMotor.get("DriveFrontRight");
+        BackLeftMotor = hardwareMap.dcMotor.get("DriveBackLeft");
+        BackRightMotor = hardwareMap.dcMotor.get("DriveBackRight");
+        FrontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        FrontRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        BackLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        DriveRobot(4000,.5,.5);
+        //DriveRobot(1200,-.5,.5);
+    }
 
+    private void DriveRobot(int milliseconds, double LeftPower, double RightPower) {
         telemetry.addData("Mode", "waiting");
         telemetry.update();
 
@@ -36,16 +50,21 @@ public class DriveForward extends LinearOpMode
         telemetry.addData("Mode", "running");
         telemetry.update();
 
-        // set both motors to 25% power.
+        // set both motors to x power.
 
-        leftMotor.setPower(0.25);
-        rightMotor.setPower(0.25);
+        FrontLeftMotor.setPower(LeftPower);
+        FrontRightMotor.setPower(RightPower);
+        BackLeftMotor.setPower(LeftPower);
+        BackRightMotor.setPower(RightPower);
 
-        sleep(2000);        // wait for 2 seconds.
+
+        sleep(milliseconds);        // wait for x seconds.
 
         // set motor power to zero to stop motors.
 
-        leftMotor.setPower(0.0);
-        rightMotor.setPower(0.0);
+        FrontLeftMotor.setPower(0);
+        FrontRightMotor.setPower(0);
+        BackLeftMotor.setPower(0);
+        BackRightMotor.setPower(0);
     }
 }
