@@ -1,172 +1,70 @@
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareDevice;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+// below is the Annotation that registers this OpMode with the FtcRobotController app.
+// @Autonomous classifies the OpMode as autonomous, name is the OpMode title and the
+// optional group places the OpMode into the Exercises group.
+// uncomment the @Disable annotation to remove the OpMode from the OpMode list.
 
 @Autonomous(name="WobbleBlue", group="ChampBot")
 //@Disabled
-
-
 public class WobbleBlue extends LinearOpMode {
+    DcMotor FrontLeftMotor;
+    DcMotor FrontRightMotor;
+    DcMotor BackLeftMotor;
+    DcMotor BackRightMotor;
+    int milliseconds = 0;
+    double LeftPower = 0;
+    double RightPower = 0;
 
-    ChampBot robot = new ChampBot() {
-    };
+
+
+    // called when init button is  pressed.
+
     @Override
-    public void runOpMode() {
-        robot.init(hardwareMap);
+    public void runOpMode() throws InterruptedException {
+        FrontLeftMotor = hardwareMap.dcMotor.get("DriveFrontLeft");
+        FrontRightMotor = hardwareMap.dcMotor.get("DriveFrontRight");
+        BackLeftMotor = hardwareMap.dcMotor.get("DriveBackLeft");
+        BackRightMotor = hardwareMap.dcMotor.get("DriveBackRight");
+        FrontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        FrontRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        BackLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        DriveRobot(4000,.5,.5);
+        //DriveRobot(1200,-.5,.5);
+    }
+
+    private void DriveRobot(int milliseconds, double LeftPower, double RightPower) {
+        telemetry.addData("Mode", "waiting");
+        telemetry.update();
+
+        // wait for start button.
 
         waitForStart();
-//forward for 5 inches
-        robot.DriveFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.DriveFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.DriveBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.DriveBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        double circumference = 3.14 * 3.94;
-        double rotationsNeeded = 5 / circumference;
-        int encoderDrivingTarget = (int) (rotationsNeeded * 1140);
-        robot.DriveFrontLeft.setTargetPosition(encoderDrivingTarget);
-        robot.DriveBackLeft.setTargetPosition(encoderDrivingTarget);
-        robot.DriveFrontRight.setTargetPosition(encoderDrivingTarget);
-        robot.DriveBackRight.setTargetPosition(encoderDrivingTarget);
-
-        robot.DriveFrontLeft.setPower(0.5);
-        robot.DriveFrontRight.setPower(0.5);
-        robot.DriveBackLeft.setPower(0.5);
-        robot.DriveBackRight.setPower(0.5);
-
-        robot.DriveFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.DriveBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.DriveFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.DriveBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        while (robot.DriveBackLeft.isBusy()) {
-            telemetry.addData("Path", "forward for 5 inches");
-            telemetry.update();
-        }
-
-        robot.DriveFrontLeft.setPower(0);
-        robot.DriveFrontRight.setPower(0);
-        robot.DriveBackLeft.setPower(0);
-        robot.DriveBackRight.setPower(0);
-
-        telemetry.addData("Path", "Complete");
+        telemetry.addData("Mode", "running");
         telemetry.update();
-        sleep(1000);
+
+        // set both motors to x power.
+
+        FrontLeftMotor.setPower(LeftPower);
+        FrontRightMotor.setPower(RightPower);
+        BackLeftMotor.setPower(LeftPower);
+        BackRightMotor.setPower(RightPower);
 
 
-// turn right
-        robot.DriveFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.DriveFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.DriveBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.DriveBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        sleep(milliseconds);        // wait for x seconds.
 
-        rotationsNeeded = 19.21 / circumference;
-        encoderDrivingTarget = (int) (rotationsNeeded * 1140);
-        robot.DriveFrontLeft.setTargetPosition(encoderDrivingTarget);
-        robot.DriveBackLeft.setTargetPosition(encoderDrivingTarget);
-        robot.DriveFrontRight.setTargetPosition(encoderDrivingTarget);
-        robot.DriveBackRight.setTargetPosition(encoderDrivingTarget);
+        // set motor power to zero to stop motors.
 
-        robot.DriveFrontLeft.setPower(0.5);
-        robot.DriveFrontRight.setPower(-.5);
-        robot.DriveBackLeft.setPower(0.5);
-        robot.DriveBackRight.setPower(-.5);
-
-        robot.DriveFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.DriveBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.DriveFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.DriveBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        while (robot.DriveBackLeft.isBusy()) {
-            telemetry.addData("Path", "turn right");
-            telemetry.update();
-        }
-
-        robot.DriveFrontLeft.setPower(0);
-        robot.DriveFrontRight.setPower(0);
-        robot.DriveBackLeft.setPower(0);
-        robot.DriveBackRight.setPower(0);
-
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-        sleep(1000);
-
-//forward for 52 inches
-        robot.DriveFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.DriveFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.DriveBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.DriveBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        rotationsNeeded = 52 / circumference;
-        encoderDrivingTarget = (int) (rotationsNeeded * 1140);
-        robot.DriveFrontLeft.setTargetPosition(encoderDrivingTarget);
-        robot.DriveBackLeft.setTargetPosition(encoderDrivingTarget);
-        robot.DriveFrontRight.setTargetPosition(encoderDrivingTarget);
-        robot.DriveBackRight.setTargetPosition(encoderDrivingTarget);
-
-        robot.DriveFrontLeft.setPower(0.5);
-        robot.DriveFrontRight.setPower(0.5);
-        robot.DriveBackLeft.setPower(0.5);
-        robot.DriveBackRight.setPower(0.5);
-
-        robot.DriveFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.DriveBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.DriveFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.DriveBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        while (robot.DriveBackLeft.isBusy()) {
-            telemetry.addData("Path", "forward for 52 inches");
-            telemetry.update();
-        }
-
-        robot.DriveFrontLeft.setPower(0);
-        robot.DriveFrontRight.setPower(0);
-        robot.DriveBackLeft.setPower(0);
-        robot.DriveBackRight.setPower(0);
-
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-        sleep(1000);
-
-//back for 45 inches
-        robot.DriveFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.DriveFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.DriveBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.DriveBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        rotationsNeeded = 45 / circumference;
-        encoderDrivingTarget = (int) (rotationsNeeded * 1140);
-        robot.DriveFrontLeft.setTargetPosition(encoderDrivingTarget);
-        robot.DriveBackLeft.setTargetPosition(encoderDrivingTarget);
-        robot.DriveFrontRight.setTargetPosition(encoderDrivingTarget);
-        robot.DriveBackRight.setTargetPosition(encoderDrivingTarget);
-
-        robot.DriveFrontLeft.setPower(-0.5);
-        robot.DriveFrontRight.setPower(-0.5);
-        robot.DriveBackLeft.setPower(-0.5);
-        robot.DriveBackRight.setPower(-0.5);
-
-        robot.DriveFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.DriveBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.DriveFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.DriveBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        while (robot.DriveBackLeft.isBusy()) {
-            telemetry.addData("Path", "back for 45 inches");
-            telemetry.update();
-        }
-
-        robot.DriveFrontLeft.setPower(0);
-        robot.DriveFrontRight.setPower(0);
-        robot.DriveBackLeft.setPower(0);
-        robot.DriveBackRight.setPower(0);
-
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-        sleep(1000);
+        FrontLeftMotor.setPower(0);
+        FrontRightMotor.setPower(0);
+        BackLeftMotor.setPower(0);
+        BackRightMotor.setPower(0);
     }
 }
