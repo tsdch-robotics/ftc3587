@@ -112,10 +112,10 @@ public class ParkingRed extends LinearOpMode {
             telemetry.update();
             sleep(100);
 
-        robot.Wrist.setPosition(1.0); //in
-        robot.Claw.setPosition(0.0); // close
-        robot.PlatformServo.setPosition(0.0); //up
-        robot.LockServo.setPosition(0.0); //un-locked
+       // robot.Wrist.setPosition(1.0); //in
+        //robot.Claw.setPosition(0.0); // close
+       // robot.PlatformServo.setPosition(0.0); //up
+       // robot.LockServo.setPosition(0.0); //un-locked
 
             while (current_state == States.STOP) {
                 // stop all motors
