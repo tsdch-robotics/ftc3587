@@ -119,7 +119,7 @@ public class VisionAutoRed extends LinearOpMode {
             robot.setDriveMotors(-0.35, -0.35, -0.35, -0.35); // left strafe (since robot backwards)
             if (robot.DriveFrontLeft.getCurrentPosition() <= -robot.inchesToEncoderCounts(27.0)) {
                 robot.stopAllMotors();
-                robot.PlatformServo.setPosition(1.0); // closed on block
+                //robot.PlatformServo.setPosition(1.0); // closed on block
                 current_state = States.AWAY_FROM_BLOCKS;
             }
             if (!opModeIsActive()) return; // check termination in the innermost loop
@@ -181,7 +181,7 @@ public class VisionAutoRed extends LinearOpMode {
                 break;
         }
 
-        robot.Wrist.setPosition(0.0); // down
+        //robot.Wrist.setPosition(0.0); // down
         gyro.resetHeading();
         robot.resetAllEncoders();
         telemetry.addData("State: ", current_state);
@@ -215,7 +215,7 @@ public class VisionAutoRed extends LinearOpMode {
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
-        robot.PlatformServo.setPosition(0.0); //up
+       // robot.PlatformServo.setPosition(0.0); //up
         gyro.resetHeading();
         robot.resetAllEncoders();
         telemetry.addData("State: ", current_state);
@@ -231,10 +231,10 @@ public class VisionAutoRed extends LinearOpMode {
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
-        robot.Wrist.setPosition(1.0); //in
-        robot.Claw.setPosition(0.0); // close
-        robot.PlatformServo.setPosition(0.0); //up
-        robot.LockServo.setPosition(0.0); //un-locked
+       // robot.Wrist.setPosition(1.0); //in
+       // robot.Claw.setPosition(0.0); // close
+        //robot.PlatformServo.setPosition(0.0); //up
+       // robot.LockServo.setPosition(0.0); //un-locked
 
         while (current_state == States.STOP) {
             // stop all motors
