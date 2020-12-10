@@ -61,8 +61,8 @@ public class GrabBlockBlue extends LinearOpMode {
 
         // State machine for robot
 
-        robot.Wrist.setPosition(0.0); // out
-        robot.Claw.setPosition(1.0); // open
+        //robot.Wrist.setPosition(0.0); // out
+        //robot.Claw.setPosition(1.0); // open
         gyro.resetHeading();
         robot.resetAllEncoders();
         telemetry.addData("State: ", current_state);
@@ -73,13 +73,13 @@ public class GrabBlockBlue extends LinearOpMode {
             robot.setDriveMotors(0.35, 0.35, 0.35, 0.35); // left strafe (since robot backwards)
             if (robot.DriveFrontLeft.getCurrentPosition() >= robot.inchesToEncoderCounts(28.0)) {
                 robot.stopAllMotors();
-                robot.PlatformServo.setPosition(1.0); // closed on block
+                //robot.PlatformServo.setPosition(1.0); // closed on block
                 current_state = States.AWAY_FROM_BLOCKS;
             }
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
-        robot.Claw.setPosition(0.0); // close
+        //robot.Claw.setPosition(0.0); // close
         gyro.resetHeading();
         robot.resetAllEncoders();
         telemetry.addData("State: ", current_state);
@@ -128,7 +128,7 @@ public class GrabBlockBlue extends LinearOpMode {
         }
 
 
-        robot.Claw.setPosition(1.0); // open
+//        robot.Claw.setPosition(1.0); // open
         gyro.resetHeading();
         robot.resetAllEncoders();
         telemetry.addData("State: ", current_state);
@@ -144,10 +144,10 @@ public class GrabBlockBlue extends LinearOpMode {
             if (!opModeIsActive()) return; // check termination in the innermost loop
         }
 
-        robot.Wrist.setPosition(1.0); //in
-        robot.Claw.setPosition(0.0); // close
-        robot.PlatformServo.setPosition(0.0); //up
-        robot.LockServo.setPosition(0.0); //un-locked
+//        robot.Wrist.setPosition(1.0); //in
+//        robot.Claw.setPosition(0.0); // close
+//        robot.PlatformServo.setPosition(0.0); //up
+//        robot.LockServo.setPosition(0.0); //un-locked
 
         while (current_state == States.STOP) {
             // stop all motors
