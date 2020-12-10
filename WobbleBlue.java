@@ -1,49 +1,45 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
 
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.ChampBot;
-import org.firstinspires.ftc.teamcode.Gyro;
-import org.firstinspires.ftc.teamcode.ParkingBlue;
+// below is the Annotation that registers this OpMode with the FtcRobotController app.
+// @Autonomous classifies the OpMode as autonomous, name is the OpMode title and the
+// optional group places the OpMode into the Exercises group.
+// uncomment the @Disable annotation to remove the OpMode from the OpMode list.
 
-@Autonomous(name="ParkingLeft", group="ChampBot")
+@Autonomous(name="WobbleBlue", group="ChampBot")
+//@Disabled
 public class WobbleBlue extends LinearOpMode {
-    ChampBot robot = new ChampBot();   // Use robot's hardware
+    DcMotor FrontLeftMotor;
+    DcMotor FrontRightMotor;
+    DcMotor BackLeftMotor;
+    DcMotor BackRightMotor;
+    int milliseconds = 0;
+    double LeftPower = 0;
+    double RightPower = 0;
 
-    private enum States { // states for the autonomous FSM
-        DRIVE_OUT, TURN_RIGHT, TURN_LEFT, DRIVE_BACK, STOP;
+
+
+    // called when init button is  pressed.
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+        FrontLeftMotor = hardwareMap.dcMotor.get("DriveFrontLeft");
+        FrontRightMotor = hardwareMap.dcMotor.get("DriveFrontRight");
+        BackLeftMotor = hardwareMap.dcMotor.get("DriveBackLeft");
+        BackRightMotor = hardwareMap.dcMotor.get("DriveBackRight");
+        FrontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        FrontRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        BackLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        DriveRobot(4000,.5,.5);
+        //DriveRobot(1200,-.5,.5);
     }
 
+<<<<<<< HEAD
     public void runOpMode() {
         robot.init(hardwareMap);
         Gyro gyro;
@@ -54,12 +50,17 @@ public class WobbleBlue extends LinearOpMode {
 
         // send telemetry message to signify robot waiting
         telemetry.addData("Status: ", "Snoozing");
+=======
+    private void DriveRobot(int milliseconds, double LeftPower, double RightPower) {
+        telemetry.addData("Mode", "waiting");
+>>>>>>> deaee019e2c1e2689366cf0d0eade2a65936ccbb
         telemetry.update();
 
+        // wait for start button.
 
-        // wait for the start button to be pressed.
         waitForStart();
 
+<<<<<<< HEAD
         gyro.resetHeading();
         robot.resetAllEncoders();
         telemetry.addData("State: ", current_state);
@@ -109,5 +110,26 @@ public class WobbleBlue extends LinearOpMode {
                 telemetry.update();
                 sleep(100);
         }
+=======
+        telemetry.addData("Mode", "running");
+        telemetry.update();
+
+        // set both motors to x power.
+
+        FrontLeftMotor.setPower(LeftPower);
+        FrontRightMotor.setPower(RightPower);
+        BackLeftMotor.setPower(LeftPower);
+        BackRightMotor.setPower(RightPower);
+
+
+        sleep(milliseconds);        // wait for x seconds.
+
+        // set motor power to zero to stop motors.
+
+        FrontLeftMotor.setPower(0);
+        FrontRightMotor.setPower(0);
+        BackLeftMotor.setPower(0);
+        BackRightMotor.setPower(0);
+>>>>>>> deaee019e2c1e2689366cf0d0eade2a65936ccbb
     }
 }
