@@ -52,12 +52,12 @@ public class TradOP extends OpMode {
         robot.DriveBackRight.setPower(BR);
 
         // Arm
-        robot.Arm.setPower(-gamepad2.left_stick_y / 2);
+        //robot.Arm.setPower(-gamepad2.left_stick_y / 2);
 
         //Wrist
         //boolean Up = gamepad2.right_bumper;
         //boolean Down = (gamepad2.right_trigger > 0.1);
-
+/*
         String ArmStatus = "";
         String ClawStatus = "";
 
@@ -97,5 +97,7 @@ public class TradOP extends OpMode {
         telemetry.addData("Wrist: ", ArmStatus);
         telemetry.addData("Claw: ", ClawStatus);
         telemetry.update();
+
+ */
     }
 }
