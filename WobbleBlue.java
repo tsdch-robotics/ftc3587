@@ -35,8 +35,29 @@ public class WobbleBlue extends LinearOpMode {
         FrontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         FrontRightMotor.setDirection(DcMotor.Direction.REVERSE);
         BackLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        DriveRobot(4000,.5,.5);
-        //DriveRobot(1200,-.5,.5);
+        DriveRobot(260,.5,.5); //move forward 5 in
+        sleep(1000);//wait for 1 sec
+        DriveRobot(1200,.5,-.5); //turn right
+        sleep(1000);//wait for 1 sec
+        DriveRobot(3117,.5,.5); //move forward 60 in
+        sleep(1000);//wait for 1 sec
+        DriveRobot(2753,-.5,-.5); //move backwards 53 in
+        sleep(1000);//wait for 1 sec
+        DriveRobot(1200,.5,-.5); // turn right
+        sleep(1000);//wait for 1 sec
+        DriveRobot(1455,.5,.5); //move forward 28 in
+        sleep(1000);//wait for 1 sec
+        DriveRobot(1200,-.5,.5); // turn left
+        sleep(1000);//wait for 1 sec
+        DriveRobot(2753,.5,.5); // move forward 53 in
+        sleep(1000);//wait for 1 sec
+        DriveRobot(1200,-.5,.5); // turn left
+        sleep(1000);//wait for 1 sec
+        DriveRobot(1455,.5,.5); // move forward 28 in
+        sleep(1000);//wait for 1 sec
+        DriveRobot(519,-.5,-.5); // move backwards 10 in
+        sleep(1000);//wait for 1 sec
+
     }
 
     private void DriveRobot(int milliseconds, double LeftPower, double RightPower) {
