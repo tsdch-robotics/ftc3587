@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 // optional group places the OpMode into the Exercises group.
 // uncomment the @Disable annotation to remove the OpMode from the OpMode list.
 
-@Autonomous(name="WobbleBlue", group="ChampBot")
+@Autonomous(name="Backup_File", group="ChampBot")
 //@Disabled
 public class WobbleBlue extends LinearOpMode {
     DcMotor FrontLeftMotor;

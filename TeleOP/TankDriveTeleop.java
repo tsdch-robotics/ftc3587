@@ -95,6 +95,28 @@ public class TankDriveTeleop extends OpMode {
         //boolean Up = gamepad2.right_bumper;
         //boolean Down = (gamepad2.right_trigger > 0.1);
 
+        HEAD;
+        String ArmStatus = "";
+        String ClawStatus = "";
+
+        /*if(gamepad2.right_bumper) {
+            robot.Wrist.setPosition(0.0);
+            ArmStatus = "moving up";
+        }
+        else if(gamepad2.right_trigger > 0.1) {
+            robot.Wrist.setPosition(1.0);
+            ArmStatus = "moving down";
+        }
+
+        if (gamepad2.a) {
+            robot.Claw.setPosition(0.0);
+            ClawStatus = "closed";
+        }
+        else if (gamepad2.b) {
+            robot.Claw.setPosition(1.0);
+            ClawStatus = "open";
+        }
+=======
        // String ArmStatus = "";
         //String ClawStatus = "";
 
@@ -115,6 +137,7 @@ public class TankDriveTeleop extends OpMode {
            // robot.Claw.setPosition(1.0);
            // ClawStatus = "open";
         //}
+>>>>>>> 495e3e834ee128f708f1d7ac15add43e52324f2c
 
         //platform
         if (gamepad1.left_bumper) { //up
@@ -136,3 +159,4 @@ public class TankDriveTeleop extends OpMode {
         //telemetry.update();
         }
     }
+}
