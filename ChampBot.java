@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.motors.RevRobotics20HdHexMotor;
+import com.qualcomm.hardware.motors.RevRobotics40HdHexMotor;
+import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -24,6 +27,9 @@ public class ChampBot {
     public DcMotor DriveFrontRight;
     public DcMotor DriveBackLeft;
     public DcMotor DriveBackRight;
+    //the intake motor
+    public DcMotor WheelMotor;
+    public DcMotor ArmMotor;
     /*
     public DcMotor Arm;
 
@@ -54,6 +60,9 @@ public class ChampBot {
         DriveBackLeft = hwMap.dcMotor.get("DriveBackLeft");
         DriveFrontRight = hwMap.dcMotor.get("DriveFrontRight");
         DriveBackRight = hwMap.dcMotor.get("DriveBackRight");
+        //initialize intake motor
+        WheelMotor = hwMap.dcMotor.get("WheelMotor");
+        ArmMotor = hwMap.dcMotor.get("ArmMotor");
 
         // reverse one side of the drivetrain so that directions are more natural
         DriveFrontRight.setDirection(DcMotor.Direction.REVERSE);
@@ -112,6 +121,8 @@ public class ChampBot {
         DriveFrontRight.setPower(0.0);
         DriveBackLeft.setPower(0.0);
         DriveBackRight.setPower(0.0);
+        WheelMotor.setPower(0.0);
+        ArmMotor.setPower(0.0);
 
        // Arm.setPower(0.0);
     }
