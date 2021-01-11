@@ -39,6 +39,10 @@ public class WobbleBlue extends LinearOpMode {
         BackLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         DriveRobot(260,.5,.5,0); //move forward 5 in
         sleep(1000);//wait for 1 sec
+        DriveRobot(1200,-.5,.5,0); // turn left
+        sleep(1000);//wait for 1 sec
+        DriveRobot(779,.5,.5,0); //move forward 15 in
+        sleep(1000);//wait for 1 sec
         DriveRobot(1200,.5,-.5,0); //turn right
         sleep(1000);//wait for 1 sec
         DriveRobot(3117,.5,.5,0); //move forward 60 in
@@ -72,7 +76,7 @@ public class WobbleBlue extends LinearOpMode {
     }
 
     public void runOpMode3() throws InterruptedException {
-        //DriveRobot(6708,.5,.5);
+        DriveRobot(6708,.5,.5,0);
     }
 
 
