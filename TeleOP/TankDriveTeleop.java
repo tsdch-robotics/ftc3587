@@ -69,6 +69,7 @@ public class TankDriveTeleop extends OpMode {
         float DriveRightPower = -gamepad1.right_stick_y;
         boolean LeftStrafe = gamepad1.dpad_left;
         boolean RightStrafe = gamepad1.dpad_right;
+        boolean WheelToggle;
 
         if (RightStrafe) {
             // to right strafe, right motors towards each other, left motors away from each other
@@ -91,6 +92,7 @@ public class TankDriveTeleop extends OpMode {
             robot.IntakeMotor.setPower(0);
         }
         if (gamepad1.a) {
+            if (WheelToggle=0);
             robot.WheelMotor.setPower(-1);
             robot.IntakeMotor.setPower(-1);
         }else{
@@ -118,7 +120,7 @@ public class TankDriveTeleop extends OpMode {
             robot.ArmMotor.setPower(0);
         }
         if (gamepad1.right_bumper) {
-            robot.LauncherMotor.setPower(25 );
+            robot.LauncherMotor.setPower(-1);
         }
         else {
             robot.LauncherMotor.setPower(0);
