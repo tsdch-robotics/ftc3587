@@ -35,7 +35,7 @@ public class DriveForward extends LinearOpMode {
         FrontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         FrontRightMotor.setDirection(DcMotor.Direction.REVERSE);
         BackLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        DriveRobot(4000,.5,.5);
+        DriveRobot(5000,.5,.5);
         //DriveRobot(1200,-.5,.5);
     }
 
