@@ -59,6 +59,14 @@ public class WobbleBlue extends LinearOpMode {
         sleep(1000);//wait for 1 sec
 
     }
+    public void runOpMode2() throws InterruptedException {
+        DriveRobot(4896, .5,.5);//move forward 94.25 in
+        sleep(1000);//wait for 1 sec
+        DriveRobot(4896, -.5,-.5);//move backward 94.25 in
+        DriveRobot(4896, .5,.5);//move forward 94.25 in
+        DriveRobot(4896, .5,.5);//move backward 94.25 in
+    }
+
 
     private void DriveRobot(int milliseconds, double LeftPower, double RightPower) {
         telemetry.addData("Mode", "waiting");
