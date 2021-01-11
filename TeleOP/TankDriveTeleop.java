@@ -68,8 +68,8 @@ public class TankDriveTeleop extends OpMode {
     public void loop() {
         // tank drive: each stick controls one side of the robot
         // dpad for strafing left/right
-        float DriveLeftPower = -gamepad1.left_stick_y;
-        float DriveRightPower = -gamepad1.right_stick_y;
+        float DriveLeftPower = gamepad1.left_stick_y;
+        float DriveRightPower = gamepad1.right_stick_y;
         boolean LeftStrafe = gamepad1.dpad_left;
         boolean RightStrafe = gamepad1.dpad_right;
         boolean WheelToggle = false;
@@ -95,35 +95,32 @@ public class TankDriveTeleop extends OpMode {
             robot.ArmMotor.setPower(0);
             robot.IntakeMotor.setPower(0);
         }
-        if (gamepad1.a) {
-            if (WheelToggle = false) {
-                WheelToggle = true;
-                robot.WheelMotor.setPower(-1);
-                robot.IntakeMotor.setPower(-1);
-            } else if (WheelToggle = true) {
-                WheelToggle = false;
-                robot.WheelMotor.setPower(0);
-                robot.IntakeMotor.setPower(0);
-            }
-            if (gamepad1.dpad_up) {
-                robot.ArmMotor.setPower(1);
-            } else {
-                robot.WheelMotor.setPower(0);
-                robot.ArmMotor.setPower(0);
-            }
-            if (gamepad1.dpad_down) {
-                robot.ArmMotor.setPower(-1);
-            } else {
-                robot.WheelMotor.setPower(0);
-                robot.ArmMotor.setPower(0);
-            }
-            if (gamepad1.b) {
-                robot.WheelMotor.setPower(0);
-                robot.ArmMotor.setPower(0);
-            } else {
-                robot.WheelMotor.setPower(0);
-                robot.ArmMotor.setPower(0);
-            }
+        if (gamepad1.left_bumper) {
+            robot.WheelMotor.setPower(-1);
+            robot.IntakeMotor.setPower(-1);
+        } else {
+            robot.WheelMotor.setPower(0);
+            robot.IntakeMotor.setPower(0);
+        }
+        if (gamepad1.dpad_up) {
+            robot.ArmMotor.setPower(1);
+        } else {
+            robot.WheelMotor.setPower(0);
+            robot.ArmMotor.setPower(0);
+        }
+        if (gamepad1.dpad_down) {
+            robot.ArmMotor.setPower(-1);
+        } else {
+            robot.WheelMotor.setPower(0);
+            robot.ArmMotor.setPower(0);
+        }
+        if (gamepad1.b) {
+            robot.WheelMotor.setPower(0);
+            robot.ArmMotor.setPower(0);
+        } else {
+            robot.WheelMotor.setPower(0);
+            robot.ArmMotor.setPower(0);
+        }
             //if (gamepad1.right_bumper) {
             //robot.LauncherMotor.setPower(-1);
             //}
@@ -132,12 +129,12 @@ public class TankDriveTeleop extends OpMode {
             //}
 
 
-            if (gamepad1.left_bumper) {
-                DriveLeftPower = DriveLeftPower / 2;
-                DriveRightPower = DriveRightPower / 2;
-            }
+            //if (gamepad1.left_bumper) {
+                //DriveLeftPower = DriveLeftPower / 2;
+                //DriveRightPower = DriveRightPower / 2;
+            //}
 
             robot.setDriveMotors(DriveLeftPower, DriveRightPower, DriveLeftPower, DriveRightPower);
         }
     }
-}
+
